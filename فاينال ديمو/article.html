@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">خبر — جسور</title>
+<meta name="description" id="metaDesc" content="آخر أخبار المصريين بالمهجر على جسور.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/josour-logo.png">
+<link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+<a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+   <!-- ===== Topbar ===== -->
+    <div class="topbar">
+      <div class="wrap">
+        <div class="right social">
+          <span data-clock></span>
+          <select class="lang" aria-label="اختر اللغة">
+            <option>العربية</option>
+            <option>English</option>
+            <option>Français</option>
+          </select>
+        </div>
+        <div class="left social-icons">
+          <a href="#" aria-label="فيسبوك" class="facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"
+              />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="X" class="x-twitter">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"
+              />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="انستجرام" class="instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="يوتيوب" class="youtube">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"
+              />
+              <path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- ===== Header ===== -->
+    <header class="site">
+      <div class="wrap header-inner">
+        <button class="icon-btn burger" aria-label="فتح القائمة">☰</button>
+
+        <a class="logo" href="index.html">
+          <img class="logo-img" src="assets/josour-logo.png" alt="جسور">
+          <span class="logo-slogan">صوت المصريين في الخارج</span>
+        </a>
+
+        <div class="masthead-credits">
+          <div class="row">
+            <span class="role">رئيس مجلس الإدارة<br>رئيس التحرير</span>
+            <span class="name">أحمد سليمان</span>
+          </div>
+
+          <div class="row">
+            <span class="role">رئيس التحرير التنفيذي</span>
+            <span class="name">أشرف جبريل</span>
+          </div>
+        </div>
+
+        <div class="header-ad">
+          <span>مساحة إعلانية</span>
+          <strong>ضع إعلانك هنا</strong>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-btn" data-open-search aria-label="بحث">🔍</button>
+          <span data-auth-slot></span>
+        </div>
+      </div>
+    </header>
+    <nav class="bluebarr">
+      <div class="nav-container">
+
+        <!-- الجانب الأيمن (RTL): اللوجو والروابط -->
+        <div class="nav-brand-group">
+          <button class="bluebarr-burger" id="bluebarrBurger" aria-label="فتح قائمة التنقل" type="button"><span></span><span></span><span></span></button>
+            <div class="nav-sticky-logo">
+            <a href="index.html" aria-label="الرئيسية">
+              <img src="assets/josour-logo.png" alt="جسور">
+            </a>
+          </div>
+
+          <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+            <li><a href="category.html?cat=mughtarib" class="nav-link">أخبار المغتربين</a></li>
+            <li><a href="category.html?cat=success" class="nav-link">قصة نجاح</a></li>
+            <li><a href="category.html?cat=egypt" class="nav-link">أخبار مصر</a></li>
+            <li><a href="category.html?cat=official" class="nav-link">مع مسئول</a></li>
+            <!--<li><a href="videos.html" class="nav-link">فيديو</a></li>-->
+            <li><a href="category.html?cat=red" class="nav-link">خط أحمر</a></li>
+
+            <!-- عنصر "المزيد" القابل للدخول بالقائمة المنسدلة -->
+            <li class="dropdown">
+              <a href="#" class="nav-link dropdown-btn">
+                <i class="fa-solid fa-bars"></i>
+                المزيد
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+                <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+                <li><a href="category.html?cat=sports">رياضة</a></li>
+                <li><a href="category.html?cat=arts">فنون</a></li>
+                <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+                <li><a href="category.html?cat=various">منوعات</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- الجانب الأيسر (RTL): الأزرار والبحث -->
+        <div class="nav-sticky-actions">
+          <button class="nav-action-btn search-trigger" data-open-search aria-label="بحث">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <div class="auth-group">
+            <a href="auth.html" class="btn-nav btn-ghostt">دخول</a>
+            <a href="auth.html?action=register" class="btn-nav btn-accent">إنشاء حساب</a>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- ===== Blue utility bar ===== -->
+    <div class="bluebar">
+      <div class="ticker">
+        <div class="ticker-track">
+          <span>القنصلية المصرية بنيويورك تُطلق حجز مواعيد التوثيق إلكترونياً</span>
+          <span>الإمارات تُحدّث شروط الإقامة الذهبية لأصحاب الأعمال المصريين</span>
+          <span>شبكة اطمّن تؤكد تواصلاً آمناً مع 14 أسرة مصرية بجنوب أوروبا</span>
+
+          <span>القنصلية المصرية بنيويورك تُطلق حجز مواعيد التوثيق إلكترونياً</span>
+          <span>الإمارات تُحدّث شروط الإقامة الذهبية لأصحاب الأعمال المصريين</span>
+          <span>شبكة اطمّن تؤكد تواصلاً آمناً مع 14 أسرة مصرية بجنوب أوروبا</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Reading progress ===== -->
+    <div class="read-progress-track"><div class="bar" id="readProgress"></div></div>
+<!--
+<main id="main">
+  <div class="wrap" style="padding-top:14px;font-size:12.5px;color:var(--text-mute)">
+    <a href="index.html">الرئيسية</a> ← <a id="crumbCatLink" href="category.html">القسم</a> ← <span id="crumbTitle">الخبر</span>
+  </div>
+-->
+  <!-- ===== Professional Article Breadcrumb ===== -->
+  <div class="wrap article-breadcrumb-wrap">
+    <nav class="breadcrumb article-breadcrumb" aria-label="مسار الصفحة">
+
+      <a href="index.html" class="breadcrumb-home">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 10.8 12 3l9 7.8v9a1.2 1.2 0 0 1-1.2 1.2H4.2A1.2 1.2 0 0 1 3 19.8v-9Z"/>
+          <path d="M9 21v-6.2h6V21"/>
+        </svg>
+
+        <span>الرئيسية</span>
+      </a>
+
+      <span class="breadcrumb-separator" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </span>
+
+      <a
+        id="crumbCatLink"
+        href="category.html"
+        class="breadcrumb-category"
+      >
+        القسم
+      </a>
+
+      <!--<span class="breadcrumb-separator" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </span>-->
+
+      <!-- <span
+        id="crumbTitle"
+        class="breadcrumb-current article-breadcrumb-title"
+        aria-current="page"
+      >
+        الخبر
+      </span>-->
+
+    </nav>
+  </div>
+  <div class="article-head wrap">
+    <a href="category.html" class="eyebrow" id="artCat">قسم</a>
+
+    <p class="article-subtitle" id="artExcerpt">موجز الخبر يظهر هنا.</p>
+    <h1 id="artTitle" class="article-title">عنوان الخبر</h1>
+
+    <div class="article-toolbar">
+      <div class="article-meta" id="artMeta">
+        <span class="author"><span class="avatar" style="width:26px;height:26px;font-size:11px;">ج</span> <span id="artSource">هيئة تحرير جسور</span></span>
+        <span class="meta-item meta-date">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18"/><path d="M8 3v3M16 3v3"/></svg>
+          <span id="artDatetime">اليوم</span>
+        </span>
+        <span class="meta-item meta-city">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10.5c0 6-8 11-8 11s-8-5-8-11a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10.5" r="2.6"/></svg>
+          <span id="artCity">المدينة</span>
+        </span>
+        <style> 
+        .meta-city {
+  display: none !important;
+}
+
+        </style>
+
+        <span class="meta-item meta-read">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg>
+          <span id="artReadTime">3 دقائق قراءة</span>
+        </span>
+      </div>
+
+    
+      <div class="share-row social-share-row" id="shareRow">
+
+        <!-- Facebook -->
+        <a
+          class="share-btn social-facebook"
+          id="shareFacebook"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="مشاركة على فيسبوك"
+          data-tip="فيسبوك"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14 8h3V4h-3c-3.3 0-5 1.9-5 5v3H6v4h3v6h4v-6h3.5l.5-4H13V9c0-.7.3-1 1-1Z"/>
+          </svg>
+        </a>
+
+        <!-- WhatsApp -->
+        <a
+          class="share-btn social-whatsapp"
+          id="shareWhatsapp"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="مشاركة على واتساب"
+          data-tip="واتساب"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2a9.8 9.8 0 0 0-8.5 14.7L2 22l5.5-1.4A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3.3.8.9-3.2-.2-.3A8 8 0 1 1 12 20Zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-.9-.3-1.7-1.1-.6-.5-1.1-1.2-1.2-1.4-.1-.2 0-.3.1-.5l.4-.5c.1-.2.1-.3 0-.5l-.7-1.6c-.2-.4-.4-.3-.6-.3h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.1s.9 2.4 1 2.5c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.4.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.1-.4-.2Z"/>
+          </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a
+          class="share-btn social-instagram"
+          id="shareInstagram"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="إنستجرام"
+          data-tip="إنستجرام"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+
+        <!-- X -->
+        <a
+          class="share-btn social-x"
+          id="shareX"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="مشاركة على X"
+          data-tip="X"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.4l-5-6.5L6.1 22H3l7.3-8.4L2.8 2h6.5l4.5 5.9L18.9 2Zm-1.1 17.8h1.8L8.3 4H6.4l11.4 15.8Z"/>
+          </svg>
+        </a>
+
+      </div>
+      <style>
+
+        .social-share-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-share-row .share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.social-share-row .share-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Facebook */
+.social-facebook {
+  color: #1877f2;
+  background: rgba(24, 119, 242, 0.08);
+}
+
+.social-facebook:hover {
+  color: #fff;
+  background: #1877f2;
+}
+
+/* WhatsApp */
+.social-whatsapp {
+  color: #25d366;
+  background: rgba(37, 211, 102, 0.08);
+}
+
+.social-whatsapp:hover {
+  color: #fff;
+  background: #25d366;
+}
+
+/* Instagram */
+.social-instagram {
+  color: #e4405f;
+  background: rgba(228, 64, 95, 0.08);
+}
+
+.social-instagram:hover {
+  color: #fff;
+  background: #e4405f;
+}
+
+/* X */
+.social-x {
+  color: #111;
+  background: rgba(17, 17, 17, 0.07);
+}
+
+.social-x:hover {
+  color: #fff;
+  background: #111;
+}
+      </style>
+
+    </div>
+  </div>
+
+  <!-- ===== Floating share rail (desktop) ===== -->
+  <!--<div class="article-share-rail" aria-hidden="true">
+    <button data-tip="نسخ الرابط" aria-label="نسخ الرابط" onclick="navigator.clipboard?.writeText(location.href); toast('تم نسخ الرابط')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a5 5 0 0 0 7.07 0l2-2a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 10a5 5 0 0 0-7.07 0l-2 2a5 5 0 0 0 7.07 7.07l1-1"/></svg>
+    </button>
+    <button data-tip="حفظ" aria-label="حفظ" onclick="toast('أُضيف الخبر إلى المحفوظات')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v16l-6-4-6 4V4Z"/></svg>
+    </button>
+    <button data-tip="طباعة" aria-label="طباعة" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4.5" y="9" width="15" height="7.5" rx="1.4"/><path d="M6 15.5v5.5h12v-5.5"/></svg>
+    </button>
+  </div>-->
+
+  <figure class="article-hero-figure">
+    <div class="article-hero-img wrap">
+      <img id="artImg" src="" alt="">
+    </div>
+    <figcaption class="article-img-caption wrap" id="artImgCaption">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span id="artImgCaptionText"></span>
+    </figcaption>
+  </figure>
+
+  <div class="wrap">
+    <article class="article-body" id="artBody"></article>
+
+    <div class="article-tags wrap" id="artTags" style="max-width:720px;margin:0 auto;">
+      <span class="tag-pill">مصريون بالمهجر</span><span class="tag-pill" id="tagCountry">الدولة</span><span class="tag-pill" id="tagCat">القسم</span>
+    </div>
+  </div>
+
+  <!-- ===== المزيد من الكاتب — only rendered when the article has a real author ===== -->
+  <section class="section tight on-surface more-from-author" id="moreFromAuthorSection" hidden style="padding-bottom:10px;">
+    <div class="wrap" style="max-width:720px;margin:0 auto;" data-reveal>
+      <div class="custom-col-head"><span class="custom-col-link"><span>المزيد من الكاتب</span></span></div>
+      <div class="news-list" id="moreFromAuthorGrid"></div>
+    </div>
+  </section>
+
+  <!-- ===== أخبار متعلقة — plain headline links, wire-agency style ===== -->
+  <section class="section tight on-surface" style="padding-bottom:10px;">
+    <div class="wrap" style="max-width:720px;margin:0 auto;" data-reveal>
+      <div class="custom-col-head"><span class="custom-col-link"><span>أخبار متعلقة</span></span></div>
+      <ul class="related-links-list" id="relatedLinks"></ul>
+    </div>
+  </section>
+
+  <!-- ===== أخبار ذات صلة (main) + الأكثر قراءة (sidebar) ===== -->
+  <section class="section on-surface" style="padding-top:20px;">
+    <div class="wrap">
+      <div class="split-2" style="grid-template-columns:1fr 340px;">
+        <div data-reveal>
+          <div class="section-head"><h2><span class="eyebrow">أخبار ذات صلة</span></h2></div>
+          <div class="story-grid" id="relatedGrid"></div>
+        </div>
+        <aside data-reveal>
+          <div class="section-head"><h2 style="font-size:14px;">الأكثر قراءة</h2></div>
+          <div class="rank-list" id="topReadRank"></div>
+          <div class="ad-slot" style="margin-top:22px;">
+            <span class="lbl">مساحة إعلانية · Sponsored</span>
+            <div>ضع إعلانك هنا</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>    <!-- ===== Footer ===== -->
+    <footer class="foot-v2">
+      <div class="wrap foot-v2-top">
+        <div class="foot-v2-grid">
+          <!-- العمود 1: الهوية + الفيديو التعريفي + التواصل الاجتماعي -->
+          <div class="foot-v2-brand">
+            <a href="index.html"><img class="logo-img" src="assets/josour-logo.png" alt="جسور"></a>
+            <p>منصة المصريين بالمهجر — إخبار، ذكاء استخباراتي جغرافي، وشبكة اطمئنان الأسرة.</p>
+
+            <button type="button" class="foot-v2-replay" data-replay-intro>
+              <span class="ico">▶</span> شاهد فيديو التعريف بجسور
+            </button>
+
+            <div class="foot-v2-social social-icons">
+              <a href="#" aria-label="فيسبوك" class="facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"/></svg>
+              </a>
+              <a href="#" aria-label="X" class="x-twitter">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"/></svg>
+              </a>
+              <a href="#" aria-label="انستجرام" class="instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+              </a>
+              <a href="#" aria-label="يوتيوب" class="youtube">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z"/></svg>
+              </a>
+            </div>
+
+            <div class="foot-v2-newsletter">
+              <h5>النشرة الإخبارية</h5>
+              <form class="foot-v2-newsletter-form" data-newsletter-form>
+                <input type="email" required placeholder="بريدك الإلكتروني" aria-label="بريدك الإلكتروني">
+                <button type="submit">اشتراك</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- العمود 2: أقسام الموقع -->
+          <div class="foot-v2-col">
+            <h5>أقسام الموقع</h5>
+            <ul>
+              <li><a href="index.html">الرئيسية</a></li>
+              <li><a href="category.html?cat=mughtarib">أخبار المغتربين</a></li>
+              <li><a href="category.html?cat=egypt">أخبار مصر</a></li>
+              <li><a href="category.html?cat=success">قصة نجاح</a></li>
+              <li><a href="category.html?cat=official">مع مسئول</a></li>
+              <li><a href="category.html?cat=red">خط أحمر</a></li>
+              <li><a href="videos.html">فيديو</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 3: المزيد من الأقسام -->
+          <div class="foot-v2-col">
+            <h5>&nbsp;</h5>
+            <ul>
+              <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+              <li><a href="category.html?cat=sports">رياضة</a></li>
+              <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+              <li><a href="category.html?cat=arts">فنون</a></li>
+              <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+              <li><a href="category.html?cat=various">منوعات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 4: الخدمات -->
+          <div class="foot-v2-col">
+            <h5>الخدمات</h5>
+            <ul>
+              <li><a href="country.html?c=ae">خريطة المهجر</a></li>
+              <li><a href="category.html?cat=sports">الرياضيون</a></li>
+              <li><a href="auth.html">بروفايل المهجر</a></li>
+              <li><a href="#">دليل السفارات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 5: من نحن + سياسات -->
+          <div class="foot-v2-col">
+            <h5>من نحن</h5>
+            <ul>
+              <li><a href="about.html">عن منصة جسور</a></li>
+              <li><a href="#">فريق العمل</a></li>
+              <li><a href="#">شراكات إعلامية</a></li>
+              <li><a href="#">مساحات إعلانية</a></li>
+              <li><a href="privacy.html">سياسة الخصوصية</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap foot-v2-bottom">
+        <span>© ٢٠٢٦ جسور. جميع الحقوق محفوظة. — منصة المصريين بالمهجر</span>
+        <div class="foot-v2-bottom-links">
+          <a href="privacy.html">الخصوصية</a>
+          <a href="#">الشروط</a>
+          <a href="#">قواعد التحرير</a>
+          <a href="#">اتصل بنا</a>
+        </div>
+        <select class="foot-v2-lang" aria-label="اختر اللغة">
+          <option>العربية</option>
+          <option>English</option>
+          <option>Français</option>
+        </select>
+      </div>
+    </footer>
+
+
+<div class="drawer-overlay"><div class="drawer">
+  <div class="flex" style="justify-content:space-between;align-items:center;margin-bottom:20px;"><img class="logo-img" src="assets/josour-logo.png" alt="جسور"><button class="drawer-close icon-btn">✕</button></div>
+  <nav><a href="index.html">الرئيسية</a><a href="country.html?c=ae">الدول</a><a href="atmaen.html">اطمّن</a><a href="index.html#services">الخدمات</a><a href="category.html?cat=sports">رياضة</a><a href="videos.html">فيديو</a><a href="auth.html">دخول / إنشاء حساب</a></nav>
+</div></div>
+<div class="search-overlay" id="searchOverlay"><div class="search-panel"><input type="text" placeholder="ابحث..."><div class="search-suggest"></div></div></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="mobile.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const a = articleById(params.get('id') || 1) || ARTICLES[0];
+
+  /* Resolve the article's REAL section through the canonical helper
+     (data.js) instead of matching a.cat against SECTIONS labels — a.cat is
+     raw internal data (e.g. "سفارات") and is not always the same string as
+     the section's public label (e.g. "مع مسئول"), so a direct match used
+     to fail and silently fall back to showing a.cat as-is, i.e. a category
+     name that doesn't exist anywhere else on the site. */
+  const catSlug = getSectionSlugForArticle(a);
+  const catLabel = getSectionLabelForArticle(a);
+
+  document.getElementById('pageTitle').textContent = a.title + ' — جسور';
+  const crumbCatLink = document.getElementById('crumbCatLink');
+  const crumbTitle = document.getElementById('crumbTitle');
+
+  if (crumbCatLink) {
+    crumbCatLink.textContent = catLabel;
+    crumbCatLink.href = catSlug
+      ? `category.html?cat=${encodeURIComponent(catSlug)}`
+      : 'index.html';
+  }
+
+  if (crumbTitle) {
+    crumbTitle.textContent =
+      a.title.length > 70
+        ? a.title.slice(0, 70) + '…'
+        : a.title;
+  }
+  const artCatEl = document.getElementById('artCat');
+  artCatEl.textContent = catLabel;
+  artCatEl.href = catSlug ? `category.html?cat=${encodeURIComponent(catSlug)}` : 'index.html';
+  document.getElementById('artTitle').textContent = a.title;
+  document.getElementById('artExcerpt').textContent = a.excerpt || `تغطية جسور لآخر تطورات ${catLabel} في ${a.country}.`;
+  document.getElementById('artSource').textContent = a.source || 'هيئة تحرير جسور';
+  document.getElementById('artDatetime').textContent = a.datetime || a.time;
+  document.getElementById('artCity').textContent = a.city || a.country;
+  document.getElementById('artImg').src = a.img;
+  document.getElementById('artImg').alt = a.title;
+  document.getElementById('tagCountry').textContent = a.country;
+  document.getElementById('tagCat').textContent = catLabel;
+
+  /* Real reading time — computed from body word count (falls back to the
+     excerpt when the article has no full body[]), ~180 wpm Arabic pace. */
+  const readTimeEl = document.getElementById('artReadTime');
+  if (readTimeEl) {
+    const wordSource = Array.isArray(a.body) && a.body.length
+      ? a.body.join(' ')
+      : (a.excerpt || a.title || '');
+    const wordCount = wordSource.trim().split(/\s+/).filter(Boolean).length;
+    const mins = Math.max(1, Math.round(wordCount / 180));
+    readTimeEl.textContent = `${mins} ${mins === 1 ? 'دقيقة' : 'دقائق'} قراءة`;
+  }
+
+  /* Image caption / credit line — independent of the article body, agency
+     style. Uses a hand-written imgCaption when the article has one,
+     otherwise falls back to a plain city/source credit line. */
+  const imgCaptionText = document.getElementById('artImgCaptionText');
+  if (imgCaptionText) {
+    imgCaptionText.textContent = a.imgCaption
+      || (a.city ? `${a.city} — ${a.source || 'جسور'}` : (a.source || 'جسور'));
+  }
+
+  /* Share toolbar — copy / save / print keep their existing feedback
+     patterns; the accent "مشاركة" button uses the native Web Share API
+     where available, and falls back to copy-link. */
+  const shareBtnCopy = document.getElementById('shareBtnCopy');
+  if (shareBtnCopy) {
+    shareBtnCopy.addEventListener('click', () => {
+      navigator.clipboard?.writeText(location.href);
+      toast('تم نسخ الرابط');
+      shareBtnCopy.classList.add('is-copied');
+      setTimeout(() => shareBtnCopy.classList.remove('is-copied'), 1400);
+    });
+  }
+  const shareBtnSave = document.getElementById('shareBtnSave');
+  if (shareBtnSave) {
+    shareBtnSave.addEventListener('click', () => toast('أُضيف الخبر إلى المحفوظات'));
+  }
+  const shareBtnPrint = document.getElementById('shareBtnPrint');
+  if (shareBtnPrint) {
+    shareBtnPrint.addEventListener('click', () => window.print());
+  }
+  const shareBtnMain = document.getElementById('shareBtnMain');
+  if (shareBtnMain) {
+    shareBtnMain.addEventListener('click', async () => {
+      const shareData = { title: a.title, text: a.excerpt || a.title, url: location.href };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch (e) { /* user cancelled */ }
+      } else {
+        navigator.clipboard?.writeText(location.href);
+        toast('تم نسخ رابط الخبر للمشاركة');
+      }
+    });
+  }
+
+  const metaDesc = document.getElementById('metaDesc');
+  if (metaDesc) metaDesc.setAttribute('content', (a.excerpt || a.title).slice(0, 160));
+
+  /* Author identity — real byline (avatar + name, linked to author.html)
+     when the article carries an authorId; falls back to the newsroom
+     byline already in the markup otherwise. */
+  const au = typeof authorById === 'function' ? authorById(a.authorId) : null;
+  if (au) {
+    const authorSpan = document.querySelector('#artMeta .author');
+    authorSpan.outerHTML = `
+      <a class="author" rel="author" href="author.html?slug=${encodeURIComponent(au.slug)}">
+        <img class="avatar-img" src="${au.avatar}" alt="${au.name}">
+        <span id="artSource">${au.name}</span>
+      </a>`;
+  }
+
+  /* المزيد من الكاتب — up to 4 other pieces by the same author */
+  const moreFromAuthorSection = document.getElementById('moreFromAuthorSection');
+  if (au) {
+    const moreFromAuthor = (typeof articlesByAuthor === 'function' ? articlesByAuthor(au.id) : [])
+      .filter(x => x.id !== a.id)
+      .slice(0, 4);
+    if (moreFromAuthor.length) {
+      document.getElementById('moreFromAuthorGrid').innerHTML = moreFromAuthor.map(cardRow).join('');
+      moreFromAuthorSection.hidden = false;
+    }
+  }
+
+  /* Extra keyword pills from the article's own tags, beyond country/cat */
+  const tagsWrap = document.getElementById('artTags');
+  (a.tags || []).forEach(t => {
+    const span = document.createElement('span');
+    span.className = 'tag-pill';
+    span.textContent = t;
+    tagsWrap.appendChild(span);
+  });
+
+  /* Body: use hand-written paragraphs + pull-quote when the article has
+     them, otherwise fall back to a category-aware generic template. */
+  function renderBody(a) {
+    if (Array.isArray(a.body) && a.body.length) {
+      const paras = a.body.map(p => `<p>${p}</p>`);
+      if (a.quote) {
+        paras.splice(1, 0, `<blockquote>«${a.quote}»<cite>— ${a.quoteAuthor || 'مصدر جسور'}</cite></blockquote>`);
+      }
+      return paras.join('');
+    }
+    return `
+      <p>${a.excerpt || ('تتابع جسور تطورات هذا الملف عبر شبكة مراسلين موثَّقين في ' + (a.city || a.country) + '.')}</p>
+      <p>وتشير المعطيات المتاحة حتى الآن إلى أن هذا التطور يمسّ شريحة واسعة من أبناء الجالية المصرية في ${a.country}، خصوصاً في ${a.city || a.country}، وسط متابعة مستمرة من هيئة تحرير جسور لأي مستجدات رسمية.</p>
+      <p>ستواصل جسور تحديث هذا التقرير كلما توفرت معطيات جديدة من الجهات المعنية أو من شبكة مراسليها الميدانيين.</p>`;
+  }
+  document.getElementById('artBody').innerHTML = renderBody(a);
+
+  /* أخبار متعلقة — plain headline links sharing a tag or the same city */
+  const relatedByTag = ARTICLES.filter(x => x.id !== a.id && (
+    (a.tags || []).some(t => (x.tags || []).includes(t)) || x.city === a.city
+  )).slice(0, 4);
+  const relatedFallback = ARTICLES.filter(x => x.id !== a.id && x.cat === a.cat).slice(0, 4);
+  const related = (relatedByTag.length ? relatedByTag : relatedFallback);
+  document.getElementById('relatedLinks').innerHTML = related.map(x =>
+    `<li><a href="${articleHref(x)}">${x.title}</a></li>`
+  ).join('') || '<li style="color:var(--text-mute);padding:12px 0;">لا توجد أخبار متعلقة حالياً</li>';
+
+  /* أخبار ذات صلة — image cards, same category or country. Excludes
+     pieces already shown in "المزيد من الكاتب" above so the two sections
+     never repeat the same article. */
+  const shownInAuthorSection = au
+    ? (typeof articlesByAuthor === 'function' ? articlesByAuthor(au.id) : []).map(x => x.id)
+    : [];
+  document.getElementById('relatedGrid').innerHTML = ARTICLES
+    .filter(x => x.id !== a.id && !shownInAuthorSection.includes(x.id) && (x.cat === a.cat || x.country === a.country))
+    .slice(0, 4)
+    .map(cardStory).join('');
+
+  /* الأكثر قراءة — sidebar rank list */
+  document.getElementById('topReadRank').innerHTML = mostRead(6).map(cardRank).join('');
+</script>
+    <!-- ضع هذا الكود قبل إغلاق body مباشرة -->
+    <div class="search-modal-backdrop" id="searchBackdrop"></div>
+
+    <div class="search-panel" id="searchPanel" role="dialog" aria-modal="true">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="ابحث عن خبر، دولة، أو خدمة..." autocomplete="off" />
+        <button class="clear-btn" id="clearSearch" hidden>✕</button>
+      </div>
+
+      <div class="search-suggest" id="searchSuggest">
+        <div class="suggest-group">
+          <span class="group-title">الأكثر بحثاً</span>
+          <div class="suggest-tags">
+            <button class="tag">مصر</button>
+            <button class="tag">أسعار الفائدة</button>
+            <button class="tag">خدمات التصدير</button>
+          </div>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <div class="search-footer">
+        <span><kbd>↵</kbd> للاختيار</span>
+        <span><kbd>↑</kbd> <kbd>↓</kbd> للتنقل</span>
+        <span><kbd>ESC</kbd> للإغلاق</span>
+      </div>
+    </div>
+</body>
+</html>

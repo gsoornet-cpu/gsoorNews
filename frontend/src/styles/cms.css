@@ -1,0 +1,97 @@
+/* CMS — reuses the site's design tokens (colors, radius, shadow) so the
+   editor feels like part of the same product. */
+.cms { padding: 32px 0 72px; }
+.cms-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-card); padding: 24px; }
+.cms-narrow { max-width: 460px; margin: 0 auto; }
+.cms-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.cms-head h1 { margin: 0; font-size: 1.5rem; }
+.cms-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.cms-field { display: grid; gap: 6px; margin-bottom: 16px; }
+.cms-desk-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px 16px; }
+.cms-desk-options label { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.cms-desk-options input { width: 18px; height: 18px; accent-color: var(--primary, #0b766e); }
+.cms-field:has(legend) { border: 1px solid var(--border, #d9e0e0); border-radius: 10px; padding: 12px 16px; }
+.cms-field legend { padding: 0 6px; font-weight: 700; }
+.cms-field label { font-weight: 700; font-size: 0.92rem; }
+.cms-field input, .cms-field textarea, .cms-field select, .cms-filter select {
+  font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; color: var(--text); width: 100%;
+}
+.cms-field textarea { resize: vertical; line-height: 1.8; }
+.cms-hint { color: var(--text-mute); font-size: 0.82rem; }
+.cms-btn { font: inherit; font-weight: 700; padding: 9px 16px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: #fff; color: var(--text); cursor: pointer; text-decoration: none; display: inline-block; }
+.cms-btn:hover { border-color: var(--blue-2); }
+.cms-btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+.cms-btn.primary:hover { background: var(--blue-dark); }
+.cms-btn.success { background: var(--success); border-color: var(--success); color: #fff; }
+.cms-btn.danger { color: var(--error); border-color: var(--error); }
+.cms-btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+.cms-msg { padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 0.94rem; }
+.cms-msg.error { background: #fdecea; color: var(--error); border: 1px solid #f5c2bc; }
+.cms-msg.ok { background: #e8f6ef; color: var(--success); border: 1px solid #bfe3d0; }
+.cms-table { width: 100%; border-collapse: collapse; }
+.cms-table th, .cms-table td { text-align: start; padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.cms-table th { font-size: 0.82rem; color: var(--text-mute); font-weight: 700; }
+.cms-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
+.cms-badge.draft { background: #fdf3e1; color: var(--warning); }
+.cms-badge.published { background: #e8f6ef; color: var(--success); }
+.cms-badge.review { background: #e8f0fb; color: #1f4f9a; }
+.cms-badge.approved { background: #eaf3e6; color: #3d6b1f; }
+.cms-badge.scheduled { background: #eee9fb; color: #573b91; }
+.cms-badge.archived { background: #eef0f3; color: #535b66; }
+.cms-badge.retracted { background: #fbe9e6; color: #a52e24; }
+.cms-revision { border: 1px solid #e3d7bd; background: #fffaf0; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+.cms-filter { display: flex; gap: 8px; align-items: center; }
+.cms-filter select { width: auto; }
+@media (max-width: 640px) { .cms-table th:nth-child(3), .cms-table td:nth-child(3) { display: none; } }
+
+/* Slice 20 — article history, revisions and corrections (decision D4) */
+.cms-history { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); }
+.cms-history h2 { margin: 0 0 12px; font-size: 1.15rem; }
+.cms-history h3 { margin: 16px 0 8px; font-size: 0.98rem; }
+.cms-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cms-timeline li { border-inline-start: 3px solid var(--line); padding-inline-start: 12px; }
+.cms-reason { margin: 4px 0 0; white-space: pre-line; }
+.cms-snapshot { margin-top: 8px; padding: 12px; background: #f7f7f5; border: 1px solid var(--line); border-radius: 8px; }
+.cms-snapshot pre { white-space: pre-wrap; font: inherit; line-height: 1.8; margin: 8px 0 0; }
+.cms-check { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; font-size: 0.94rem; }
+
+/* Slice 21 — rich-text body editor (decision D2) */
+.rte { border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; }
+.rte:focus-within { border-color: var(--blue-2); }
+.rte-loading { padding: 16px; color: var(--text-mute); }
+.rte-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 8px; border-bottom: 1px solid var(--line); background: #f7f7f5; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+.rte-btn { font: inherit; min-width: 34px; height: 34px; padding: 0 8px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--text); cursor: pointer; line-height: 1; }
+.rte-btn:hover:not([disabled]) { background: #fff; border-color: var(--line); }
+.rte-btn.active { background: #e8f0fb; border-color: var(--blue-2); color: var(--blue-dark); }
+.rte-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.rte-btn:focus-visible { outline: 2px solid var(--blue-2); outline-offset: 1px; }
+.cms-media-picker { padding: 14px; border: 1px solid var(--line); border-top: 0; background: #fff; display: grid; gap: 12px; }
+.cms-media-picker-head { display: flex; align-items: center; justify-content: space-between; }
+.cms-media-picker form { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 10px; align-items: end; }
+.cms-media-picker label { display: grid; gap: 4px; font-size: .82rem; }
+.cms-media-picker input { min-width: 0; width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
+.cms-media-picker button { font: inherit; cursor: pointer; }
+.cms-media-picker form > button { padding: 8px 14px; border: 0; border-radius: 6px; background: var(--blue); color: #fff; }
+.cms-media-focal { display: flex; gap: 8px; }
+.cms-media-picker ul { margin: 0; padding-inline-start: 20px; max-height: 180px; overflow: auto; }
+.cms-media-picker li button { border: 0; background: none; color: var(--blue-dark); text-align: start; padding: 4px; }
+.article-body figure { margin: 1.5rem 0; }
+.article-body figure img { display: block; max-width: 100%; height: auto; margin-inline: auto; border-radius: 8px; }
+.article-body figure video { display: block; max-width: 100%; max-height: 620px; margin-inline: auto; border-radius: 8px; }
+.article-body figcaption { color: var(--text-mute); font-size: .86rem; text-align: center; margin-top: .5rem; }
+.article-body iframe { display: block; width: min(100%, 800px); min-height: 450px; margin: 1.5rem auto; border: 0; border-radius: 8px; }
+.rte-sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
+/* The editing surface reuses the public article typography (.article-body) so what the editor
+   sees is what readers get, minus the page chrome and the drop cap. */
+.rte .rte-content { max-width: none; margin: 0; padding: 16px 18px; min-height: 320px; max-height: 70vh; overflow-y: auto; outline: none; }
+.rte .rte-content > p:first-of-type::first-letter { float: none; margin: 0; font: inherit; color: inherit; line-height: inherit; }
+.rte .tableWrapper { max-width: 100%; overflow-x: auto; }
+.rte .rte-content table, .cms-snapshot-body table { width: 100%; border-collapse: collapse; }
+.rte .rte-content th, .rte .rte-content td, .cms-snapshot-body th, .cms-snapshot-body td { border: 1px solid var(--line); padding: 8px 10px; min-width: 100px; text-align: start; vertical-align: top; }
+.rte .rte-content th, .cms-snapshot-body th { background: #f1f3f6; font-weight: 700; }
+.rte-counters { display: flex; flex-wrap: wrap; gap: 14px; padding: 8px 12px; border-top: 1px solid var(--line); }
+.rte-warn { color: var(--warning); font-weight: 700; }
+.rte-over { color: var(--error); font-weight: 700; }
+.rte .cms-msg { margin: 8px 12px 0; }
+.cms-snapshot .cms-snapshot-body { max-width: none; margin: 8px 0 0; padding: 0; font-size: 16px; line-height: 1.9; }
+.cms-snapshot .cms-snapshot-body > p:first-of-type::first-letter { float: none; margin: 0; font: inherit; color: inherit; line-height: inherit; }

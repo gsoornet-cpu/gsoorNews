@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الأخبار — جسور</title>
+    <meta name="description" content="أخبار جسور مقسّمة حسب القسم — تصفح كل أخبار مصر، الجيل الثاني، فرص العمل، والمزيد." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/josour-logo.png">
+<link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mobile.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+
+    <!-- ===== Topbar ===== -->
+    <div class="topbar">
+      <div class="wrap">
+        <div class="right social">
+          <span data-clock></span>
+          <select class="lang" aria-label="اختر اللغة">
+            <option>العربية</option>
+            <option>English</option>
+            <option>Français</option>
+          </select>
+        </div>
+        <div class="left social-icons">
+          <a href="#" aria-label="فيسبوك" class="facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"
+              />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="X" class="x-twitter">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"
+              />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="انستجرام" class="instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="يوتيوب" class="youtube">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"
+              />
+              <path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+<!-- ===== Header ===== -->
+    <header class="site">
+      <div class="wrap header-inner">
+        <button class="icon-btn burger" aria-label="فتح القائمة">☰</button>
+
+        <a class="logo" href="index.html">
+          <img class="logo-img" src="assets/josour-logo.png" alt="جسور">
+          <span class="logo-slogan">صوت المصريين في الخارج</span>
+        </a>
+
+        <div class="masthead-credits">
+          <div class="row">
+            <span class="role">رئيس مجلس الإدارة<br>رئيس التحرير</span>
+            <span class="name">أحمد سليمان</span>
+          </div>
+
+          <div class="row">
+            <span class="role">رئيس التحرير التنفيذي</span>
+            <span class="name">أشرف جبريل</span>
+          </div>
+        </div>
+
+        <div class="header-ad">
+          <span>مساحة إعلانية</span>
+          <strong>ضع إعلانك هنا</strong>
+        </div>
+
+        <div class="header-actions">
+          <!-- استبدل زر البحث القديم بهذا الزر -->
+          <button class="icon-btn" data-open-search aria-label="بحث">
+            🔍
+          </button>
+          <span data-auth-slot></span>
+        </div>
+      </div>
+    </header>
+<nav class="bluebarr">
+      <div class="nav-container">
+
+        <!-- الجانب الأيمن (RTL): اللوجو والروابط -->
+        <div class="nav-brand-group">
+          <button class="bluebarr-burger" id="bluebarrBurger" aria-label="فتح قائمة التنقل" type="button"><span></span><span></span><span></span></button>
+            <div class="nav-sticky-logo">
+            <a href="index.html" aria-label="الرئيسية">
+              <img src="assets/josour-logo.png" alt="جسور">
+            </a>
+          </div>
+
+          <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+            <li><a href="category.html?cat=mughtarib" class="nav-link">أخبار المغتربين</a></li>
+            <li><a href="category.html?cat=success" class="nav-link">قصة نجاح</a></li>
+            <li><a href="category.html?cat=egypt" class="nav-link">أخبار مصر</a></li>
+            <li><a href="category.html?cat=official" class="nav-link">مع مسئول</a></li>
+            <!--<li><a href="videos.html" class="nav-link">فيديو</a></li>-->
+            <li><a href="category.html?cat=red" class="nav-link">خط أحمر</a></li>
+
+            <!-- عنصر "المزيد" القابل للدخول بالقائمة المنسدلة -->
+            <li class="dropdown">
+              <a href="#" class="nav-link dropdown-btn">
+                <i class="fa-solid fa-bars"></i>
+                المزيد
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+                <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+                <li><a href="category.html?cat=sports">رياضة</a></li>
+                <li><a href="category.html?cat=arts">فنون</a></li>
+                <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+                <li><a href="category.html?cat=various">منوعات</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- الجانب الأيسر (RTL): الأزرار والبحث -->
+        <div class="nav-sticky-actions">
+          <button class="nav-action-btn search-trigger" data-open-search aria-label="بحث">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <div class="auth-group">
+            <a href="auth.html" class="btn-nav btn-ghostt">دخول</a>
+            <a href="auth.html?action=register" class="btn-nav btn-accent">إنشاء حساب</a>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+
+<div class="bluebar">
+  <div class="ticker">
+    <div class="ticker-track">
+
+      <!-- المجموعة الأولى -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+
+      <!-- المجموعة الثانية: نسخة مطابقة تمامًا -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    <main id="main">
+      <!-- ===== Category header ===== 
+      <section class="section tight on-surface">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow" id="catEyebrow">القسم</span>
+          </div>
+          <h1 id="catTitle" style="font-size:26px;margin-bottom:6px;">القسم</h1>
+          <p class="text-mute" id="catCount" style="font-size:13.5px;"></p>
+        </div>
+      </section>
+-->
+      <!-- ===== Professional Page Header ===== -->
+      <section class="page-header category-page-header">
+        <div class="wrap">
+
+          <!-- Breadcrumb -->
+          <nav class="breadcrumb" aria-label="مسار الصفحة">
+            <a href="index.html" class="breadcrumb-home">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 10.8 12 3l9 7.8v9a1.2 1.2 0 0 1-1.2 1.2H4.2A1.2 1.2 0 0 1 3 19.8v-9Z"/>
+                <path d="M9 21v-6.2h6V21"/>
+              </svg>
+              <span>الرئيسية</span>
+            </a>
+
+            <span class="breadcrumb-separator" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </span>
+
+            <a href="index.html" class="breadcrumb-section">
+              الأخبار
+            </a>
+
+            <span class="breadcrumb-separator" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </span>
+
+            <span
+              class="breadcrumb-current"
+              id="breadcrumbCurrent"
+              aria-current="page"
+            >
+              القسم
+            </span>
+          </nav>
+
+          <!-- Page title -->
+          <div class="category-heading">
+
+            <div class="category-heading-line" aria-hidden="true"></div>
+
+            <div class="category-heading-content">
+              <!--<span class="category-heading-kicker">
+                جسور · الأخبار
+              </span>-->
+
+              <h1 id="catTitle">القسم</h1>
+
+              <p id="catCount" class="category-heading-meta"></p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+      <!-- ===== Category grid + pagination ===== -->
+      <section class="section tight on-surface" style="padding-top:0;">
+        <div class="wrap">
+          <div class="six-grid" id="categoryGrid"></div>
+          <p class="empty-state" id="categoryEmpty" style="display:none;padding:40px 0;text-align:center;color:var(--text-mute);">
+            لا توجد أخبار في هذا القسم حاليًا.
+          </p>
+          <div class="pagination" id="categoryPager" style="justify-content:center;margin:34px 0 10px;"></div>
+        </div>
+      </section>
+    </main>    <!-- ===== Footer ===== -->
+    <footer class="foot-v2">
+      <div class="wrap foot-v2-top">
+        <div class="foot-v2-grid">
+          <!-- العمود 1: الهوية + الفيديو التعريفي + التواصل الاجتماعي -->
+          <div class="foot-v2-brand">
+            <a href="index.html"><img class="logo-img" src="assets/josour-logo.png" alt="جسور"></a>
+            <p>منصة المصريين بالمهجر — إخبار، ذكاء استخباراتي جغرافي، وشبكة اطمئنان الأسرة.</p>
+
+            <button type="button" class="foot-v2-replay" data-replay-intro>
+              <span class="ico">▶</span> شاهد فيديو التعريف بجسور
+            </button>
+
+            <div class="foot-v2-social social-icons">
+              <a href="#" aria-label="فيسبوك" class="facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"/></svg>
+              </a>
+              <a href="#" aria-label="X" class="x-twitter">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"/></svg>
+              </a>
+              <a href="#" aria-label="انستجرام" class="instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+              </a>
+              <a href="#" aria-label="يوتيوب" class="youtube">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z"/></svg>
+              </a>
+            </div>
+
+            <div class="foot-v2-newsletter">
+              <h5>النشرة الإخبارية</h5>
+              <form class="foot-v2-newsletter-form" data-newsletter-form>
+                <input type="email" required placeholder="بريدك الإلكتروني" aria-label="بريدك الإلكتروني">
+                <button type="submit">اشتراك</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- العمود 2: أقسام الموقع -->
+          <div class="foot-v2-col">
+            <h5>أقسام الموقع</h5>
+            <ul>
+              <li><a href="index.html">الرئيسية</a></li>
+              <li><a href="category.html?cat=mughtarib">أخبار المغتربين</a></li>
+              <li><a href="category.html?cat=egypt">أخبار مصر</a></li>
+              <li><a href="category.html?cat=success">قصة نجاح</a></li>
+              <li><a href="category.html?cat=official">مع مسئول</a></li>
+              <li><a href="category.html?cat=red">خط أحمر</a></li>
+              <li><a href="videos.html">فيديو</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 3: المزيد من الأقسام -->
+          <div class="foot-v2-col">
+            <h5>&nbsp;</h5>
+            <ul>
+              <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+              <li><a href="category.html?cat=sports">رياضة</a></li>
+              <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+              <li><a href="category.html?cat=arts">فنون</a></li>
+              <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+              <li><a href="category.html?cat=various">منوعات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 4: الخدمات -->
+          <div class="foot-v2-col">
+            <h5>الخدمات</h5>
+            <ul>
+              <li><a href="country.html?c=ae">خريطة المهجر</a></li>
+              <li><a href="category.html?cat=sports">الرياضيون</a></li>
+              <li><a href="auth.html">بروفايل المهجر</a></li>
+              <li><a href="#">دليل السفارات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 5: من نحن + سياسات -->
+          <div class="foot-v2-col">
+            <h5>من نحن</h5>
+            <ul>
+              <li><a href="about.html">عن منصة جسور</a></li>
+              <li><a href="#">فريق العمل</a></li>
+              <li><a href="#">شراكات إعلامية</a></li>
+              <li><a href="#">مساحات إعلانية</a></li>
+              <li><a href="privacy.html">سياسة الخصوصية</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap foot-v2-bottom">
+        <span>© ٢٠٢٦ جسور. جميع الحقوق محفوظة. — منصة المصريين بالمهجر</span>
+        <div class="foot-v2-bottom-links">
+          <a href="privacy.html">الخصوصية</a>
+          <a href="#">الشروط</a>
+          <a href="#">قواعد التحرير</a>
+          <a href="#">اتصل بنا</a>
+        </div>
+        <select class="foot-v2-lang" aria-label="اختر اللغة">
+          <option>العربية</option>
+          <option>English</option>
+          <option>Français</option>
+        </select>
+      </div>
+    </footer>
+
+    <!-- ===== Mobile drawer ===== -->
+    <div class="drawer-overlay">
+      <div class="drawer">
+        <div
+          class="flex"
+          style="
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <img
+            class="logo-img"
+            src="assets/josour-logo.png"
+            alt="جسور"
+          /><button class="drawer-close icon-btn">✕</button>
+        </div>
+        <nav>
+          <a href="index.html">الرئيسية</a><a href="country.html?c=ae">الدول</a
+          ><a href="atmaen.html">اطمّن</a
+          ><a href="index.html#services">الخدمات</a
+          ><a href="index.html#sports">رياضة</a
+          ><a href="videos.html">فيديو</a
+          ><a href="auth.html">دخول / إنشاء حساب</a>
+        </nav>
+      </div>
+    </div>
+
+
+    <!-- ===== Search overlay ===== -->
+    <div class="search-overlay" id="searchOverlay">
+      <div class="search-panel">
+        <input type="text" placeholder="ابحث عن خبر، دولة، أو خدمة..." />
+        <div class="search-suggest"></div>
+      </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+<script src="mobile.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof SECTIONS === "undefined" || typeof ARTICLES === "undefined") return;
+
+        const params = new URLSearchParams(location.search);
+        const slug = params.get("cat") || "mughtarib";
+        const sec = SECTIONS[slug];
+        const label = sec ? sec.label : "الأخبار";
+
+        document.title = `${label} — جسور`;
+        const titleEl = document.getElementById("catTitle");
+        const breadcrumbCurrent = document.getElementById("breadcrumbCurrent");
+
+        if (titleEl) {
+          titleEl.textContent = label;
+        }
+
+        if (breadcrumbCurrent) {
+          breadcrumbCurrent.textContent = label;
+        }
+
+        // Highlight the matching top-level nav link, if this section has one
+        document.querySelectorAll(".bluebarr .nav-link, .bluebarr .dropdown-menu a").forEach(a => {
+          if (a.textContent.trim() === label) a.classList.add("active");
+        });
+
+        const all = sec ? getArticlesBySection(slug) : [];
+        const PAGE_SIZE = 18;
+        const totalPages = Math.max(1, Math.ceil(all.length / PAGE_SIZE));
+        let currentPage = 1;
+
+        const grid = document.getElementById("categoryGrid");
+        const pager = document.getElementById("categoryPager");
+        const empty = document.getElementById("categoryEmpty");
+        const countEl = document.getElementById("catCount");
+
+        if (countEl) {
+          countEl.textContent = all.length
+            ? `${all.length} خبر في هذا القسم`
+            : "";
+        }
+
+        function renderPage(p) {
+          currentPage = Math.min(Math.max(1, p), totalPages);
+          const start = (currentPage - 1) * PAGE_SIZE;
+          const items = all.slice(start, start + PAGE_SIZE);
+
+          if (grid) grid.innerHTML = items.map(cardGrid).join("");
+          if (empty) empty.style.display = items.length ? "none" : "block";
+
+          renderPager();
+
+          if (grid && items.length) {
+            grid.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+
+        function renderPager() {
+          if (!pager) return;
+          if (totalPages <= 1) {
+            pager.innerHTML = "";
+            return;
+          }
+
+          const pages = [];
+          for (let i = 1; i <= totalPages; i++) pages.push(i);
+
+          let shown = pages;
+          if (totalPages > 7) {
+            const keep = new Set([1, 2, totalPages - 1, totalPages, currentPage - 1, currentPage, currentPage + 1]);
+            shown = pages.filter(p => keep.has(p));
+          }
+
+          let html = `<button ${currentPage === 1 ? "disabled" : ""} data-page="${currentPage - 1}" aria-label="السابق">‹</button>`;
+          let prev = 0;
+          shown.forEach(p => {
+            if (p - prev > 1) {
+              html += `<span style="padding:0 4px;color:var(--text-mute)">…</span>`;
+            }
+            html += `<button class="${p === currentPage ? "active" : ""}" data-page="${p}">${p}</button>`;
+            prev = p;
+          });
+          html += `<button ${currentPage === totalPages ? "disabled" : ""} data-page="${currentPage + 1}" aria-label="التالي">›</button>`;
+
+          pager.innerHTML = html;
+          pager.querySelectorAll("[data-page]").forEach(b => {
+            b.addEventListener("click", () => renderPage(Number(b.dataset.page)));
+          });
+        }
+
+        renderPage(1);
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof ARTICLES === "undefined") return;
+
+        // 1. مقالات مغترب
+        
+
+        // 7. الأكثر قراءة والرياضة
+        const mostReadEl = document.getElementById("mostRead");
+        if (mostReadEl && typeof mostRead === "function") {
+          mostReadEl.innerHTML = mostRead(6).map(cardRank).join("");
+        }
+
+        // اللمة الحلوة — feature card + supporting grid
+        const lammaFeatureEl = document.getElementById("lammaFeature");
+        const lammaGridEl = document.getElementById("lammaGrid");
+        if (lammaFeatureEl && lammaGridEl && typeof getArticlesBySection === "function") {
+          const lammaItems = getArticlesBySection("lamma", 5);
+          const feature = lammaItems[0];
+          const rest = lammaItems.slice(1);
+
+          if (feature) {
+            lammaFeatureEl.className = "lead-story lamma-feature";
+            lammaFeatureEl.innerHTML = `
+              <div class="lead-story-img">
+                <span class="eyebrow">${escapeHTML(feature.cat)}</span>
+                <img loading="lazy" src="${escapeHTML(feature.img)}" alt="${escapeHTML(feature.title)}">
+                <span class="lamma-badge">🤝 لمّة الجالية</span>
+              </div>
+              <div class="lead-story-body">
+                <h2>${escapeHTML(feature.title)}</h2>
+                <p class="sub">${escapeHTML(feature.excerpt || "")}</p>
+                <div class="foot"><span>${escapeHTML(feature.city || feature.country || "")}</span><span>·</span><span>${escapeHTML(feature.time || "")}</span></div>
+              </div>`;
+            lammaFeatureEl.onclick = () => location.href = articleHref(feature);
+          }
+
+          lammaGridEl.innerHTML = rest.map(cardStory).join("");
+          [...lammaGridEl.children].forEach(el => el.setAttribute("data-reveal", ""));
+          // This block runs in a DOMContentLoaded listener registered AFTER
+          // app.js's own listener (which already called initScrollReveal()
+          // once), so re-run it here to pick up these freshly-added nodes.
+          if (typeof initScrollReveal === "function") initScrollReveal();
+        }
+
+        // الفعاليات القادمة — sidebar events widget
+        const eventsListEl = document.getElementById("eventsList");
+        if (eventsListEl && typeof UPCOMING_EVENTS !== "undefined") {
+          eventsListEl.innerHTML = UPCOMING_EVENTS.map(ev => `
+            <div class="event-item">
+              <div class="event-date"><b>${escapeHTML(ev.day)}</b><span>${escapeHTML(ev.month)}</span></div>
+              <div>
+                <h5>${escapeHTML(ev.title)}</h5>
+                <div class="foot">${escapeHTML(ev.city)} · ${escapeHTML(ev.time)}</div>
+              </div>
+            </div>`).join("");
+        }
+
+        // 8. تشغيل المكونات التفاعلية الرئيسية
+        if (typeof HERO_STORIES !== "undefined" && typeof initHeroSlider === "function") {
+          initHeroSlider(HERO_STORIES);
+        }
+        if (typeof initAtmaenModal === "function") {
+          initAtmaenModal();
+        }
+      });
+    </script>
+    <!-- ضع هذا الكود قبل إغلاق body مباشرة -->
+    <div class="search-modal-backdrop" id="searchBackdrop"></div>
+
+    <div class="search-panel" id="searchPanel" role="dialog" aria-modal="true">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="ابحث عن خبر، دولة، أو خدمة..." autocomplete="off" />
+        <button class="clear-btn" id="clearSearch" hidden>✕</button>
+      </div>
+
+      <div class="search-suggest" id="searchSuggest">
+        <div class="suggest-group">
+          <span class="group-title">الأكثر بحثاً</span>
+          <div class="suggest-tags">
+            <button class="tag">مصر</button>
+            <button class="tag">أسعار الفائدة</button>
+            <button class="tag">خدمات التصدير</button>
+          </div>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <div class="search-footer">
+        <span><kbd>↵</kbd> للاختيار</span>
+        <span><kbd>↑</kbd> <kbd>↓</kbd> للتنقل</span>
+        <span><kbd>ESC</kbd> للإغلاق</span>
+      </div>
+    </div>
+  </body>
+</html>

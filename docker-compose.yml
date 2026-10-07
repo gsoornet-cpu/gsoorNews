@@ -1,0 +1,109 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: jusoor
+      POSTGRES_USER: jusoor
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jusoor_dev_only}
+    ports:
+      # Host-side port is 5433, not 5432: a native PostgreSQL install
+      # (common on Windows dev machines) commonly already owns 5432 on the
+      # host, and Docker Desktop's WSL2 port-forwarding can get silently
+      # shadowed by it — connections from the host land on the native
+      # instance instead of this container with no error at `docker compose
+      # up` time. Inside the Docker network, this container is still
+      # reachable as `postgres:5432` (see the `api` service below) — only
+      # the HOST-facing port changes.
+      - "5433:5432"
+    volumes:
+      - jusoor_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jusoor"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Postgres: "Host=postgres;Database=jusoor;Username=jusoor;Password=${POSTGRES_PASSWORD:-jusoor_dev_only}"
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?Set JWT_SIGNING_KEY in your .env}
+      Jwt__Issuer: jusoor-api
+      Jwt__Audience: jusoor-clients
+      FieldEncryption__LocalKey: ${FIELD_ENCRYPTION_LOCAL_KEY:?Set FIELD_ENCRYPTION_LOCAL_KEY in your .env}
+      SUPABASE_URL: ${SUPABASE_URL:-}
+      SUPABASE_STORAGE_BUCKET: ${SUPABASE_STORAGE_BUCKET:-jusoor-media}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      Cors__AllowedOrigins__0: "http://localhost:3000"
+      # Development-only demo newsroom login (optional; blank = not created).
+      DevSeed__Email: ${DEV_SEED_EMAIL:-}
+      DevSeed__Password: ${DEV_SEED_PASSWORD:-}
+      DevSeed__Role: ${DEV_SEED_ROLE:-ManagingEditor}
+      DevSeed__Accounts__Reporter__Email: ${DEV_SEED_REPORTER_EMAIL:-}
+      DevSeed__Accounts__Reporter__Password: ${DEV_SEED_REPORTER_PASSWORD:-}
+      DevSeed__Accounts__Reporter__DisplayName: ${DEV_SEED_REPORTER_NAME:-}
+      DevSeed__Accounts__Researcher__Email: ${DEV_SEED_RESEARCHER_EMAIL:-}
+      DevSeed__Accounts__Researcher__Password: ${DEV_SEED_RESEARCHER_PASSWORD:-}
+      DevSeed__Accounts__Researcher__DisplayName: ${DEV_SEED_RESEARCHER_NAME:-}
+      DevSeed__Accounts__AiEditor__Email: ${DEV_SEED_AI_EDITOR_EMAIL:-}
+      DevSeed__Accounts__AiEditor__Password: ${DEV_SEED_AI_EDITOR_PASSWORD:-}
+      DevSeed__Accounts__AiEditor__DisplayName: ${DEV_SEED_AI_EDITOR_NAME:-}
+      DevSeed__Accounts__CopyEditor__Email: ${DEV_SEED_COPY_EDITOR_EMAIL:-}
+      DevSeed__Accounts__CopyEditor__Password: ${DEV_SEED_COPY_EDITOR_PASSWORD:-}
+      DevSeed__Accounts__CopyEditor__DisplayName: ${DEV_SEED_COPY_EDITOR_NAME:-}
+      DevSeed__Accounts__SeniorEditor__Email: ${DEV_SEED_SENIOR_EDITOR_EMAIL:-}
+      DevSeed__Accounts__SeniorEditor__Password: ${DEV_SEED_SENIOR_EDITOR_PASSWORD:-}
+      DevSeed__Accounts__SeniorEditor__DisplayName: ${DEV_SEED_SENIOR_EDITOR_NAME:-}
+      DevSeed__Accounts__ManagingEditor__Email: ${DEV_SEED_MANAGING_EDITOR_EMAIL:-}
+      DevSeed__Accounts__ManagingEditor__Password: ${DEV_SEED_MANAGING_EDITOR_PASSWORD:-}
+      DevSeed__Accounts__ManagingEditor__DisplayName: ${DEV_SEED_MANAGING_EDITOR_NAME:-}
+      DevSeed__Accounts__EditorInChief__Email: ${DEV_SEED_EDITOR_IN_CHIEF_EMAIL:-}
+      DevSeed__Accounts__EditorInChief__Password: ${DEV_SEED_EDITOR_IN_CHIEF_PASSWORD:-}
+      DevSeed__Accounts__EditorInChief__DisplayName: ${DEV_SEED_EDITOR_IN_CHIEF_NAME:-}
+      DevSeed__Accounts__FactChecker__Email: ${DEV_SEED_FACT_CHECKER_EMAIL:-}
+      DevSeed__Accounts__FactChecker__Password: ${DEV_SEED_FACT_CHECKER_PASSWORD:-}
+      DevSeed__Accounts__FactChecker__DisplayName: ${DEV_SEED_FACT_CHECKER_NAME:-}
+      DevSeed__Accounts__SeoEditor__Email: ${DEV_SEED_SEO_EDITOR_EMAIL:-}
+      DevSeed__Accounts__SeoEditor__Password: ${DEV_SEED_SEO_EDITOR_PASSWORD:-}
+      DevSeed__Accounts__SeoEditor__DisplayName: ${DEV_SEED_SEO_EDITOR_NAME:-}
+      DevSeed__Accounts__CrisisEditor__Email: ${DEV_SEED_CRISIS_EDITOR_EMAIL:-}
+      DevSeed__Accounts__CrisisEditor__Password: ${DEV_SEED_CRISIS_EDITOR_PASSWORD:-}
+      DevSeed__Accounts__CrisisEditor__DisplayName: ${DEV_SEED_CRISIS_EDITOR_NAME:-}
+      DevSeed__Accounts__SystemAdmin__Email: ${DEV_SEED_SYSTEM_ADMIN_EMAIL:-}
+      DevSeed__Accounts__SystemAdmin__Password: ${DEV_SEED_SYSTEM_ADMIN_PASSWORD:-}
+      DevSeed__Accounts__SystemAdmin__DisplayName: ${DEV_SEED_SYSTEM_ADMIN_NAME:-}
+    ports:
+      - "5000:8080"
+
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: "http://localhost:5000"
+      # Server-side (SSR + CMS proxy) reaches the API over the compose network.
+      API_INTERNAL_BASE_URL: "http://api:8080"
+      # LOCAL DEV ONLY: the CMS session cookie is Secure in production builds;
+      # this lets it work over plain http://localhost. Never set in staging/prod.
+      COOKIE_INSECURE: "true"
+      # Public origin for canonical URLs, structured data and sitemaps.
+      SITE_URL: ${SITE_URL:-http://localhost:3000}
+    ports:
+      - "3000:3000"
+
+volumes:
+  jusoor_postgres_data:

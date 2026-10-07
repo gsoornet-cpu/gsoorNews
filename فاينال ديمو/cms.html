@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحرير جسور</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/josour-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="cms-mobile.css">
+</head>
+<body>
+<div class="cms-shell">
+  <!-- زر القائمة والخلفية الخاصان بنسخة الموبايل فقط (مخفيان على الديسكتوب
+       عبر cms-mobile.css) — يحوّلان الشريط الجانبي لـ Drawer بدل ما يكون
+       عمود ثابت ياكل عرض الشاشة كله -->
+  <button type="button" class="cms-mobile-menu-btn" id="cmsMenuBtn" aria-label="فتح قائمة لوحة التحكم">☰</button>
+  <div class="cms-sidebar-backdrop" id="cmsSidebarBackdrop"></div>
+
+  <aside class="cms-sidebar">
+    <div class="cms-sidebar-head">
+      <img class="logo-img" src="assets/josour-logo.png" alt="جسور" style="filter:brightness(0) invert(1);opacity:.92;height:22px;">
+      <span style="font-size:11px;color:#5C6673;font-weight:700;letter-spacing:.04em;">غرفة التحرير</span>
+    </div>
+    <nav class="cms-nav">
+      <div class="grp" data-toggle="g1">عام <span class="car">▾</span></div>
+      <div class="grp-items" id="g1">
+        <a href="#" class="active" data-page="dashboard">📊 نظرة عامة</a>
+      </div>
+
+      <div class="grp" data-toggle="g2">المحتوى <span class="car">▾</span></div>
+      <div class="grp-items" id="g2">
+        <a href="#" data-page="articles">📰 كل الأخبار</a>
+        <a href="#" data-page="editor" onclick="openEditor()">✍️ خبر جديد</a>
+        <a href="#" data-page="review">🕵️ قيد المراجعة <span class="badge" id="navReviewBadge">0</span></a>
+        <a href="#" data-page="scheduled">⏱️ مجدولة <span class="badge" id="navSchedBadge">0</span></a>
+        <a href="#" data-page="media">🖼️ مكتبة الوسائط</a>
+        <a href="#" data-page="taxonomy">🏷️ الأقسام والدول</a>
+      </div>
+
+      <div class="grp" data-toggle="g3">الطوارئ <span class="car">▾</span></div>
+      <div class="grp-items" id="g3">
+        <a href="#" data-page="crisis">🚨 وضع الأزمة</a>
+      </div>
+
+      <div class="grp" data-toggle="g4">الإدارة <span class="car">▾</span></div>
+      <div class="grp-items" id="g4">
+        <a href="#" data-page="users">👤 المستخدمون والصلاحيات</a>
+        <a href="#" data-page="activity">🧾 سجل النشاط</a>
+        <a href="#" data-page="settings">⚙️ الإعدادات</a>
+      </div>
+    </nav>
+    <div class="cms-sidebar-foot">
+      <div class="avatar" style="width:30px;height:30px;font-size:12px;">ع</div>
+      <div>
+        <div class="who">عمر فتحي</div>
+        <div class="role">محرر رئيسي</div>
+      </div>
+      <a href="index.html" title="العودة للموقع">←</a>
+    </div>
+  </aside>
+
+  <main class="cms-main">
+
+    <!-- ===== Global top strip (search / notifications / avatar) ===== -->
+    <div class="cms-topbar" style="margin-bottom:14px;">
+      <div class="cms-search"><input type="text" id="globalSearch" placeholder="ابحث عن خبر، عضو، أو قسم..."></div>
+      <div class="cms-topbar-tools">
+        <button class="icon-btn" title="الإشعارات" onclick="openNotifications()">🔔<span class="dot"></span></button>
+        <button class="icon-btn" title="مساعدة">❓</button>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <section class="cms-page active" data-page="dashboard">
+      <div class="cms-topbar"><h1>نظرة عامة</h1>
+        <div class="flex gap-8"><span class="role-pill">محرر رئيسي</span><button class="btn btn-primary" onclick="goto('editor');openEditor()">+ خبر جديد</button></div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="n" id="kpiTotal">--</div><div class="l">إجمالي الأخبار</div><div class="delta up">▲ 6% هذا الأسبوع</div></div>
+        <div class="kpi-card"><div class="n" id="kpiPublished">--</div><div class="l">منشور</div><div class="delta up">▲ 3</div></div>
+        <div class="kpi-card"><div class="n" id="kpiReview">--</div><div class="l">بانتظار المراجعة</div><div class="delta down" id="kpiReviewDelta">تحتاج إجراء</div></div>
+        <div class="kpi-card"><div class="n" id="kpiSched">--</div><div class="l">مجدولة للنشر</div><div class="delta up">قادمة</div></div>
+      </div>
+
+      <div class="cms-editor-grid" style="grid-template-columns:1.6fr 1fr;">
+        <div>
+          <div class="cms-panel">
+            <div class="panel-head"><h2>أحدث الأخبار</h2><a class="more" href="#" onclick="goto('articles')">عرض الكل ←</a></div>
+            <div class="table-scroll"><table class="cms-table"><thead><tr><th>الخبر</th><th>القسم</th><th>الدولة</th><th>الحالة</th><th>تاريخ</th></tr></thead>
+              <tbody id="dashRows"></tbody></table></div>
+          </div>
+        </div>
+        <div>
+          <div class="cms-panel">
+            <div class="panel-head"><h2>يحتاج إجراءً منك</h2></div>
+            <div id="needsAttention"></div>
+          </div>
+          <div class="cms-panel">
+            <div class="panel-head"><h2>آخر نشاط</h2><a class="more" href="#" onclick="goto('activity')">السجل الكامل ←</a></div>
+            <div id="dashActivity"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ARTICLES LIST ===== -->
+    <section class="cms-page" data-page="articles">
+      <div class="cms-topbar"><h1>إدارة الأخبار</h1><button class="btn btn-primary" onclick="goto('editor');openEditor()">+ خبر جديد</button></div>
+
+      <div class="bulk-bar" id="bulkBar">
+        <span id="bulkCount">0 محدد</span>
+        <span class="sp"></span>
+        <button onclick="bulkAction('منشور')">نشر المحدد</button>
+        <button onclick="bulkAction('مؤرشف')">أرشفة المحدد</button>
+        <button class="danger" onclick="bulkDelete()">حذف المحدد</button>
+      </div>
+
+      <div class="cms-panel">
+        <div class="panel-head">
+          <div class="toolbar">
+            <input id="artSearch" type="text" placeholder="ابحث في العناوين...">
+            <select id="artStatusFilter"><option value="">كل الحالات</option></select>
+            <select id="artCatFilter"><option value="">كل الأقسام</option></select>
+            <select id="artCountryFilter"><option value="">كل الدول</option></select>
+          </div>
+        </div>
+        <div class="table-scroll"><table class="cms-table"><thead><tr>
+          <th style="width:26px;"><input type="checkbox" id="artSelectAll"></th>
+          <th>الخبر</th><th>القسم</th><th>الدولة</th><th>الكاتب</th><th>الحالة</th><th>تاريخ</th><th></th></tr></thead>
+          <tbody id="artRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ===== REVIEW QUEUE ===== -->
+    <section class="cms-page" data-page="review">
+      <div class="cms-topbar"><h1>قيد المراجعة</h1></div>
+      <div class="cms-panel">
+        <div class="table-scroll"><table class="cms-table"><thead><tr><th>الخبر</th><th>القسم</th><th>الكاتب</th><th>أُرسل للمراجعة</th><th></th></tr></thead>
+          <tbody id="reviewRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ===== SCHEDULED ===== -->
+    <section class="cms-page" data-page="scheduled">
+      <div class="cms-topbar"><h1>الأخبار المجدولة</h1></div>
+      <div class="cms-panel">
+        <div class="table-scroll"><table class="cms-table"><thead><tr><th>الخبر</th><th>القسم</th><th>موعد النشر</th><th></th></tr></thead>
+          <tbody id="schedRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ===== EDITOR ===== -->
+    <section class="cms-page" data-page="editor">
+      <div class="cms-topbar">
+        <h1 id="editorTitle">خبر جديد</h1>
+        <div class="flex gap-8" style="align-items:center;">
+          <span class="autosave-note" id="autosaveNote"></span>
+          <button class="btn btn-ghost" onclick="saveDraft()">حفظ كمسودة</button>
+          <button class="btn btn-primary" onclick="publishArticle()">نشر</button>
+        </div>
+      </div>
+      <div class="cms-editor-grid">
+        <div>
+          <div class="field"><input id="edTitle" type="text" placeholder="عنوان الخبر" style="font-size:19px;font-weight:800;padding:14px;"></div>
+          <div class="field"><input id="edDeck" type="text" placeholder="نص تمهيدي مختصر (Deck) — يظهر أسفل العنوان"></div>
+          <div class="field"><input id="edSlug" type="text" placeholder="الرابط المختصر (slug) — مثال: egypt-uae-golden-visa"></div>
+          <div class="editor-toolbar">
+            <button title="عريض"><b>B</b></button><button title="مائل"><i>I</i></button><button title="عنوان">H2</button>
+            <button title="اقتباس">❝</button><button title="رابط">🔗</button><button title="صورة">🖼️</button><button title="قائمة">≡</button>
+          </div>
+          <div class="editor-canvas" id="edBody" contenteditable="true" data-placeholder="اكتب محتوى الخبر هنا..."></div>
+
+          <div class="cms-panel" style="margin-top:18px;">
+            <h2 style="font-size:14px;margin-bottom:10px;">فيديو مرتبط (اختياري)</h2>
+            <div class="field"><input id="edVideoUrl" type="text" placeholder="رابط الفيديو (يوتيوب أو ملف مباشر)"></div>
+          </div>
+
+          <div class="cms-panel">
+            <h2 style="font-size:14px;margin-bottom:10px;">الوسوم</h2>
+            <div class="chip-input" id="edTagsWrap"><input id="edTagInput" placeholder="اكتب وسماً واضغط Enter"></div>
+          </div>
+
+          <div class="cms-panel">
+            <div class="panel-head"><h2 style="font-size:14px;">أخبار ذات صلة</h2><span style="font-size:11.5px;color:var(--text-mute);" id="relatedCount">0 محدد</span></div>
+            <input type="text" id="relatedSearch" placeholder="ابحث لإضافة خبر ذي صلة..." style="width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:6px;font-size:13px;margin-bottom:10px;">
+            <div id="relatedList" style="max-height:200px;overflow-y:auto;"></div>
+          </div>
+        </div>
+        <div>
+          <div class="cms-panel">
+            <h2 style="font-size:14px;margin-bottom:14px;">حالة النشر</h2>
+            <div class="status-stepper" id="edStatusStepper">
+              <button data-st="مسودة">مسودة</button>
+              <button data-st="قيد المراجعة">مراجعة</button>
+              <button data-st="مجدوَل">جدولة</button>
+              <button data-st="منشور">نشر</button>
+            </div>
+            <div class="field" id="scheduleField" style="display:none;margin-top:12px;"><label>موعد النشر</label><input id="edScheduleAt" type="datetime-local"></div>
+            <div class="field" style="margin-top:12px;"><label>القسم</label><select id="edCat"></select></div>
+            <div class="field"><label>الدولة</label><select id="edCountry"></select></div>
+            <div class="field"><label class="checkline"><input id="edFeatured" type="checkbox"> مميّز على الرئيسية</label></div>
+            <div class="field"><label class="checkline"><input id="edUrgent" type="checkbox" onchange="document.getElementById('urgentDurationField').style.display=this.checked?'block':'none'"> خبر عاجل</label></div>
+            <div class="field" id="urgentDurationField" style="display:none;">
+              <label>مدة العرض كعاجل</label>
+              <select id="edUrgentDuration"><option value="60">ساعة واحدة</option><option value="360">6 ساعات</option><option value="1440">24 ساعة</option></select>
+            </div>
+          </div>
+
+          <div class="cms-panel">
+            <div class="panel-head"><h2 style="font-size:14px;">تحسين محركات البحث (SEO)</h2></div>
+            <div class="seo-score-ring"><div class="num" id="seoScoreNum">0%</div><div class="lbl">تقييم جاهزية الخبر لمحركات البحث</div></div>
+            <div class="field"><label>الكلمة المفتاحية الرئيسية</label><input id="edFocusKeyword" type="text" placeholder="مثال: الإقامة الذهبية"></div>
+            <div class="field"><label>وصف SEO</label><textarea id="edMetaDesc" placeholder="حتى 160 حرفاً" maxlength="160"></textarea>
+              <div class="field-hint"><span id="metaDescCount">0</span>/160 حرفاً</div></div>
+            <div id="seoChecklist"></div>
+          </div>
+
+          <div class="cms-panel">
+            <h2 style="font-size:14px;margin-bottom:14px;">الصورة البارزة</h2>
+            <div class="media-grid" id="edMediaPick"></div>
+            <div class="field" style="margin-top:12px;"><label>نص بديل (Alt)</label><input id="edImgAlt" type="text" placeholder="وصف الصورة لذوي الإعاقة البصرية ولمحركات البحث"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MEDIA ===== -->
+    <section class="cms-page" data-page="media">
+      <div class="cms-topbar"><h1>مكتبة الوسائط</h1></div>
+      <div class="cms-panel">
+        <div class="dropzone" id="mediaDropzone">
+          <div class="ic">⬆️</div>
+          اسحب الملفات هنا أو اضغط للاختيار — JPG, PNG, WEBP حتى 8MB
+          <input type="file" id="mediaFileInput" accept="image/*" multiple style="display:none;">
+        </div>
+        <div class="media-grid" id="mediaGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== TAXONOMY ===== -->
+    <section class="cms-page" data-page="taxonomy">
+      <div class="cms-topbar"><h1>الأقسام والدول</h1></div>
+      <div class="tabs-row"><button class="active" data-sub="cats">الأقسام</button><button data-sub="countries">الدول</button></div>
+      <div class="cms-panel sub-view" data-sub="cats">
+        <div class="panel-head"><h2>الأقسام</h2><button class="btn btn-primary btn-sm" onclick="openAddCategory()">+ إضافة قسم</button></div>
+        <div class="table-scroll"><table class="cms-table"><thead><tr><th>القسم</th><th>عدد الأخبار</th><th></th></tr></thead><tbody id="catRows"></tbody></table></div>
+      </div>
+      <div class="cms-panel sub-view" data-sub="countries" style="display:none;">
+        <div class="panel-head"><h2>الدول</h2><button class="btn btn-primary btn-sm" onclick="openAddCountry()">+ إضافة دولة</button></div>
+        <div class="table-scroll"><table class="cms-table"><thead><tr><th>الدولة</th><th>حجم الجالية</th><th>عدد الأخبار</th><th></th></tr></thead><tbody id="countryRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ===== وضع الأزمة (Crisis Mode) ===== -->
+    <section class="cms-page" data-page="crisis">
+      <div class="cms-topbar">
+        <h1>🚨 وضع الأزمة</h1>
+        <label class="checkline" style="gap:8px;">
+          <input id="crisisActive" type="checkbox">
+          تفعيل الوضع على كل صفحات الموقع
+        </label>
+      </div>
+
+      <div class="cms-panel">
+        <h2 style="font-size:14px;margin-bottom:14px;">محتوى الشريط والمركز</h2>
+        <div class="field"><label>مستوى التنبيه</label>
+          <select id="crisisLevel"><option>عاجل</option><option>تحذير</option><option>مراقبة</option></select>
+        </div>
+        <div class="field"><label>عنوان الأزمة</label><input id="crisisTitle" type="text" placeholder="مثال: فيضانات كبرى في مدينة كالجاري، كندا"></div>
+        <div class="field"><label>الوصف/الملخص</label><textarea id="crisisSummary" rows="3" placeholder="ملخص موجز يظهر في الشريط وصفحة مركز الأزمة"></textarea></div>
+        <div class="field"><label>نص "آخر تحديث"</label><input id="crisisUpdatedLabel" type="text" placeholder="مثال: منذ 18 دقيقة"></div>
+      </div>
+
+      <div class="cms-panel">
+        <h2 style="font-size:14px;margin-bottom:14px;">مؤشرات الحالة (4 بطاقات)</h2>
+        <div class="cms-editor-grid" style="grid-template-columns:repeat(4,1fr);gap:12px;">
+          <div class="field"><label>بطاقة 1 — رقم</label><input id="crisisStat0Value" type="text"></div>
+          <div class="field"><label>بطاقة 2 — رقم</label><input id="crisisStat1Value" type="text"></div>
+          <div class="field"><label>بطاقة 3 — رقم</label><input id="crisisStat2Value" type="text"></div>
+          <div class="field"><label>بطاقة 4 — رقم</label><input id="crisisStat3Value" type="text"></div>
+          <div class="field"><label>بطاقة 1 — وصف</label><input id="crisisStat0Label" type="text"></div>
+          <div class="field"><label>بطاقة 2 — وصف</label><input id="crisisStat1Label" type="text"></div>
+          <div class="field"><label>بطاقة 3 — وصف</label><input id="crisisStat2Label" type="text"></div>
+          <div class="field"><label>بطاقة 4 — وصف</label><input id="crisisStat3Label" type="text"></div>
+        </div>
+      </div>
+
+      <div class="cms-panel">
+        <h2 style="font-size:14px;margin-bottom:14px;">آخر التحديثات (سطر لكل تحديث — الوقت ثم :: ثم النص)</h2>
+        <div class="field"><textarea id="crisisUpdates" rows="5" placeholder="منذ 18 دقيقة :: نص التحديث الأول"></textarea></div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveCrisisFromForm()">حفظ إعدادات وضع الأزمة</button>
+      <span style="color:var(--text-mute);font-size:12.5px;margin-inline-start:10px;">التفعيل/الإيقاف يظهر فوراً على كل صفحات الموقع في هذا المتصفح.</span>
+    </section>
+
+    <!-- ===== USERS & PERMISSIONS ===== -->
+    <section class="cms-page" data-page="users">
+      <div class="cms-topbar"><h1>المستخدمون والصلاحيات</h1><button class="btn btn-primary" onclick="openInviteUser()">+ دعوة عضو</button></div>
+      <div class="tabs-row">
+        <button class="active" data-sub2="members">الأعضاء</button>
+        <button data-sub2="perms">مصفوفة الصلاحيات</button>
+        <button data-sub2="sessions">الجلسات النشطة</button>
+      </div>
+
+      <div class="cms-panel sub-view2" data-sub2="members">
+        <div class="table-scroll"><table class="cms-table"><thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th>آخر نشاط</th><th>الحالة</th><th></th></tr></thead>
+        <tbody id="userRows"></tbody></table></div>
+      </div>
+
+      <div class="cms-panel sub-view2" data-sub2="perms" style="display:none;">
+        <div class="panel-head"><h2 style="font-size:14px;">صلاحيات الإجراءات حسب الدور</h2></div>
+        <div class="table-scroll"><table class="perm-matrix"><thead><tr><th>الدور</th><th>نشر مباشر</th><th>مراجعة أخبار الغير</th><th>حذف/أرشفة</th><th>إدارة الأعضاء</th></tr></thead>
+          <tbody id="permActionRows"></tbody></table></div>
+        <div class="panel-head" style="margin-top:22px;"><h2 style="font-size:14px;">نطاق الأقسام المتاحة لكل دور</h2></div>
+        <div class="table-scroll"><table class="perm-matrix" id="permScopeTable"></table></div>
+        <div style="margin-top:14px;"><button class="btn btn-primary btn-sm" onclick="toast('تم حفظ مصفوفة الصلاحيات ✅')">حفظ التغييرات</button></div>
+      </div>
+
+      <div class="cms-panel sub-view2" data-sub2="sessions" style="display:none;">
+        <div class="table-scroll"><table class="cms-table"><thead><tr><th>الاسم</th><th>الدور</th><th>IP</th><th>بدأت</th><th>آخر نشاط</th><th></th></tr></thead>
+          <tbody id="sessionRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ===== ACTIVITY LOG ===== -->
+    <section class="cms-page" data-page="activity">
+      <div class="cms-topbar"><h1>سجل النشاط</h1></div>
+      <div class="cms-panel"><div id="activityFull"></div></div>
+    </section>
+
+    <!-- ===== SETTINGS ===== -->
+    <section class="cms-page" data-page="settings">
+      <div class="cms-topbar"><h1>الإعدادات العامة</h1></div>
+      <div class="cms-panel">
+        <h2 style="font-size:14px;margin-bottom:14px;">عام</h2>
+        <div class="field"><label>اسم الموقع</label><input type="text" value="جسور"></div>
+        <div class="field"><label>الوصف التعريفي</label><textarea>منصة المصريين بالمهجر — أخبار، اطمّن، وخريطة المهجر</textarea></div>
+        <div class="field"><label>اللغة الافتراضية</label><select><option>العربية</option><option>English</option></select></div>
+      </div>
+      <div class="cms-panel">
+        <h2 style="font-size:14px;margin-bottom:14px;">إعدادات SEO الافتراضية</h2>
+        <div class="field-row-2">
+          <div class="field"><label>وصف SEO الافتراضي للموقع</label><textarea placeholder="يُستخدم عند غياب وصف مخصص للخبر"></textarea></div>
+          <div class="field"><label>الحد الأدنى الموصى به لكلمات الخبر</label><input type="number" value="300"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="toast('تم حفظ الإعدادات ✅')">حفظ التغييرات</button>
+    </section>
+
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+/* ==========================================================================
+   Jusoor CMS — page routing
+   ========================================================================== */
+function goto(page){
+  document.querySelectorAll('.cms-page').forEach(p=>p.classList.toggle('active', p.dataset.page===page));
+  document.querySelectorAll('.cms-nav a').forEach(a=>a.classList.toggle('active', a.dataset.page===page));
+  window.scrollTo(0,0);
+  if (page==='review') renderReviewQueue();
+  if (page==='scheduled') renderScheduledList();
+  if (page==='activity') renderActivityFull();
+  if (page==='users') renderUsersEverything();
+}
+document.querySelectorAll('.cms-nav a').forEach(a=>a.addEventListener('click', e=>{ e.preventDefault(); goto(a.dataset.page); }));
+document.querySelectorAll('.grp[data-toggle]').forEach(g=>g.addEventListener('click', ()=> g.classList.toggle('collapsed')));
+
+/* ===== نسخة الموبايل: الشريط الجانبي كـ Drawer ===== */
+(function(){
+  const sidebar = document.querySelector('.cms-sidebar');
+  const menuBtn = document.getElementById('cmsMenuBtn');
+  const backdrop = document.getElementById('cmsSidebarBackdrop');
+  if (!sidebar || !menuBtn || !backdrop) return;
+  const openSidebar = () => { sidebar.classList.add('open'); backdrop.classList.add('open'); document.body.style.overflow = 'hidden'; };
+  const closeSidebar = () => { sidebar.classList.remove('open'); backdrop.classList.remove('open'); document.body.style.overflow = ''; };
+  menuBtn.addEventListener('click', openSidebar);
+  backdrop.addEventListener('click', closeSidebar);
+  document.querySelectorAll('.cms-nav a').forEach(a => a.addEventListener('click', closeSidebar));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+})();
+document.querySelectorAll('.tabs-row [data-sub]').forEach(b=>b.addEventListener('click', ()=>{
+  document.querySelectorAll('.tabs-row [data-sub]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  document.querySelectorAll('.sub-view').forEach(v=> v.style.display = v.dataset.sub===b.dataset.sub ? 'block':'none');
+}));
+document.querySelectorAll('[data-sub2]').forEach(b=>b.addEventListener('click', ()=>{
+  document.querySelectorAll('[data-sub2]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  document.querySelectorAll('.sub-view2').forEach(v=> v.style.display = v.dataset.sub2===b.dataset.sub2 ? 'block':'none');
+}));
+function openNotifications(){
+  openModal({title:'الإشعارات', bodyHTML: ACTIVITY_LOG.slice(0,5).map(a=>`
+    <div class="activity-row"><div class="ic">${a.ic}</div><div><div class="tx"><b>${a.user}</b> ${a.action} — ${a.target}</div><div class="meta">${a.time}</div></div></div>`).join('')});
+}
+
+/* ==========================================================================
+   Article status model — ARTICLES has no status field in the mock data,
+   so a deterministic default is derived per id and any edit made through
+   this CMS is layered on top via `overrides` (in-memory only, like the
+   rest of this frontend-only demo).
+   ========================================================================== */
+const ARTICLE_STATUSES = ["مسودة","قيد المراجعة","مجدوَل","منشور","مؤرشف"];
+const overrides = {};
+function defaultStatusFor(a){ const seq=["منشور","منشور","مسودة","قيد المراجعة","مجدوَل"]; return seq[a.id % seq.length]; }
+function statusFor(a){ return (overrides[a.id] && overrides[a.id].status) || defaultStatusFor(a); }
+function statusClass(s){ return s==='منشور'?'published':s==='مجدوَل'?'scheduled':s==='قيد المراجعة'?'review':s==='مؤرشف'?'archived':'draft'; }
+function setStatus(id, status){ overrides[id] = Object.assign({}, overrides[id], {status}); }
+
+/* ---------- dashboard ---------- */
+function renderDashboard(){
+  document.getElementById('kpiTotal').textContent = ARTICLES.length;
+  document.getElementById('kpiPublished').textContent = ARTICLES.filter(a=>statusFor(a)==='منشور').length;
+  const reviewCount = ARTICLES.filter(a=>statusFor(a)==='قيد المراجعة').length;
+  const schedCount = ARTICLES.filter(a=>statusFor(a)==='مجدوَل').length;
+  document.getElementById('kpiReview').textContent = reviewCount;
+  document.getElementById('kpiSched').textContent = schedCount;
+  document.getElementById('navReviewBadge').textContent = reviewCount;
+  document.getElementById('navSchedBadge').textContent = schedCount;
+  document.getElementById('navReviewBadge').style.display = reviewCount ? 'inline-block':'none';
+  document.getElementById('navSchedBadge').style.display = schedCount ? 'inline-block':'none';
+
+  document.getElementById('dashRows').innerHTML = ARTICLES.slice(0,6).map(a=>`
+    <tr><td><div class="table-thumb"><img src="${a.img}" alt="${a.title}"><span>${a.title}</span></div></td>
+<td>${getSectionLabelForArticle(a)}</td><td>${a.country||'—'}</td>
+    <td><span class="status-pill ${statusClass(statusFor(a))}">${statusFor(a)}</span></td><td>${a.time}</td></tr>`).join('');
+
+  const needsReview = ARTICLES.filter(a=>statusFor(a)==='قيد المراجعة').slice(0,3);
+  const needsSched = ARTICLES.filter(a=>statusFor(a)==='مجدوَل').slice(0,2);
+  const items = [...needsReview.map(a=>({label:'بانتظار المراجعة', a})), ...needsSched.map(a=>({label:'مجدول للنشر', a}))];
+  document.getElementById('needsAttention').innerHTML = items.length ? items.map(it=>`
+    <div class="activity-row"><div class="ic">${it.label==='بانتظار المراجعة'?'🕵️':'⏱️'}</div>
+      <div><div class="tx"><b>${it.label}</b> — ${it.a.title}</div><div class="meta">${it.a.cat} · ${it.a.time}</div></div></div>`).join('')
+    : `<div style="color:var(--text-mute);font-size:13px;padding:8px 0;">لا يوجد ما يحتاج إجراءً الآن ✅</div>`;
+
+  document.getElementById('dashActivity').innerHTML = ACTIVITY_LOG.slice(0,4).map(a=>`
+    <div class="activity-row"><div class="ic">${a.ic}</div><div><div class="tx"><b>${a.user}</b> ${a.action} — ${a.target}</div><div class="meta">${a.time}</div></div></div>`).join('');
+}
+
+/* ---------- articles table ---------- */
+function populateArticleFilters(){
+  document.getElementById('artStatusFilter').innerHTML = '<option value="">كل الحالات</option>' + ARTICLE_STATUSES.map(s=>`<option>${s}</option>`).join('');
+  document.getElementById('artCatFilter').innerHTML = '<option value="">كل الأقسام</option>' + CATEGORIES.map(c=>`<option>${c}</option>`).join('');
+  document.getElementById('artCountryFilter').innerHTML = '<option value="">كل الدول</option>' + COUNTRIES.map(c=>`<option>${c.name}</option>`).join('');
+}
+function renderArticleRows(){
+  const q = document.getElementById('artSearch').value.trim();
+  const st = document.getElementById('artStatusFilter').value;
+  const cat = document.getElementById('artCatFilter').value;
+  const country = document.getElementById('artCountryFilter').value;
+  const list = ARTICLES.filter(a=>
+    (!q || a.title.includes(q)) && (!st || statusFor(a)===st) && (!cat || a.cat===cat) && (!country || a.country===country));
+  document.getElementById('artRows').innerHTML = list.length ? list.map(a=>`
+    <tr><td><input type="checkbox" class="row-check" data-id="${a.id}"></td>
+    <td><div class="table-thumb"><img src="${a.img}" alt="${a.title}"><span>${a.title}</span></div></td>
+<td>${getSectionLabelForArticle(a)}</td><td>${a.country||'—'}</td><td>عمر فتحي</td>
+    <td><span class="status-pill ${statusClass(statusFor(a))}">${statusFor(a)}</span></td><td>${a.time}</td>
+    <td><div class="row-actions">
+      <button title="معاينة" onclick="window.open('article.html?id=${a.id}','_blank')">👁️</button>
+      <button title="تعديل" onclick="goto('editor');openEditor(${a.id})">✏️</button>
+      <button title="نسخ" onclick="duplicateArticle(${a.id})">📄</button>
+      <button title="أرشفة/حذف" onclick="deleteRow(${a.id})">🗑️</button>
+    </div></td></tr>`).join('') : `<tr><td colspan="8"><div class="empty-state"><div class="ico">📭</div><h3>لا نتائج مطابقة للفلاتر الحالية</h3></div></td></tr>`;
+  document.querySelectorAll('.row-check').forEach(cb=>cb.addEventListener('change', updateBulkBar));
+  updateBulkBar();
+}
+['artSearch','artStatusFilter','artCatFilter','artCountryFilter'].forEach(id=> document.getElementById(id).addEventListener('input', renderArticleRows));
+document.getElementById('artSelectAll').addEventListener('change', e=>{
+  document.querySelectorAll('.row-check').forEach(cb=> cb.checked = e.target.checked);
+  updateBulkBar();
+});
+function selectedIds(){ return [...document.querySelectorAll('.row-check:checked')].map(cb=>Number(cb.dataset.id)); }
+function updateBulkBar(){
+  const n = selectedIds().length;
+  document.getElementById('bulkBar').classList.toggle('show', n>0);
+  document.getElementById('bulkCount').textContent = n + ' محدد';
+}
+function bulkAction(status){
+  const ids = selectedIds();
+  ids.forEach(id=> setStatus(id, status));
+  toast(`تم تحديث ${ids.length} خبر إلى «${status}» ✅`);
+  renderArticleRows(); renderDashboard();
+}
+function bulkDelete(){
+  const ids = selectedIds();
+  confirmDialog({title:`أرشفة ${ids.length} خبر؟`, body:'ستُنقل الأخبار المحددة إلى الأرشيف ويمكن استعادتها لاحقاً من نفس القائمة عبر فلتر الحالة.', confirmLabel:'أرشفة', onConfirm:()=>{
+    ids.forEach(id=> setStatus(id, 'مؤرشف'));
+    toast('تم أرشفة الأخبار المحددة 🗄️');
+    renderArticleRows(); renderDashboard();
+  }});
+}
+function duplicateArticle(id){
+  const src = ARTICLES.find(a=>a.id===id);
+  if(!src) return;
+  const newId = Math.max(...ARTICLES.map(a=>a.id)) + 1;
+  const copy = Object.assign({}, src, {id:newId, title: src.title + ' (نسخة)', featured:false});
+  ARTICLES.unshift(copy);
+  setStatus(newId, 'مسودة');
+  toast('تم إنشاء نسخة كمسودة ✅');
+  renderArticleRows(); renderDashboard();
+}
+function deleteRow(id){
+  confirmDialog({title:'أرشفة هذا الخبر؟', body:'سيُنقل الخبر إلى الأرشيف ولن يظهر في القوائم العامة. يمكن استعادته لاحقاً.', confirmLabel:'أرشفة', onConfirm:()=>{ setStatus(id,'مؤرشف'); toast('تم أرشفة الخبر 🗄️'); renderArticleRows(); renderDashboard(); }});
+}
+
+/* ---------- review / scheduled ---------- */
+function renderReviewQueue(){
+  const list = ARTICLES.filter(a=>statusFor(a)==='قيد المراجعة');
+  document.getElementById('reviewRows').innerHTML = list.length ? list.map(a=>`
+    <tr><td><div class="table-thumb"><img src="${a.img}" alt="${a.title}"><span>${a.title}</span></div></td>
+<td>${getSectionLabelForArticle(a)}</td><td>ياسمين عادل</td><td>${a.time}</td>
+    <td><div class="row-actions">
+      <button title="موافقة ونشر" onclick="setStatus(${a.id},'منشور');toast('تمت الموافقة والنشر ✅');renderReviewQueue();renderDashboard();">✅</button>
+      <button title="إرجاع لمسودة" onclick="setStatus(${a.id},'مسودة');toast('أُعيد الخبر كمسودة');renderReviewQueue();renderDashboard();">↩️</button>
+      <button title="فتح في المحرر" onclick="goto('editor');openEditor(${a.id})">✏️</button>
+    </div></td></tr>`).join('') : `<tr><td colspan="5"><div class="empty-state"><div class="ico">✅</div><h3>لا توجد أخبار بانتظار المراجعة</h3></div></td></tr>`;
+}
+function renderScheduledList(){
+  const list = ARTICLES.filter(a=>statusFor(a)==='مجدوَل');
+  document.getElementById('schedRows').innerHTML = list.length ? list.map(a=>`
+    <tr><td><div class="table-thumb"><img src="${a.img}" alt="${a.title}"><span>${a.title}</span></div></td>
+<td>${getSectionLabelForArticle(a)}</td><td>${(overrides[a.id]&&overrides[a.id].scheduleAt) || 'غير محدد'}</td>
+    <td><div class="row-actions">
+      <button title="نشر الآن" onclick="setStatus(${a.id},'منشور');toast('تم النشر الآن ✅');renderScheduledList();renderDashboard();">🚀</button>
+      <button title="فتح في المحرر" onclick="goto('editor');openEditor(${a.id})">✏️</button>
+    </div></td></tr>`).join('') : `<tr><td colspan="4"><div class="empty-state"><div class="ico">⏱️</div><h3>لا توجد أخبار مجدولة حالياً</h3></div></td></tr>`;
+}
+
+/* ==========================================================================
+   Editor
+   ========================================================================== */
+let edTags = [];
+let editingId = null;
+
+function openEditor(id){
+  editingId = id || null;
+  document.getElementById('edCat').innerHTML = CATEGORIES.map(c=>`<option>${c}</option>`).join('');
+  document.getElementById('edCountry').innerHTML = '<option value="">— بدون تخصيص دولة —</option>' + COUNTRIES.map(c=>`<option>${c.name}</option>`).join('');
+  document.getElementById('edMediaPick').innerHTML = Object.values(IMG).slice(0,8).map((src,i)=>
+    `<div class="item ${i===0?'selected':''}" onclick="document.querySelectorAll('#edMediaPick .item').forEach(x=>x.classList.remove('selected'));this.classList.add('selected')"><img src="${src}" alt="صورة من مكتبة الوسائط"></div>`).join('');
+  edTags = [];
+  renderTags();
+  renderRelatedList();
+
+  if (id){
+    const a = ARTICLES.find(x=>x.id===id);
+    document.getElementById('editorTitle').textContent = 'تعديل خبر';
+    document.getElementById('edTitle').value = a.title || '';
+    document.getElementById('edDeck').value = a.excerpt || '';
+    document.getElementById('edSlug').value = (a.title||'').trim().split(/\s+/).slice(0,6).join('-');
+    document.getElementById('edBody').innerHTML = (a.body||[]).map(p=>`<p>${p}</p>`).join('') || '';
+    document.getElementById('edCat').value = a.cat || CATEGORIES[0];
+    document.getElementById('edCountry').value = a.country || '';
+    document.getElementById('edFeatured').checked = !!a.featured;
+    edTags = (a.tags||[]).slice(0,8);
+    renderTags();
+    setStepper(statusFor(a));
+  } else {
+    document.getElementById('editorTitle').textContent = 'خبر جديد';
+    document.getElementById('edTitle').value = '';
+    document.getElementById('edDeck').value = '';
+    document.getElementById('edSlug').value = '';
+    document.getElementById('edBody').innerHTML = '';
+    document.getElementById('edFeatured').checked = false;
+    document.getElementById('edUrgent').checked = false;
+    document.getElementById('urgentDurationField').style.display = 'none';
+    setStepper('مسودة');
+  }
+  document.getElementById('edFocusKeyword').value = '';
+  document.getElementById('edMetaDesc').value = '';
+  updateSeo();
+  document.getElementById('autosaveNote').textContent = '';
+}
+
+function setStepper(status){
+  document.querySelectorAll('#edStatusStepper button').forEach(b=>{
+    b.classList.remove('active','rev','sched');
+    if (b.dataset.st===status){
+      b.classList.add('active');
+      if (status==='قيد المراجعة') b.classList.add('rev');
+      if (status==='مجدوَل') b.classList.add('sched');
+    }
+  });
+  document.getElementById('scheduleField').style.display = status==='مجدوَل' ? 'block' : 'none';
+}
+document.querySelectorAll('#edStatusStepper button').forEach(b=> b.addEventListener('click', ()=> setStepper(b.dataset.st)));
+function currentStepperStatus(){
+  const active = document.querySelector('#edStatusStepper button.active');
+  return active ? active.dataset.st : 'مسودة';
+}
+
+document.getElementById('edTitle').addEventListener('input', e=>{
+  document.getElementById('edSlug').value = e.target.value.trim().split(/\s+/).slice(0,6).join('-');
+  markUnsaved(); updateSeo();
+});
+document.getElementById('edBody').addEventListener('input', ()=>{ markUnsaved(); updateSeo(); });
+document.getElementById('edFocusKeyword').addEventListener('input', updateSeo);
+document.getElementById('edMetaDesc').addEventListener('input', e=>{
+  document.getElementById('metaDescCount').textContent = e.target.value.length;
+  updateSeo();
+});
+function updateSeo(){
+  const { score, checks } = computeSeoChecklist({
+    title: document.getElementById('edTitle').value,
+    body: document.getElementById('edBody').innerHTML,
+    keyword: document.getElementById('edFocusKeyword').value,
+  });
+  document.getElementById('seoScoreNum').textContent = score + '%';
+  document.getElementById('seoScoreNum').style.color = score>=70?'var(--success)':score>=40?'var(--warning)':'var(--error)';
+  document.getElementById('seoChecklist').innerHTML = checks.map(c=>{
+    const cls = c.ok ? 'ok' : c.warn ? 'warn' : 'bad';
+    const ic = c.ok ? '✔' : c.warn ? '!' : '✕';
+    return `<div class="seo-check ${cls}"><span class="ic">${ic}</span><span class="tx">${c.text}</span></div>`;
+  }).join('');
+}
+
+function renderTags(){
+  const wrap = document.getElementById('edTagsWrap');
+  wrap.querySelectorAll('.chip').forEach(c=>c.remove());
+  edTags.forEach((t,i)=>{
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerHTML = `${t} <button type="button" aria-label="إزالة">✕</button>`;
+    chip.querySelector('button').addEventListener('click', ()=>{ edTags.splice(i,1); renderTags(); });
+    wrap.insertBefore(chip, document.getElementById('edTagInput'));
+  });
+}
+document.getElementById('edTagInput').addEventListener('keydown', e=>{
+  if (e.key==='Enter' && e.target.value.trim()){
+    e.preventDefault();
+    edTags.push(e.target.value.trim());
+    e.target.value = '';
+    renderTags(); markUnsaved();
+  }
+});
+
+function renderRelatedList(selected){
+  selected = selected || [];
+  const q = (document.getElementById('relatedSearch').value||'').trim();
+  const list = ARTICLES.filter(a=> !q || a.title.includes(q)).slice(0,30);
+  document.getElementById('relatedList').innerHTML = list.map(a=>`
+    <label class="checkline" style="padding:5px 0;font-size:12.5px;">
+      <input type="checkbox" class="related-check" value="${a.id}" ${selected.includes(a.id)?'checked':''}> ${a.title}
+    </label>`).join('') || '<div style="color:var(--text-mute);font-size:12.5px;">لا نتائج</div>';
+  document.querySelectorAll('.related-check').forEach(cb=>cb.addEventListener('change', updateRelatedCount));
+  updateRelatedCount();
+}
+document.getElementById('relatedSearch').addEventListener('input', ()=>renderRelatedList());
+function updateRelatedCount(){
+  document.getElementById('relatedCount').textContent = document.querySelectorAll('.related-check:checked').length + ' محدد';
+}
+
+let unsavedFlag = false;
+function markUnsaved(){
+  unsavedFlag = true;
+  document.getElementById('autosaveNote').innerHTML = '<span class="unsaved-dot"></span>تغييرات غير محفوظة';
+}
+setInterval(()=>{
+  if (unsavedFlag && document.querySelector('[data-page="editor"].active')){
+    unsavedFlag = false;
+    const now = new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('autosaveNote').textContent = 'حُفظ تلقائياً — ' + now;
+  }
+}, 8000);
+
+function validateEditor(){
+  if (!document.getElementById('edTitle').value.trim()) return 'أدخل عنوان الخبر أولاً';
+  if (!document.getElementById('edCat').value) return 'اختر قسماً للخبر';
+  if (!document.getElementById('edBody').textContent.trim()) return 'أضف محتوى الخبر قبل النشر';
+  return null;
+}
+function saveDraft(){
+  const err = !document.getElementById('edTitle').value.trim() ? 'أدخل عنوان الخبر أولاً' : null;
+  if (err){ toast(err); return; }
+  setStepper('مسودة');
+  toast('تم الحفظ كمسودة 💾');
+  unsavedFlag = false;
+  document.getElementById('autosaveNote').textContent = 'حُفظ للتو';
+}
+function publishArticle(){
+  const status = currentStepperStatus();
+  if (status==='منشور' || status==='قيد المراجعة'){
+    const err = validateEditor();
+    if (err){ toast(err); return; }
+  }
+  if (editingId){ setStatus(editingId, status); }
+  const label = status==='منشور'?'تم نشر الخبر بنجاح ✅':status==='قيد المراجعة'?'تم إرساله للمراجعة 🕵️':status==='مجدوَل'?'تم جدولة الخبر ⏱️':'تم الحفظ كمسودة 💾';
+  toast(label);
+  unsavedFlag = false;
+  setTimeout(()=>{ goto('articles'); renderArticleRows(); renderDashboard(); }, 500);
+}
+
+/* ==========================================================================
+   Media library
+   ========================================================================== */
+function renderMediaGrid(){
+  document.getElementById('mediaGrid').innerHTML = Object.entries(IMG).map(([key,src])=>`
+    <div class="item" style="position:relative;">
+      <img src="${src}" alt="صورة من مكتبة الوسائط">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 45%);opacity:0;transition:.15s;display:flex;align-items:flex-end;justify-content:flex-end;padding:6px;gap:4px;" class="media-hover">
+        <button title="تعديل البيانات" onclick="editMediaMeta('${key}')" style="background:#fff;border:none;border-radius:5px;width:26px;height:26px;font-size:11px;">✏️</button>
+      </div>
+    </div>`).join('');
+  document.querySelectorAll('#mediaGrid .item').forEach(it=>{
+    it.addEventListener('mouseenter', ()=> it.querySelector('.media-hover').style.opacity=1);
+    it.addEventListener('mouseleave', ()=> it.querySelector('.media-hover').style.opacity=0);
+  });
+}
+function editMediaMeta(key){
+  openModal({title:'بيانات الوسيط', bodyHTML:`
+    <div class="field"><label>نص بديل (Alt)</label><input id="mmAlt" type="text" placeholder="وصف الصورة"></div>
+    <div class="field"><label>تسمية توضيحية</label><input id="mmCaption" type="text" placeholder="تظهر أسفل الصورة داخل الخبر"></div>
+    <div class="field"><label>مصدر/حقوق الصورة</label><input id="mmCredit" type="text" placeholder="مثال: جسور — القاهرة"></div>`,
+    actions:[{label:'إلغاء',className:'btn btn-ghost'},{label:'حفظ',className:'btn btn-primary',onClick:()=>toast('تم حفظ بيانات الصورة ✅')}]});
+}
+const dz = document.getElementById('mediaDropzone');
+dz.addEventListener('click', ()=> document.getElementById('mediaFileInput').click());
+['dragover','dragenter'].forEach(ev=> dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev=> dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
+dz.addEventListener('drop', e=>{ handleUpload(e.dataTransfer.files); });
+document.getElementById('mediaFileInput').addEventListener('change', e=> handleUpload(e.target.files));
+function handleUpload(files){
+  if (!files || !files.length) return;
+  toast(`جارٍ رفع ${files.length} ملف...`);
+  setTimeout(()=> toast(`تم رفع ${files.length} ملف بنجاح ✅`), 700);
+}
+
+/* ==========================================================================
+   Taxonomy
+   ========================================================================== */
+function renderTaxonomy(){
+  document.getElementById('catRows').innerHTML = CATEGORIES.map(c=>`
+    <tr><td>${c}</td><td>${ARTICLES.filter(a=>a.cat===c).length}</td>
+    <td><div class="row-actions">
+      <button title="تعديل" onclick="toast('تعديل اسم القسم — نموذج مبسّط')">✏️</button>
+      <button title="حذف" onclick="deleteCategory('${c}')">🗑️</button>
+    </div></td></tr>`).join('');
+  document.getElementById('countryRows').innerHTML = COUNTRIES.map(c=>`
+    <tr><td>${c.flag} ${c.name}</td><td>${c.community}</td><td>${articlesByCountry(c.name).length}</td>
+    <td><div class="row-actions">
+      <button title="تعديل" onclick="toast('تعديل بيانات الدولة — نموذج مبسّط')">✏️</button>
+      <button title="حذف" onclick="deleteCountry('${c.code}')">🗑️</button>
+    </div></td></tr>`).join('');
+}
+function openAddCategory(){
+  openModal({title:'إضافة قسم جديد', bodyHTML:`<div class="field"><label>اسم القسم</label><input id="newCatName" type="text" placeholder="مثال: صحة"></div>`,
+    actions:[{label:'إلغاء',className:'btn btn-ghost'},{label:'إضافة',className:'btn btn-primary',onClick:()=>{
+      const v = document.getElementById('newCatName').value.trim();
+      if(!v){ toast('أدخل اسم القسم'); return; }
+      CATEGORIES.push(v); renderTaxonomy(); populateArticleFilters(); toast('تمت إضافة القسم ✅');
+    }}]});
+}
+function deleteCategory(name){
+  confirmDialog({title:`حذف قسم «${name}»؟`, body:'الأخبار المرتبطة بهذا القسم ستبقى، لكن سيُحذف القسم من قائمة التصنيفات.', onConfirm:()=>{
+    const i = CATEGORIES.indexOf(name); if(i>-1) CATEGORIES.splice(i,1);
+    renderTaxonomy(); populateArticleFilters(); toast('تم حذف القسم 🗑️');
+  }});
+}
+function openAddCountry(){
+  openModal({title:'إضافة دولة جديدة', bodyHTML:`
+    <div class="field"><label>اسم الدولة</label><input id="newCountryName" type="text" placeholder="مثال: قطر"></div>
+    <div class="field"><label>حجم الجالية (نص وصفي)</label><input id="newCountryComm" type="text" placeholder="مثال: نحو 50 ألف مصري"></div>`,
+    actions:[{label:'إلغاء',className:'btn btn-ghost'},{label:'إضافة',className:'btn btn-primary',onClick:()=>{
+      const name = document.getElementById('newCountryName').value.trim();
+      if(!name){ toast('أدخل اسم الدولة'); return; }
+      COUNTRIES.push({code:name.slice(0,2), name, flag:'🏳️', community: document.getElementById('newCountryComm').value.trim()||'—', summary:''});
+      renderTaxonomy(); toast('تمت إضافة الدولة ✅');
+    }}]});
+}
+function deleteCountry(code){
+  const c = COUNTRIES.find(x=>x.code===code);
+  confirmDialog({title:`حذف «${c?c.name:''}»؟`, body:'سيُحذف من قائمة الدول المتاحة عند نشر أو تصنيف الأخبار.', onConfirm:()=>{
+    const i = COUNTRIES.findIndex(x=>x.code===code); if(i>-1) COUNTRIES.splice(i,1);
+    renderTaxonomy(); toast('تم حذف الدولة 🗑️');
+  }});
+}
+
+/* ==========================================================================
+   Crisis mode (unchanged logic, kept intact)
+   ========================================================================== */
+function loadCrisisForm(){
+  if (typeof getCrisisState !== 'function') return;
+  const s = getCrisisState();
+  document.getElementById('crisisActive').checked = !!s.active;
+  document.getElementById('crisisLevel').value = s.level || 'عاجل';
+  document.getElementById('crisisTitle').value = s.title || '';
+  document.getElementById('crisisSummary').value = s.summary || '';
+  document.getElementById('crisisUpdatedLabel').value = s.updatedLabel || '';
+  (s.stats || []).forEach((st, i) => {
+    const v = document.getElementById('crisisStat' + i + 'Value');
+    const l = document.getElementById('crisisStat' + i + 'Label');
+    if (v) v.value = st.value || '';
+    if (l) l.value = st.label || '';
+  });
+  document.getElementById('crisisUpdates').value = (s.updates || [])
+    .map(u => `${u.time} :: ${u.text}`).join('\n');
+}
+function saveCrisisFromForm(){
+  const stats = [0,1,2,3].map(i => ({
+    value: document.getElementById('crisisStat' + i + 'Value').value.trim(),
+    label: document.getElementById('crisisStat' + i + 'Label').value.trim(),
+  })).filter(s => s.value || s.label);
+  const updates = document.getElementById('crisisUpdates').value
+    .split('\n').map(line => line.trim()).filter(Boolean)
+    .map(line => { const [time, ...rest] = line.split('::'); return { time: (time || '').trim(), text: rest.join('::').trim() }; });
+  saveCrisisState({
+    active: document.getElementById('crisisActive').checked,
+    level: document.getElementById('crisisLevel').value,
+    title: document.getElementById('crisisTitle').value.trim(),
+    summary: document.getElementById('crisisSummary').value.trim(),
+    updatedLabel: document.getElementById('crisisUpdatedLabel').value.trim(),
+    stats, updates,
+  });
+  toast('تم حفظ إعدادات وضع الأزمة ✅');
+}
+
+/* ==========================================================================
+   Users, permissions matrix, sessions
+   ========================================================================== */
+function renderUsersEverything(){
+  document.getElementById('userRows').innerHTML = CMS_USERS.map(u=>{
+    const meta = CMS_USER_META[u.id] || {};
+    return `<tr><td>${u.name}</td><td>${u.email}</td><td><span class="role-pill">${u.role}</span></td>
+    <td>${meta.lastActive || '—'}</td>
+    <td><span class="status-pill ${u.status==='نشط'?'published':'draft'}">${u.status}</span></td>
+    <td><div class="row-actions">
+      <button title="تعديل الدور" onclick="editUserRole(${u.id})">✏️</button>
+      <button title="إزالة" onclick="removeUser(${u.id})">🗑️</button>
+    </div></td></tr>`;
+  }).join('');
+
+  document.getElementById('permActionRows').innerHTML = CMS_ROLES.map(r=>`
+    <tr><td>${r.name}</td>
+    <td>${r.publish?'✅':'⛔'}</td>
+    <td>${r.review?'✅':'—'}</td>
+    <td>${r.delete?'✅':'—'}</td>
+    <td>${r.manageUsers?'✅':'—'}</td></tr>`).join('');
+
+  const scopeHead = `<thead><tr><th>الدور</th>${CATEGORIES.map(c=>`<th>${c}</th>`).join('')}</tr></thead>`;
+  const scopeBody = '<tbody>' + CMS_ROLES.map(r=>{
+    const cells = CATEGORIES.map(c=>{
+      const checked = r.scope==='all' || (Array.isArray(r.scope) && r.scope.includes(c));
+      return `<td><input type="checkbox" ${checked?'checked':''} ${r.scope==='all'?'disabled':''}></td>`;
+    }).join('');
+    return `<tr><td>${r.name}</td>${cells}</tr>`;
+  }).join('') + '</tbody>';
+  document.getElementById('permScopeTable').innerHTML = scopeHead + scopeBody;
+
+  document.getElementById('sessionRows').innerHTML = CMS_USERS.map(u=>{
+    const meta = CMS_USER_META[u.id] || {};
+    return `<tr><td>${u.name}</td><td><span class="role-pill">${u.role}</span></td><td style="font-family:var(--mono);">${meta.ip||'—'}</td>
+    <td>${meta.since||'—'}</td><td><span class="session-live">${meta.lastActive||'—'}</span></td>
+    <td><div class="row-actions"><button title="إنهاء الجلسة" onclick="confirmDialog({title:'إنهاء جلسة ${u.name}؟',body:'سيُطلب منه تسجيل الدخول من جديد.',onConfirm:()=>toast('تم إنهاء الجلسة')})">⏻</button></div></td></tr>`;
+  }).join('');
+}
+function editUserRole(id){
+  const u = CMS_USERS.find(x=>x.id===id);
+  openModal({title:`تعديل دور ${u.name}`, bodyHTML:`
+    <div class="field"><label>الدور</label>
+      <select id="editRoleSelect">${CMS_ROLES.map(r=>`<option ${r.name===u.role?'selected':''}>${r.name}</option>`).join('')}</select>
+    </div>`,
+    actions:[{label:'إلغاء',className:'btn btn-ghost'},{label:'حفظ',className:'btn btn-primary',onClick:()=>{
+      u.role = document.getElementById('editRoleSelect').value;
+      renderUsersEverything(); toast('تم تحديث الدور ✅');
+    }}]});
+}
+function removeUser(id){
+  const u = CMS_USERS.find(x=>x.id===id);
+  confirmDialog({title:`إزالة ${u.name}؟`, body:'سيفقد صلاحية الدخول للوحة التحكم فوراً.', onConfirm:()=>{
+    const i = CMS_USERS.findIndex(x=>x.id===id); if(i>-1) CMS_USERS.splice(i,1);
+    renderUsersEverything(); toast('تمت إزالة العضو');
+  }});
+}
+function openInviteUser(){
+  openModal({title:'دعوة عضو جديد', bodyHTML:`
+    <div class="field"><label>الاسم الكامل</label><input id="invName" type="text"></div>
+    <div class="field"><label>البريد الإلكتروني</label><input id="invEmail" type="email"></div>
+    <div class="field"><label>الدور</label><select id="invRole">${CMS_ROLES.map(r=>`<option>${r.name}</option>`).join('')}</select></div>`,
+    actions:[{label:'إلغاء',className:'btn btn-ghost'},{label:'إرسال الدعوة',className:'btn btn-primary',onClick:()=>{
+      const name = document.getElementById('invName').value.trim();
+      const email = document.getElementById('invEmail').value.trim();
+      if(!name || !email){ toast('أدخل الاسم والبريد الإلكتروني'); return; }
+      const id = Math.max(...CMS_USERS.map(u=>u.id)) + 1;
+      CMS_USERS.push({id, name, role: document.getElementById('invRole').value, email, status:'دعوة مرسلة'});
+      renderUsersEverything(); toast('تم إرسال الدعوة ✅');
+    }}]});
+}
+
+/* ---------- activity log page ---------- */
+function renderActivityFull(){
+  document.getElementById('activityFull').innerHTML = ACTIVITY_LOG.map(a=>`
+    <div class="activity-row"><div class="ic">${a.ic}</div><div><div class="tx"><b>${a.user}</b> ${a.action} — ${a.target}</div><div class="meta">${a.time}</div></div></div>`).join('');
+}
+
+/* ==========================================================================
+   Init
+   ========================================================================== */
+loadCrisisForm();
+populateArticleFilters();
+renderDashboard();
+renderArticleRows();
+renderMediaGrid();
+renderTaxonomy();
+renderUsersEverything();
+</script>
+</body>
+</html>

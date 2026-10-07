@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جسور (Jusoor) — Engineering Execution &amp; Delivery Roadmap</title>
+<style>
+  :root{
+    --ink:#0b0e14; --ink-2:#151a24; --paper:#f5f6f8; --surface:#ffffff;
+    --text:#171b22; --text-mute:#5b6472; --line:#e4e7ec;
+    --blue:#1857c7; --blue-2:#2e71e8; --blue-dark:#0f3e8f;
+    --green:#1c8a5d; --green-bg:#e8f6f0;
+    --amber:#b98a12; --amber-bg:#fdf4df;
+    --red:#c6402f; --red-bg:#fbe9e6;
+    --grey:#6b7280; --grey-bg:#eef0f3;
+    --purple:#7238c9; --purple-bg:#f1eafb;
+    --radius:10px; --radius-sm:6px;
+    --maxw:1320px;
+    --shadow: 0 1px 2px rgba(10,14,25,.06), 0 1px 1px rgba(10,14,25,.04);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--text);
+    font-family:"Segoe UI","IBM Plex Sans Arabic","Tahoma",sans-serif; line-height:1.7;}
+  a{color:var(--blue);text-decoration:none;}
+  code, .mono{font-family:"Consolas","IBM Plex Mono",monospace; font-size:.92em;}
+
+  /* ---- Layout ---- */
+  .app{display:flex; min-height:100vh;}
+  .sidebar{
+    width:270px; flex:0 0 270px; background:var(--ink); color:#cdd3de;
+    position:sticky; top:0; height:100vh; overflow-y:auto; padding:20px 16px;
+  }
+  .sidebar .brand{color:#fff; font-weight:700; font-size:1.05rem; margin-bottom:2px;}
+  .sidebar .brand-sub{color:#8b93a3; font-size:.78rem; margin-bottom:18px;}
+  .sidebar nav a{
+    display:block; color:#c3c9d4; padding:7px 10px; border-radius:6px; font-size:.87rem;
+    margin-bottom:2px;
+  }
+  .sidebar nav a:hover{background:#1c2230; color:#fff;}
+  .sidebar nav .group-title{
+    color:#6b7385; font-size:.72rem; text-transform:uppercase; letter-spacing:.05em;
+    margin:16px 10px 6px; font-weight:700;
+  }
+  main{flex:1; min-width:0; padding:32px 40px 80px; max-width:var(--maxw); margin:0 auto;}
+
+  section{margin-bottom:52px; scroll-margin-top:20px;}
+  h1{font-size:1.9rem; margin:0 0 6px;}
+  h2{font-size:1.45rem; border-bottom:2px solid var(--line); padding-bottom:10px; margin:0 0 20px;}
+  h3{font-size:1.15rem; margin:22px 0 10px;}
+  h4{font-size:1rem; margin:16px 0 8px;}
+  p{color:var(--text); margin:8px 0;}
+  .muted{color:var(--text-mute);}
+
+  /* ---- Top banner / baseline ---- */
+  .baseline-banner{
+    background:var(--ink-2); color:#e7eaf0; border-radius:var(--radius);
+    padding:18px 22px; margin-bottom:28px; display:flex; justify-content:space-between;
+    align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  .baseline-banner .label{font-size:.78rem; color:#9aa3b5; text-transform:uppercase; letter-spacing:.04em;}
+  .baseline-banner .value{font-weight:700; font-size:1rem;}
+
+  /* ---- Status badges ---- */
+  .badge{
+    display:inline-flex; align-items:center; gap:6px; font-size:.78rem; font-weight:700;
+    padding:4px 10px; border-radius:999px; white-space:nowrap;
+  }
+  .badge.verified{background:var(--green-bg); color:var(--green);}
+  .badge.awaiting{background:#e3edfc; color:var(--blue-dark);}
+  .badge.progress{background:var(--amber-bg); color:var(--amber);}
+  .badge.planned{background:var(--grey-bg); color:var(--grey);}
+  .badge.blocked{background:var(--red-bg); color:var(--red);}
+  .badge.review{background:var(--purple-bg); color:var(--purple);}
+
+  /* ---- Dashboard cards ---- */
+  .dash-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px;}
+  .dash-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 18px; box-shadow:var(--shadow);
+  }
+  .dash-card .num{font-size:1.7rem; font-weight:800;}
+  .dash-card .lbl{font-size:.82rem; color:var(--text-mute); margin-top:2px;}
+
+  /* ---- Cards / Slice cards ---- */
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 22px; margin-bottom:18px; box-shadow:var(--shadow);
+  }
+  .card-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;}
+  .card-head h3{margin:0;}
+  .tag-row{display:flex; gap:6px; flex-wrap:wrap; margin:10px 0;}
+  .tag{background:var(--grey-bg); color:#374151; font-size:.76rem; padding:3px 9px; border-radius:6px; font-family:monospace;}
+
+  ul.clean{margin:6px 0; padding-inline-start:20px;}
+  ul.clean li{margin:4px 0;}
+  ul.check li::marker{content:"✓  "; color:var(--green);}
+  ul.check-awaiting li::marker{content:"→  "; color:var(--blue-dark);}
+  ul.check-planned li::marker{content:"○  "; color:var(--grey);}
+
+  table{width:100%; border-collapse:collapse; font-size:.88rem; margin:10px 0;}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:right; vertical-align:top;}
+  th{background:#f1f3f6; font-weight:700;}
+  .table-wrap{overflow-x:auto;}
+
+  .flow{display:flex; flex-direction:column; gap:0; align-items:center; margin:14px 0;}
+  .flow .node{
+    background:var(--surface); border:1px solid var(--line); border-radius:8px;
+    padding:8px 16px; font-size:.85rem; font-weight:600; min-width:220px; text-align:center;
+  }
+  .flow .arrow{color:var(--text-mute); font-size:1rem; padding:2px 0;}
+
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:800px){ .split{grid-template-columns:1fr;} }
+  .split .box{background:#fbfbfc; border:1px dashed var(--line); border-radius:8px; padding:12px 14px;}
+  .split .box h4{margin-top:0;}
+
+  .callout{
+    border-inline-start:4px solid var(--blue); background:#eef3fc; border-radius:6px;
+    padding:10px 14px; font-size:.9rem; margin:12px 0;
+  }
+  .callout.warn{border-color:var(--amber); background:var(--amber-bg);}
+  .callout.risk{border-color:var(--red); background:var(--red-bg);}
+
+  footer{color:var(--text-mute); font-size:.8rem; text-align:center; padding:30px 0;}
+
+  /* ---- Print ---- */
+  @media print{
+    .sidebar{display:none;}
+    main{padding:0; max-width:100%;}
+    .app{display:block;}
+    section{page-break-inside:avoid;}
+    .card{box-shadow:none;}
+  }
+  @media (max-width:900px){
+    .sidebar{position:fixed; z-index:20; transform:translateX(100%); transition:transform .2s;}
+    .sidebar.open{transform:translateX(0);}
+    main{padding:20px;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">JUSOOR (جسور)</div>
+    <div class="brand-sub">Engineering Execution &amp; Delivery Roadmap</div>
+    <nav>
+      <a href="#exec-summary">Executive Summary</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#current-state">Current Development State</a>
+      <div class="group-title">Phases</div>
+      <a href="#phase-0">Phase 0 — الأساس التقني</a>
+      <a href="#phase-1">Phase 1 — News Pipeline + Relevance</a>
+      <a href="#phase-2">Phase 2 — اطمّن + Geo</a>
+      <a href="#phase-3">Phase 3 — Newsroom CMS</a>
+      <a href="#phase-4">Phase 4 (V1)</a>
+      <a href="#phase-5">Phase 5 (V2)</a>
+      <div class="group-title">Cross-Cutting</div>
+      <a href="#dependency-map">Dependency Map</a>
+      <a href="#traceability">Traceability Matrix</a>
+      <a href="#database">Database Tracking</a>
+      <a href="#security">Security Tracking</a>
+      <a href="#ai">AI Engineering Tracking</a>
+      <a href="#testing">Testing Strategy</a>
+      <a href="#risks">Risks</a>
+      <a href="#final-delivery">Final Delivery &amp; Handover</a>
+      <a href="#changelog">Changelog</a>
+    </nav>
+  </aside>
+
+  <main>
+
+    <div class="baseline-banner">
+      <div>
+        <div class="label">Documentation Baseline</div>
+        <div class="value">Current baseline — لا يوجد تاريخ تقويمي ثابت مؤكد لهذا الإصدار من الوثيقة</div>
+      </div>
+      <div>
+        <div class="label">Source of Truth</div>
+        <div class="value">Specification → Engineering Plan → Actual Codebase (repo state) → Developer-confirmed verification</div>
+      </div>
+    </div>
+
+    <!-- ============ EXECUTIVE SUMMARY ============ -->
+    <section id="exec-summary">
+      <h1>ملخص تنفيذي — Executive Project Summary</h1>
+      <p class="muted">هذا القسم موجّه للعميل ولأصحاب القرار. التفاصيل الهندسية الدقيقة موجودة في الأقسام اللاحقة.</p>
+
+      <div class="card">
+        <p>
+          منصة <strong>جسور (Jusoor)</strong> هي منصة إخبارية واستخباراتية للمصريين في المهجر،
+          مبنية على <strong>Clean Architecture</strong> باستخدام <strong>.NET 10 / ASP.NET Core</strong> على
+          الـ Backend و<strong>Next.js</strong> على الـ Frontend، مع <strong>PostgreSQL</strong> كقاعدة بيانات أساسية.
+          المشروع يتقدّم حاليًا ضمن <strong>Phase 1 — خط الأخبار ومحرك الملاءمة</strong>، وهي المرحلة الثانية من أصل ست مراحل هندسية معرّفة في خطة المشروع.
+        </p>
+        <h4>ما تم إنجازه فعليًا حتى الآن</h4>
+        <ul class="clean check">
+          <li><strong>Phase 0 — الأساس التقني</strong>: تم تنفيذه بالكامل، وتم تأكيد نجاحه محليًا من قِبل المطوّر (Docker Compose، Backend build/test، EF Core Migrations، Frontend lint/build، وتدفّق Authentication الأساسي). <span class="badge verified">🟢 COMPLETED &amp; VERIFIED</span></li>
+          <li><strong>Phase 1 / Slice 1 — Domain persistence لخط الأخبار</strong> (Story، Article، RelevanceResult): تم تنفيذه واختباره وتأكيده من قِبل المطوّر على بيئة حقيقية (build، Unit Tests، EF Migration، Integration Tests). <span class="badge verified">🟢 COMPLETED &amp; VERIFIED</span></li>
+        </ul>
+        <h4>ما تم تنفيذه وينتظر التأكيد النهائي</h4>
+        <ul class="clean check-awaiting">
+          <li><strong>Phase 1 / Slice 2 — SSRF-Safe Fetcher + RSS Ingestion</strong>: الكود مكتمل هندسيًا (بما في ذلك الحماية من SSRF وDNS Rebinding وXXE)، لكنه لم يمرّ بعد بدورة build/test فعلية على جهاز المطوّر. <span class="badge awaiting">🔵 IMPLEMENTED — AWAITING VERIFICATION</span></li>
+        </ul>
+        <h4>ما لم يبدأ بعد</h4>
+        <p class="muted">بقية نطاق Phase 1 (Scheduler، Relevance Engine، Homepage الحقيقية)، وكل من Phase 2 حتى Phase 5 — راجع الأقسام التفصيلية أدناه.</p>
+      </div>
+
+      <div class="callout warn">
+        <strong>ملاحظة أمانة توثيقية:</strong> هذه الوثيقة لا تصف المشروع بأنه <strong>"Production Ready"</strong> في أي قسم،
+        لأن الأدلة الحالية لا تدعم هذا الوصف. Implementation ≠ Verification، وVerification ≠ Production Readiness،
+        وProduction Readiness ≠ Client Acceptance — وهذه الوثيقة تحافظ على الفصل بين هذه المفاهيم الأربعة بدقة.
+      </div>
+    </section>
+
+    <!-- ============ DASHBOARD ============ -->
+    <section id="dashboard">
+      <h2>لوحة القيادة — Project Dashboard</h2>
+      <div class="dash-grid">
+        <div class="dash-card"><div class="num">6</div><div class="lbl">Total Phases (Phase 0 → Phase 5)</div></div>
+        <div class="dash-card"><div class="num">2</div><div class="lbl">Delivery Slices فعليًا مُنفَّذة (ضمن Phase 1)</div></div>
+        <div class="dash-card"><div class="num" style="color:var(--green)">2</div><div class="lbl">🟢 Completed &amp; Verified</div></div>
+        <div class="dash-card"><div class="num" style="color:var(--blue-dark)">1</div><div class="lbl">🔵 Awaiting Verification</div></div>
+        <div class="dash-card"><div class="num" style="color:var(--amber)">0</div><div class="lbl">🟡 In Progress</div></div>
+        <div class="dash-card"><div class="num" style="color:var(--grey)">—</div><div class="lbl">⚪ Planned (بقية النطاق)</div></div>
+        <div class="dash-card"><div class="num" style="color:var(--red)">0</div><div class="lbl">🔴 Blocked</div></div>
+        <div class="dash-card"><div class="num" style="color:var(--purple)">0</div><div class="lbl">🟣 Needs Review</div></div>
+      </div>
+      <div class="callout">
+        لا يتم عرض أي نسبة إنجاز مئوية إجمالية للمشروع، لأن Phase 2 حتى Phase 5 لم تُقسَّم بعد إلى Slices قابلة للقياس،
+        وأي نسبة مئوية في هذه المرحلة ستكون تقديرًا غير موثّق وليست بيانات حقيقية. القياس الحالي هو <strong>Status-based</strong> فقط.
+      </div>
+      <table>
+        <tr><th>Current Phase</th><td>Phase 1 — News Pipeline + Relevance Engine</td></tr>
+        <tr><th>Current Slice</th><td>Slice 2 — SSRF-Safe Fetcher + RSS Ingestion <span class="badge awaiting">AWAITING VERIFICATION</span></td></tr>
+        <tr><th>Next Milestone</th><td>تأكيد بناء/اختبار Slice 2 على بيئة المطوّر، ثم بدء Slice 3 (Scheduler)</td></tr>
+        <tr><th>Final Delivery Stage</th><td>Phase 5 (V2) → UAT → Client Handover — لم يبدأ التخطيط التفصيلي له بعد</td></tr>
+      </table>
+    </section>
+
+    <!-- ============ CURRENT DEVELOPMENT STATE ============ -->
+    <section id="current-state">
+      <h2>الحالة التطويرية الحالية — Current Development State</h2>
+      <div class="split">
+        <div class="box">
+          <h4>آخر Phase مكتملة بالكامل</h4>
+          <p><strong>Phase 0</strong> — الأساس التقني <span class="badge verified">🟢 VERIFIED</span></p>
+          <h4>آخر Slice مكتملة ومؤكدة</h4>
+          <p><strong>Phase 1 / Slice 1</strong> — Story/Article/RelevanceResult Domain + Persistence <span class="badge verified">🟢 VERIFIED</span></p>
+        </div>
+        <div class="box">
+          <h4>Current Phase</h4>
+          <p><strong>Phase 1</strong> — News Pipeline + Relevance Engine</p>
+          <h4>Current Slice</h4>
+          <p><strong>Slice 2</strong> — SSRF-Safe Fetcher + RSS Ingestion <span class="badge awaiting">🔵 AWAITING VERIFICATION</span></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Slice 2 — SSRF-Safe Fetcher + RSS Ingestion</h3>
+        <p><strong>Status:</strong> <span class="badge awaiting">🔵 IMPLEMENTED — AWAITING VERIFICATION</span></p>
+        <h4>Implemented</h4>
+        <ul class="clean check">
+          <li>PrivateNetworkGuard (تصنيف IPv4/IPv6 الخاصة والمحجوزة، بما فيها Cloud Metadata 169.254.169.254)</li>
+          <li>SafeSocketConnector — DNS resolve-then-pin عبر SocketsHttpHandler.ConnectCallback (حماية DNS Rebinding)</li>
+          <li>Manual redirect validation (AllowAutoRedirect=false + إعادة تحقق كل Redirect)</li>
+          <li>Response size limiting (Bounded stream read، لا تجميع غير محدود في الذاكرة)</li>
+          <li>RssFeedParser (باستخدام System.ServiceModel.Syndication) مع حماية XXE (DtdProcessing.Prohibit، XmlResolver=null)</li>
+          <li>SourceFetchLog Entity + SourceFetchOutcome Enum (Observability لكل محاولة Ingestion)</li>
+          <li>IngestSourceCommand/Handler (MediatR) — Fetch → Parse → Idempotent Persist، مع معالجة أخطاء مصنّفة (§19)</li>
+          <li>IngestionController — Endpoint يدوي للتشغيل (Authorize فقط، RBAC الكامل مؤجّل لـ Phase 3)</li>
+          <li>Unit Tests: PrivateNetworkGuardTests، RssFeedParserTests (بما فيها اختبار رفض XXE)، SsrfSafeSourceFetcherTests (End-to-End على Socket حقيقي)</li>
+          <li>Unit Tests: IngestSourceCommandHandlerTests (باستخدام EF Core InMemory) لسيناريوهات النجاح/الفشل/التكرار/العناصر التالفة</li>
+        </ul>
+        <h4>Awaiting</h4>
+        <ul class="clean check-awaiting">
+          <li><code>dotnet restore</code></li>
+          <li><code>dotnet build</code></li>
+          <li><code>dotnet test</code> (المشاريع الأربعة: Domain، Application، Infrastructure، Api.IntegrationTests)</li>
+          <li><code>dotnet ef migrations add AddSourceFetchLog</code></li>
+          <li><code>dotnet ef database update</code></li>
+          <li>تأكيد المطوّر النهائي (User confirmation)</li>
+        </ul>
+        <h4>Next</h4>
+        <p>Slice 3 — Scheduler (تشغيل Ingestion تلقائيًا بدل التشغيل اليدوي عبر الـ Endpoint)، قرار معماري بين Hangfire أو بديل أبسط لم يُتّخذ بعد.</p>
+      </div>
+
+      <div class="callout">
+        <strong>ملاحظة منهجية:</strong> تقسيم Phase 1 إلى "Slices" (Slice 1، Slice 2، ...) هو قرار تنفيذي اتُّخذ أثناء التطوير
+        لجعل كل جزء أمنيًا/معماريًا قابلًا للمراجعة بشكل مستقل — <strong>وليس</strong> تقسيمًا منصوصًا عليه حرفيًا في وثيقة الخطة الهندسية الأصلية،
+        التي تصف Phase 1 كوحدة واحدة ضمن جدول WBS. هذا التمييز مهم لتفادي الخلط بين "خطة المشروع الرسمية" و"تسلسل التسليم الفعلي".
+      </div>
+    </section>
+
+    <!-- ============ PHASE 0 ============ -->
+    <section id="phase-0">
+      <h2>Phase 0 — الأساس التقني <span class="badge verified">🟢 COMPLETED &amp; VERIFIED</span></h2>
+
+      <div class="split">
+        <div class="box">
+          <h4>Client View</h4>
+          <p>في هذه المرحلة تم بناء الأساس التقني الذي يسمح للمنصة بالعمل بأمان: نظام تسجيل دخول حقيقي،
+          قاعدة بيانات حقيقية، وبيئة تطوير يمكن لأي مطوّر جديد تشغيلها خلال أقل من ساعة.</p>
+        </div>
+        <div class="box">
+          <h4>Engineering View</h4>
+          <p>Clean Architecture skeleton (Domain → Application → Infrastructure → Api)، ASP.NET Identity + JWT Authentication،
+          PostgreSQL عبر EF Core، Docker Compose لبيئة التطوير المحلية، وGitHub Actions CI/CD أساسي.</p>
+        </div>
+      </div>
+
+      <h3>Phase Components</h3>
+      <div class="tag-row">
+        <span class="tag">Jusoor.Domain</span><span class="tag">Jusoor.Application</span>
+        <span class="tag">Jusoor.Infrastructure</span><span class="tag">Jusoor.Api</span>
+        <span class="tag">ASP.NET Identity</span><span class="tag">JWT</span>
+        <span class="tag">PostgreSQL</span><span class="tag">EF Core Migrations</span>
+        <span class="tag">Next.js Scaffold</span><span class="tag">Docker Compose</span>
+        <span class="tag">GitHub Actions CI</span>
+      </div>
+
+      <h3>Detailed Implementation</h3>
+      <ul class="clean check">
+        <li>Identity model: <code>ApplicationUser : IdentityUser</code> مع <code>DisplayName</code>، <code>PreferredLanguage</code></li>
+        <li>User Registration + Login (<code>RegisterCommand</code>، <code>LoginCommand</code> عبر MediatR + FluentValidation)</li>
+        <li>Password Hashing عبر ASP.NET Identity الافتراضي</li>
+        <li>JWT Issuance (<code>JwtTokenService</code>) — بدون أي Signing Key ثابت في الكود، القراءة إلزامية من Configuration</li>
+        <li>Anti-enumeration على Login (رسالة فشل عامة موحّدة لكلمة مرور خاطئة أو مستخدم غير موجود) — مُثبَت باختبار Integration مخصّص</li>
+        <li>11 Newsroom Roles (من Spec §25) مزروعة (Seeded) كـ Identity Roles — بدون تفعيل RBAC فعلي بعد (مؤجّل لـ Phase 3)</li>
+        <li>Global Exception Handling Middleware — لا Stack Trace يصل للعميل أبدًا</li>
+        <li><code>Country</code>، <code>City</code> Entities (الطبقتان الأوليان من الهرمية الجغرافية، Region/Neighborhood مؤجّلة لـ Phase 2)</li>
+        <li><code>Source</code> Entity (7 Source Layers من Spec §5)</li>
+        <li>AuditableEntity SaveChanges Interceptor (تعبئة CreatedAtUtc/LastModifiedAtUtc تلقائيًا لكل Entity قابل للتدقيق)</li>
+        <li>ApplicationDbContextFactory (Design-time factory) لضمان عمل <code>dotnet ef</code> بشكل موثوق دون تنفيذ منطق Program.cs الحيّ</li>
+      </ul>
+
+      <h3>Verification Evidence</h3>
+      <div class="table-wrap"><table>
+        <tr><th>Command / Check</th><th>Result</th><th>Evidence Source</th></tr>
+        <tr><td><code>docker compose up</code></td><td>PASS</td><td>تأكيد المطوّر المباشر</td></tr>
+        <tr><td><code>dotnet restore / build / test</code></td><td>PASS</td><td>تأكيد المطوّر المباشر</td></tr>
+        <tr><td><code>dotnet ef migrations / database update</code></td><td>PASS</td><td>تأكيد المطوّر المباشر (بعد حل تعارض المنفذ 5432 مع تثبيت PostgreSQL محلي على Windows)</td></tr>
+        <tr><td><code>npm run lint / build</code></td><td>PASS</td><td>تأكيد المطوّر المباشر</td></tr>
+        <tr><td>Core Authentication Flow (Register → Login → JWT)</td><td>PASS</td><td>تأكيد المطوّر المباشر</td></tr>
+      </table></div>
+
+      <h3>Definition of Done</h3>
+      <ul class="clean check">
+        <li>✓ Implementation complete</li><li>✓ Build passes</li><li>✓ Docker Compose environment works end-to-end</li>
+        <li>✓ EF Core Migrations apply cleanly</li><li>✓ Core Auth flow verified</li><li>✓ Frontend build/lint passes</li>
+        <li>✓ No secrets committed to source control</li>
+      </ul>
+    </section>
+
+    <!-- ============ PHASE 1 ============ -->
+    <section id="phase-1">
+      <h2>Phase 1 — خط الأخبار + محرك الملاءمة (News Pipeline + Relevance Engine)</h2>
+      <p><span class="badge awaiting">🔵 IN PROGRESS (Slice 2 من 2 قيد التنفيذ حاليًا)</span> — المدة المخطَّطة في الخطة الهندسية: 4 أسابيع.</p>
+
+      <div class="split">
+        <div class="box">
+          <h4>Client View</h4>
+          <p>في هذه المرحلة تُبنى القدرة الفعلية على استقبال الأخبار من مصادر خارجية بأمان، ومعالجتها تمهيدًا لعرضها للمستخدمين،
+          بدلًا من البيانات الثابتة (Static Data) الموجودة في الـ Demo.</p>
+        </div>
+        <div class="box">
+          <h4>Engineering View</h4>
+          <p>Source Workers لكل طبقة مصدر، Pipeline معالجة مُقسَّم إلى مراحل (Fetch → Validate → Normalize → ... → Relevance → Publishing)،
+          تصنيف ملاءمة باستخدام Embeddings + Rules، واستدعاء LLM للحالات الحدّية فقط.</p>
+        </div>
+      </div>
+
+      <h3>Component Mapping (النطاق الكامل لـ Phase 1 حسب WBS)</h3>
+      <div class="flow">
+        <div class="node">Domain — Source / Story / Article / RelevanceResult</div>
+        <div class="arrow">↓</div>
+        <div class="node">Application — Ingestion Commands، Relevance Engine (مخطَّط)</div>
+        <div class="arrow">↓</div>
+        <div class="node">Infrastructure — SSRF-Safe Fetcher، RSS Parser، Embeddings (مخطَّط)</div>
+        <div class="arrow">↓</div>
+        <div class="node">API — Ingestion Endpoint، Article/Homepage Endpoints (مخطَّط)</div>
+        <div class="arrow">↓</div>
+        <div class="node">Frontend — Homepage SSR حقيقية (مخطَّط، غير مُنفَّذ بعد)</div>
+        <div class="arrow">↓</div>
+        <div class="node">Database — Migrations لجداول Phase 1</div>
+      </div>
+
+      <!-- Slice 1 -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Slice 1 — Story/Article/RelevanceResult Domain + Persistence</h3>
+          <span class="badge verified">🟢 COMPLETED &amp; VERIFIED</span>
+        </div>
+        <h4>الهدف</h4>
+        <p>إنشاء أساس الـ Persistence لخط الأخبار: تمثيل الـ Story (الحدث الكنسي) والـ Article (تقرير مصدر واحد عنه)
+        ونتيجة الـ Relevance Engine، مع دعم Exact-Duplicate Detection وIdempotency على مستوى قاعدة البيانات.</p>
+        <h4>نطاق التنفيذ</h4>
+        <ul class="clean check">
+          <li>Domain Entities: <code>Story</code>، <code>Article</code>، <code>RelevanceResult</code> مع Invariants حقيقية (رفض URL غير http/https، رفض الانتقال من حالة نهائية)</li>
+          <li>Enums: <code>StoryStatus</code>، <code>ArticleProcessingStatus</code>، <code>RelevanceMethod</code></li>
+          <li>EF Core Configurations + Unique Indexes للـ Idempotency: <code>(SourceId, ExternalSourceItemId)</code> و<code>(SourceId, ContentHash)</code></li>
+          <li>إصلاح فجوة حقيقية: AuditableEntity SaveChanges Interceptor لم يكن موجودًا من الأساس، تم بناؤه في هذا الـ Slice</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Domain Component</span><span class="tag">Database Component</span><span class="tag">Testing Component</span>
+        </div>
+        <h4>Verification Evidence</h4>
+        <div class="table-wrap"><table>
+          <tr><th>Command</th><th>Result</th></tr>
+          <tr><td><code>dotnet build</code> (كل المشاريع)</td><td>PASS — تأكيد المطوّر</td></tr>
+          <tr><td>Jusoor.Domain.UnitTests</td><td>19/19 PASS — تأكيد المطوّر</td></tr>
+          <tr><td>Jusoor.Application.UnitTests</td><td>6/6 PASS — تأكيد المطوّر</td></tr>
+          <tr><td><code>dotnet ef migrations add / database update</code></td><td>PASS — تأكيد المطوّر</td></tr>
+          <tr><td>Jusoor.Api.IntegrationTests</td><td>PASS — تأكيد المطوّر (بعد إصلاح خطأ حقيقي: قراءة Configuration مبكرة قبل اكتمال WebApplicationFactory)</td></tr>
+        </table></div>
+      </div>
+
+      <!-- Slice 2 -->
+      <div class="card">
+        <div class="card-head">
+          <h3>Slice 2 — SSRF-Safe Fetcher + RSS Ingestion</h3>
+          <span class="badge awaiting">🔵 IMPLEMENTED — AWAITING VERIFICATION</span>
+        </div>
+        <h4>الهدف</h4>
+        <p>بناء أول Source Worker حقيقي (RSS) قادر على جلب محتوى من مصدر خارجي وتخزينه بأمان،
+        مع معالجة تهديد SSRF كمتطلب إلزامي (§9 من خطة التنفيذ) وليس كإضافة لاحقة.</p>
+        <h4>نطاق التنفيذ</h4>
+        <ul class="clean check">
+          <li>SSRF Threat Model موثَّق رسميًا في <code>docs/security/ssrf-threat-model.md</code></li>
+          <li><code>PrivateNetworkGuard</code> — تصنيف عناوين IPv4/IPv6 الخاصة/المحجوزة/Cloud Metadata</li>
+          <li><code>SafeSocketConnector</code> — DNS resolve-then-pin عبر <code>SocketsHttpHandler.ConnectCallback</code> لمنع DNS Rebinding</li>
+          <li>Manual Redirect handling (كل Redirect يُعاد التحقق منه من الصفر)</li>
+          <li>Response Size Limiting (قراءة Stream تدريجية بحد أقصى قابل للتهيئة عبر Configuration)</li>
+          <li><code>RssFeedParser</code> مع حماية XXE (<code>DtdProcessing.Prohibit</code>، <code>XmlResolver = null</code>)</li>
+          <li><code>SourceFetchLog</code> Entity + <code>SourceFetchOutcome</code> Enum — Observability لكل محاولة Ingestion</li>
+          <li><code>IngestSourceCommand</code>/Handler — منطق Fetch → Parse → Idempotent Persist، مع تجاوز العناصر التالفة دون إفشال الدفعة كاملة</li>
+          <li><code>IngestionController</code> — Endpoint تشغيل يدوي (Authorize فقط، RBAC الكامل Phase 3)</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">Infrastructure Component</span><span class="tag">Application Component</span>
+          <span class="tag">API Component</span><span class="tag">Security Component</span>
+          <span class="tag">Observability Component</span><span class="tag">Testing Component</span>
+        </div>
+        <h4>Awaiting Verification</h4>
+        <div class="table-wrap"><table>
+          <tr><th>Required Command</th><th>Status</th></tr>
+          <tr><td><code>dotnet restore &amp;&amp; dotnet build</code></td><td><span class="badge awaiting">Not yet run by developer</span></td></tr>
+          <tr><td>Jusoor.Infrastructure.UnitTests (مشروع جديد)</td><td><span class="badge awaiting">Not yet run</span></td></tr>
+          <tr><td>Jusoor.Application.UnitTests (حالات جديدة للـ Ingestion Handler)</td><td><span class="badge awaiting">Not yet run</span></td></tr>
+          <tr><td><code>dotnet ef migrations add AddSourceFetchLog</code></td><td><span class="badge awaiting">Not yet run</span></td></tr>
+        </table></div>
+        <div class="callout risk">
+          <strong>مخاطرة معروفة غير مُختبَرة:</strong> مسار معالجة تعارض المفتاح الفريد (Duplicate Key Race) تحت التنفيذ المتزامن
+          (Concurrent Ingestion Runs) مُنفَّذ في الكود لكنه غير مُختبَر مباشرة — يحتاج بيئة اختبار تزامن مخصّصة لم تُبنَ بعد.
+        </div>
+      </div>
+
+      <h3>Remaining Phase 1 Scope</h3>
+      <p class="muted">حسب WBS الأصلي، Phase 1 يتضمّن أيضًا العناصر التالية التي <strong>لم يبدأ تنفيذها بعد</strong>:</p>
+      <ul class="clean check-planned">
+        <li>Scheduler (Hangfire أو بديل) لتشغيل Ingestion تلقائيًا — القرار المعماري لم يُتَّخذ بعد</li>
+        <li>Source Workers لطبقات مصادر إضافية غير RSS (طبقات 1، 4، 5، 6، 7 من §5)</li>
+        <li>مراحل Pipeline: Validate (بمعنى Content Validation المتقدّم)، Sanitize، Cross-Source Deduplication، Geographic Extraction</li>
+        <li>Relevance Engine v1 (Rules + Embeddings + LLM للحالات الحدّية) — لم يبدأ</li>
+        <li>AI Gateway / Semantic Kernel Integration — لم يبدأ</li>
+        <li>pgvector Embeddings Column — لم يُضَف عمدًا حتى تُستخدَم فعليًا (تجنّبًا لإضافة أعمدة غير مُستخدَمة)</li>
+        <li>Homepage SSR الحقيقية + Article Page — الواجهة الأمامية ما زالت تعرض صفحة Placeholder فقط</li>
+      </ul>
+    </section>
+
+    <!-- ============ PHASE 2 ============ -->
+    <section id="phase-2">
+      <h2>Phase 2 — الدول/المدن + اطمّن الكامل <span class="badge planned">⚪ PLANNED</span></h2>
+      <p class="muted">المدة المخطَّطة: 5 أسابيع. لم يبدأ أي تنفيذ فعلي بعد.</p>
+      <div class="split">
+        <div class="box">
+          <h4>Client View</h4>
+          <p>هذه أعلى مرحلة أولوية أمنية في المشروع بأكمله — بناء نظام "اطمّن" الذي يسمح لعائلات المصريين بالمهجر
+          بالتواصل الآمن مع فريق استجابة أثناء الأزمات، مع حماية كاملة للبيانات الحساسة.</p>
+        </div>
+        <div class="box">
+          <h4>Engineering View</h4>
+          <p>هرمية جغرافية كاملة (Country → Region → City → Neighborhood)، Case Entity مشفّر حقليًا (Field-level Encryption)،
+          OTP فعلي، توزيع يدوي على فريق استجابة، وحالة حيّة عبر SignalR.</p>
+        </div>
+      </div>
+      <h3>Planned Components</h3>
+      <div class="tag-row">
+        <span class="tag">Region/Neighborhood Entities</span><span class="tag">Case Entity (Encrypted)</span>
+        <span class="tag">OTP Service</span><span class="tag">SignalR Hub</span>
+        <span class="tag">Response Team Assignment</span><span class="tag">Audit Log</span>
+      </div>
+      <div class="callout risk">
+        <strong>أعلى مخاطرة أمنية في المشروع بأكمله (حسب الخطة الهندسية):</strong> نموذج Case المشفّر + OTP.
+        لا يمكن إطلاق MVP بدون هذه المرحلة مهما اكتملت بقية الميزات.
+      </div>
+    </section>
+
+    <!-- ============ PHASE 3 ============ -->
+    <section id="phase-3">
+      <h2>Phase 3 — غرفة الأخبار الأساسية (Newsroom CMS) <span class="badge planned">⚪ PLANNED</span></h2>
+      <p class="muted">المدة المخطَّطة: 4 أسابيع. نهاية MVP المخطَّطة تقريبًا 14–16 أسبوعًا من بداية Phase 0.</p>
+      <div class="split">
+        <div class="box">
+          <h4>Client View</h4>
+          <p>بناء غرفة تحرير حقيقية تسمح لفريق العمل بمراجعة ونشر الأخبار بأمان، بدل الاعتماد على بيانات ثابتة.</p>
+        </div>
+        <div class="box">
+          <h4>Engineering View</h4>
+          <p>تفعيل RBAC الفعلي لعشرة أدوار (المزروعة مسبقًا في Phase 0)، طابور مراجعة بشرية إلزامي، محرر مقال،
+          نشر فعلي، وSchema.org + Sitemap أساسي.</p>
+        </div>
+      </div>
+      <div class="tag-row">
+        <span class="tag">RBAC Enforcement</span><span class="tag">RolePermission Entity</span>
+        <span class="tag">Editorial Review Queue</span><span class="tag">Article Editor UI</span>
+        <span class="tag">Schema.org</span><span class="tag">Sitemap</span>
+      </div>
+    </section>
+
+    <!-- ============ PHASE 4 ============ -->
+    <section id="phase-4">
+      <h2>Phase 4 (V1) — الأتمتة والذكاء الجغرافي <span class="badge planned">⚪ PLANNED</span></h2>
+      <p class="muted">المدة المخطَّطة: 10–12 أسبوعًا.</p>
+      <div class="tag-row">
+        <span class="tag">Full Dedup Service</span><span class="tag">Automatic Crisis Mode</span>
+        <span class="tag">Geographic Alerts</span><span class="tag">Contributor Network</span>
+        <span class="tag">Sports Section</span><span class="tag">Embeddings Index</span>
+        <span class="tag">AI Hallucination Evaluation</span>
+      </div>
+    </section>
+
+    <!-- ============ PHASE 5 ============ -->
+    <section id="phase-5">
+      <h2>Phase 5 (V2) — الاستخبارات الاستراتيجية <span class="badge planned">⚪ PLANNED</span></h2>
+      <p class="muted">المدة المخطَّطة: 12–14 أسبوعًا. المرحلة الهندسية الأخيرة قبل الانتقال إلى UAT وTeslim النهائي.</p>
+      <div class="tag-row">
+        <span class="tag">Diaspora Aggregation Map</span><span class="tag">Knowledge Graph</span>
+        <span class="tag">Advanced Semantic Search</span><span class="tag">Multi-tier Crisis Escalation</span>
+        <span class="tag">Anti-enumeration Audit</span><span class="tag">k-Anonymity Aggregation Views</span>
+      </div>
+    </section>
+
+    <!-- ============ DEPENDENCY MAP ============ -->
+    <section id="dependency-map">
+      <h2>خريطة الاعتماديات — Dependency Map</h2>
+      <div class="flow">
+        <div class="node">Phase 0 — Auth + DB + CI/CD 🟢</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 1 — Source/Story/Article Persistence 🟢</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 1 — SSRF-Safe Fetcher + RSS Worker 🔵</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 1 — Scheduler ⚪</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 1 — Deduplication + Relevance Engine ⚪</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 2 — Geography + اطمّن (Case + OTP + SignalR) ⚪</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 3 — Newsroom CMS + RBAC Enforcement ⚪</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 4 (V1) — Automation + Geo-Intelligence ⚪</div>
+        <div class="arrow">↓</div>
+        <div class="node">Phase 5 (V2) — Strategic Intelligence ⚪</div>
+        <div class="arrow">↓</div>
+        <div class="node">Final Delivery &amp; Client Handover ⚪</div>
+      </div>
+      <p class="muted">المصدر: قسم "المسار الحرج" في الخطة الهندسية — Phase 0 يحجب كل شيء لاحقًا، ونموذج Case المشفّر هو أعلى مخاطرة أمنية في المشروع.</p>
+    </section>
+
+    <!-- ============ TRACEABILITY MATRIX ============ -->
+    <section id="traceability">
+      <h2>مصفوفة التتبّع الهندسي — Traceability Matrix</h2>
+      <div class="table-wrap"><table>
+        <tr><th>Requirement</th><th>Phase</th><th>Slice</th><th>Component</th><th>Implementation</th><th>Tests</th><th>Status</th></tr>
+        <tr><td>Authentication آمن (Register/Login/JWT)</td><td>0</td><td>—</td><td>Application + Infrastructure</td><td><code>RegisterCommand</code>، <code>LoginCommand</code>، <code>JwtTokenService</code></td><td>Api.IntegrationTests (Auth)</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>هرمية جغرافية (المستوى 1-2)</td><td>0</td><td>—</td><td>Domain + Database</td><td><code>Country</code>، <code>City</code></td><td>—</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>تمثيل مصادر الأخبار (7 طبقات)</td><td>0</td><td>—</td><td>Domain + Database</td><td><code>Source</code>، <code>SourceLayer</code></td><td>—</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Story/Article Persistence + Idempotency</td><td>1</td><td>1</td><td>Domain + Infrastructure</td><td><code>Story</code>، <code>Article</code>، Unique Indexes</td><td>Domain.UnitTests (19)</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Relevance Verdict Audit Trail</td><td>1</td><td>1</td><td>Domain</td><td><code>RelevanceResult</code></td><td>Domain.UnitTests</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>SSRF Protection لجلب المصادر</td><td>1</td><td>2</td><td>Infrastructure + Security</td><td><code>PrivateNetworkGuard</code>، <code>SafeSocketConnector</code></td><td>Infrastructure.UnitTests</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>RSS Feed Parsing (XXE-Safe)</td><td>1</td><td>2</td><td>Infrastructure</td><td><code>RssFeedParser</code></td><td>Infrastructure.UnitTests</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>Ingestion Observability</td><td>1</td><td>2</td><td>Domain + Application</td><td><code>SourceFetchLog</code></td><td>Application.UnitTests</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>Scheduler للتشغيل التلقائي</td><td>1</td><td>3 (مخطَّط)</td><td>Background Worker</td><td>Planned — implementation name TBD</td><td>—</td><td><span class="badge planned">⚪</span></td></tr>
+        <tr><td>Relevance Engine v1</td><td>1</td><td>مخطَّط</td><td>Application + AI</td><td>Planned — implementation name TBD</td><td>—</td><td><span class="badge planned">⚪</span></td></tr>
+        <tr><td>اطمّن Case (تشفير حقلي + OTP)</td><td>2</td><td>—</td><td>Domain + Infrastructure + Security</td><td>Planned — implementation name TBD</td><td>—</td><td><span class="badge planned">⚪</span></td></tr>
+        <tr><td>RBAC Enforcement (10 أدوار)</td><td>3</td><td>—</td><td>API + Security</td><td>الأدوار مزروعة في Phase 0، الإنفاذ Planned</td><td>—</td><td><span class="badge planned">⚪</span></td></tr>
+      </table></div>
+    </section>
+
+    <!-- ============ DATABASE TRACKING ============ -->
+    <section id="database">
+      <h2>تتبّع قاعدة البيانات — Database Tracking</h2>
+      <h3>Implemented Tables</h3>
+      <div class="table-wrap"><table>
+        <tr><th>Table</th><th>Phase/Slice</th><th>Key Constraints</th><th>Status</th></tr>
+        <tr><td>AspNetUsers / AspNetRoles / ...</td><td>0</td><td>ASP.NET Identity defaults</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Countries</td><td>0</td><td>Unique: Slug، IsoCode2</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Cities</td><td>0</td><td>Unique: (CountryId, Slug)</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Sources</td><td>0</td><td>Index: Layer</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Stories</td><td>1 / Slice 1</td><td>Index: Status، LastUpdatedAtUtc</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Articles</td><td>1 / Slice 1</td><td>Unique: (SourceId, ExternalSourceItemId)؛ Index: (SourceId, ContentHash)</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>RelevanceResults</td><td>1 / Slice 1</td><td>Index: (StoryId, EvaluatedAtUtc)</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>SourceFetchLogs</td><td>1 / Slice 2</td><td>Index: (SourceId, StartedAtUtc)</td><td><span class="badge awaiting">🔵 Migration not yet applied</span></td></tr>
+      </table></div>
+      <h3>Planned (Not Implemented)</h3>
+      <ul class="clean check-planned">
+        <li>Regions / Neighborhoods (استكمال الهرمية الجغرافية) — Phase 2</li>
+        <li>Cases (اطمّن، Field-level Encrypted) — Phase 2</li>
+        <li>RolePermission، Correction — Phase 3</li>
+        <li>Embeddings Index (pgvector) — Phase 4</li>
+        <li>Knowledge Graph / Aggregation Views (k-anonymity) — Phase 5</li>
+      </ul>
+      <div class="callout">
+        عمود Embedding على Article/Story <strong>لم يُضَف عمدًا</strong> في Slice 1 أو Slice 2 — إضافة عمود Vector غير مُستخدَم
+        قبل ربطه فعليًا بمنطق قراءة/كتابة حقيقي تُعتبر من الأخطاء المعمارية التي تحذّر منها خطة التنفيذ (بناء جداول "لأنها تبدو مفيدة").
+      </div>
+    </section>
+
+    <!-- ============ SECURITY TRACKING ============ -->
+    <section id="security">
+      <h2>تتبّع الأمان — Security Tracking</h2>
+      <div class="table-wrap"><table>
+        <tr><th>Security Control</th><th>Phase/Slice</th><th>Status</th></tr>
+        <tr><td>JWT-based Authentication</td><td>0</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Password Hashing (ASP.NET Identity)</td><td>0</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Anti-enumeration على Login</td><td>0</td><td><span class="badge verified">🟢</span> (مُثبَت باختبار Integration)</td></tr>
+        <tr><td>Secrets Management (لا أسرار في الكود، Environment Variables محليًا / Key Vault إنتاجيًا)</td><td>0</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>RBAC (الأدوار مزروعة، الإنفاذ الفعلي غير مُفعَّل)</td><td>0 (Seed) / 3 (Enforcement)</td><td><span class="badge planned">⚪ Enforcement Planned</span></td></tr>
+        <tr><td>SSRF Protection (DNS resolve-then-pin)</td><td>1 / Slice 2</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>DNS Rebinding Protection</td><td>1 / Slice 2</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>XXE Protection (RSS Parsing)</td><td>1 / Slice 2</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>Input Validation (FluentValidation على كل Command)</td><td>0، 1</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Rate Limiting</td><td>غير مُحدَّد بعد</td><td><span class="badge planned">⚪</span></td></tr>
+        <tr><td>Audit Logging العام</td><td>2/3 (مخطَّط)</td><td><span class="badge planned">⚪</span></td></tr>
+        <tr><td>اطمّن Field-level Encryption + OTP</td><td>2</td><td><span class="badge planned">⚪ أعلى أولوية أمنية في المشروع</span></td></tr>
+      </table></div>
+    </section>
+
+    <!-- ============ AI ENGINEERING TRACKING ============ -->
+    <section id="ai">
+      <h2>تتبّع هندسة الذكاء الاصطناعي — AI Engineering Tracking</h2>
+      <div class="callout warn">
+        <strong>لا يوجد أي تنفيذ فعلي لأي مكوّن AI حتى لحظة إعداد هذه الوثيقة.</strong> كل ما يلي هو Planning فقط حسب الخطة الهندسية.
+      </div>
+      <ul class="clean check-planned">
+        <li>AI Gateway / Semantic Kernel Integration — Phase 1 (لاحقًا ضمن Relevance Engine)</li>
+        <li>Prompt Versioning، Structured Outputs، Validation — Phase 1</li>
+        <li>Retry Policy، Timeout، Cost Control، Caching للاستدعاءات — Phase 1</li>
+        <li>Human-in-the-loop لسياقات المراجعة التحريرية — Phase 3</li>
+        <li>AI Draft Assist (اختياري حسب WBS) — Phase 3</li>
+        <li>Hallucination Evaluation Pipeline كامل — Phase 4</li>
+        <li>Knowledge Graph Builder — Phase 5</li>
+      </ul>
+    </section>
+
+    <!-- ============ TESTING STRATEGY ============ -->
+    <section id="testing">
+      <h2>استراتيجية الاختبار — Testing Strategy</h2>
+      <div class="table-wrap"><table>
+        <tr><th>Test Project</th><th>Type</th><th>Covers</th><th>Status</th></tr>
+        <tr><td>Jusoor.Domain.UnitTests</td><td>Unit</td><td>Story/Article/RelevanceResult Invariants</td><td><span class="badge verified">🟢 19/19 PASS</span></td></tr>
+        <tr><td>Jusoor.Application.UnitTests</td><td>Unit</td><td>Auth Commands، IngestSourceCommandHandler (InMemory EF)</td><td><span class="badge verified">🟢</span> للجزء المؤكَّد / <span class="badge awaiting">🔵</span> للحالات الجديدة</td></tr>
+        <tr><td>Jusoor.Infrastructure.UnitTests</td><td>Unit + Socket-level Integration</td><td>PrivateNetworkGuard، RssFeedParser (بما فيه XXE)، SsrfSafeSourceFetcher End-to-End</td><td><span class="badge awaiting">🔵 لم يُبنَ بعد على بيئة المطوّر</span></td></tr>
+        <tr><td>Jusoor.Api.IntegrationTests</td><td>Integration (Testcontainers + Postgres حقيقي)</td><td>Auth Endpoints، Anti-enumeration</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>E2E Tests</td><td>End-to-End</td><td>—</td><td><span class="badge planned">⚪ لم تبدأ</span></td></tr>
+        <tr><td>Security Tests (خارج الـ Unit Tests المدمجة)</td><td>Security</td><td>—</td><td><span class="badge planned">⚪ لم تبدأ</span></td></tr>
+        <tr><td>AI Evaluation Tests</td><td>AI</td><td>—</td><td><span class="badge planned">⚪ لم تبدأ</span></td></tr>
+        <tr><td>Load / Performance Tests</td><td>Performance</td><td>—</td><td><span class="badge planned">⚪ لم تبدأ</span></td></tr>
+      </table></div>
+    </section>
+
+    <!-- ============ RISKS ============ -->
+    <section id="risks">
+      <h2>سجل المخاطر — Risk Register</h2>
+      <div class="table-wrap"><table>
+        <tr><th>Risk</th><th>Impact</th><th>Probability</th><th>Mitigation</th><th>Status</th></tr>
+        <tr><td>SSRF عبر مصادر خارجية</td><td>عالٍ</td><td>متوسط</td><td>PrivateNetworkGuard + DNS resolve-then-pin + Manual Redirect Validation</td><td><span class="badge awaiting">🔵 Mitigated، Awaiting Verification</span></td></tr>
+        <tr><td>DNS Rebinding</td><td>عالٍ</td><td>منخفض</td><td>Connect-then-pin عبر SocketsHttpHandler.ConnectCallback</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>XXE عبر محتوى Feed خبيث</td><td>عالٍ</td><td>منخفض</td><td>DtdProcessing.Prohibit + XmlResolver=null</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>Duplicate Key Race تحت Ingestion متزامن</td><td>متوسط</td><td>منخفض</td><td>Per-item SaveChanges + DbUpdateException handling</td><td><span class="badge review">🟣 مُنفَّذ لكن غير مُختبَر مباشرة</span></td></tr>
+        <tr><td>موثوقية المصادر الإخبارية</td><td>متوسط</td><td>متوسط</td><td>Source.ReliabilityScore (Phase 0) + SourceFetchLog Observability (Slice 2)</td><td><span class="badge awaiting">🔵</span></td></tr>
+        <tr><td>نموذج اطمّن غير مؤمَّن كفاية</td><td>حرج</td><td>—</td><td>لم يبدأ التنفيذ بعد — أعلى أولوية أمنية في Phase 2</td><td><span class="badge planned">⚪</span></td></tr>
+        <tr><td>Hallucination في محرك الـ AI</td><td>عالٍ</td><td>—</td><td>لم يبدأ التنفيذ — Human-in-the-loop مخطَّط لـ Phase 3/4</td><td><span class="badge planned">⚪</span></td></tr>
+        <tr><td>تأخير Phase 0 ينزلق على كامل الجدول</td><td>حرج</td><td>منخفض (Phase 0 مكتملة)</td><td>Phase 0 مكتملة ومؤكَّدة</td><td><span class="badge verified">🟢 Resolved</span></td></tr>
+      </table></div>
+    </section>
+
+    <!-- ============ FINAL DELIVERY ============ -->
+    <section id="final-delivery">
+      <h2>التسليم النهائي وتسليم العميل — Final Delivery &amp; Client Handover</h2>
+      <div class="callout warn">
+        <strong>هذا القسم يوثّق المتطلبات المستقبلية فقط.</strong> المشروع حاليًا في Phase 1 من أصل 6 مراحل،
+        ولا يوجد أي أساس واقعي لتوصيف أي جزء منه بأنه "Production Ready" أو "جاهز للتسليم" في الوقت الحالي.
+      </div>
+      <h3>Production Readiness (Planned Checklist)</h3>
+      <ul class="clean check-planned">
+        <li>Backend — جزئي (Phase 0 + Phase 1/Slice 1 فقط)</li>
+        <li>Frontend — Scaffold فقط، لا صفحات إنتاجية حقيقية بعد</li>
+        <li>Database — Migrations أولية فقط</li>
+        <li>Authentication / Authorization — Authentication جاهز، Authorization (RBAC) غير مُفعَّل</li>
+        <li>News Pipeline، AI، Monitoring، Backup، Recovery، Scalability — لم تبدأ</li>
+      </ul>
+      <h3>Testing Completion</h3>
+      <p class="muted">راجع قسم <a href="#testing">استراتيجية الاختبار</a> أعلاه — E2E وSecurity وAI Evaluation وLoad Tests لم تبدأ بعد.</p>
+      <h3>Deployment Readiness</h3>
+      <ul class="clean check-planned">
+        <li>Production Infrastructure — Planned — implementation name TBD</li>
+        <li>CI/CD — أساسي فقط (Build + Test)، لا يوجد Deployment Pipeline فعلي بعد</li>
+        <li>Monitoring / Health Checks / Rollback Strategy — لم تبدأ</li>
+      </ul>
+      <h3>Client Acceptance</h3>
+      <p>شروط <strong>CLIENT ACCEPTED / PROJECT DELIVERED</strong> لم تُعرَّف بعد رسميًا في هذه الوثيقة،
+      وستُضاف عند الوصول إلى نهاية Phase 5 وبدء مرحلة UAT الرسمية حسب الجدول الزمني للخطة الهندسية.</p>
+    </section>
+
+    <!-- ============ CHANGELOG ============ -->
+    <section id="changelog">
+      <h2>سجل تغييرات الوثيقة — Document Changelog</h2>
+      <div class="table-wrap"><table>
+        <tr><th>Date</th><th>Phase/Slice</th><th>Change</th><th>Status</th></tr>
+        <tr><td>Current baseline</td><td>Phase 0</td><td>إنشاء الوثيقة الأولى بعد تأكيد اكتمال Phase 0 بالكامل</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Current baseline</td><td>Phase 1 / Slice 1</td><td>تسجيل اكتمال وتأكيد Slice 1 (Story/Article/RelevanceResult)</td><td><span class="badge verified">🟢</span></td></tr>
+        <tr><td>Current baseline</td><td>Phase 1 / Slice 2</td><td>تسجيل تنفيذ Slice 2 (SSRF-Safe Fetcher + RSS) — بانتظار التأكيد</td><td><span class="badge awaiting">🔵</span></td></tr>
+      </table></div>
+      <p class="muted">لا توجد تواريخ تقويمية دقيقة موثَّقة لهذه الأحداث؛ تم استخدام "Current baseline" بدلًا من اختلاق تواريخ تاريخية غير مؤكَّدة، التزامًا بسياسة عدم الاختلاق (§29).</p>
+    </section>
+
+    <footer>
+      JUSOOR (جسور) — Engineering Execution &amp; Delivery Roadmap · Internal + Client-facing document · Generated from actual repository state and developer-confirmed verification, not from unverified prior claims.
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

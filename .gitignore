@@ -1,0 +1,30 @@
+# .NET
+bin/
+obj/
+*.user
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+
+# Env
+.env
+.env.local
+
+# OS
+.DS_Store
+ملفات/
+ملفات/
+PHASE3_EDITORIAL_DECISIONS.zip
+p3-up.zip
+test.zip
+frontend/.npm-cache/
+PHASE3_EDITORIAL_DECISIONS.zip
+p3-up.zip
+test.zip
+frontend/.npm-cache/
+PHASE3_EDITORIAL_DECISIONS.zip
+p3-up.zip
+test.zip
+frontend/.npm-cache/

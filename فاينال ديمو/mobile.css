@@ -1,0 +1,1119 @@
+/* ==========================================================================
+   جسور — MOBILE EXPERIENCE OVERHAUL
+   ==========================================================================
+   ملف مستقل، محمّل بعد styles.css على كل صفحة، عشان:
+   - يفصل منطق الموبايل عن الملف الأصلي (10,259 سطر) بدل ما نضيف له فوق
+     70 نقطة توقف متضاربة أصلاً — سهولة صيانة ومراجعة لاحقة.
+   - يضمن أولوية الكاسكيد (Cascade) على القواعد المكافئة في التخصيص
+     (Specificity) داخل styles.css، بما إنه محمّل بعده مباشرة.
+   - لا يمس أي سطر في styles.css ولا في منطق الديسكتوب — الديسكتوب
+     يفضل يشتغل بالضبط زي ما هو.
+
+   نظام نقاط التوقف الموحّد المستخدم في كل هذا الملف:
+     1024px  → تابلت / لابتوب صغير: تبسيط أول، القائمة تتحول لـ Drawer
+      768px  → موبايل كبير وتابلت بورتريه: كل الشبكات multi-column
+                تتحول لعمود واحد أو عمودين حسب المحتوى
+      480px  → موبايل قياسي وأصغر: كثافة أقل، خط وأزرار أكبر للمس
+      380px  → أصغر الشاشات (iPhone SE ونحوها): حماية إضافية فقط
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0) أساسيات وحماية عامة (كل المقاسات تحت 1024px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  img,
+  video,
+  iframe,
+  svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* مناطق آمنة لأجهزة فيها notch/home-indicator */
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* حجم لمس أدنى 44×44 لكل عنصر تفاعلي أساسي */
+  .icon-btn,
+  .nav-action-btn,
+  .burger,
+  .btn,
+  .btn-nav,
+  .btn-primary,
+  .btn-ghost,
+  .btn-ghostt,
+  .btn-accent,
+  .btn-sm,
+  .drawer-close,
+  .clear-btn,
+  .reaction-btn,
+  .comments-toggle,
+  .video-tabs button {
+    min-height: 40px;
+    min-width: 40px;
+  }
+  .btn-sm {
+    min-height: 35px;
+    min-width: auto;
+  }
+
+  /* إيقاف أي hover-only تفاعل حساس على اللمس (القائمة المنسدلة "المزيد") */
+  .dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   0-ب) الحاوية العامة (.wrap) — تقليل الهامش الجانبي الزائد على الموبايل.
+        كانت بتاخد padding: 0 70px بنفس مقاس الديسكتوب بالظبط (مفيش أي
+        override ليها في الملف ده أصلاً)، فالمحتوى بيتضغط في عمود ضيق
+        وسط مساحة بيضاء ضخمة على الجنبين. القيم الجديدة قريبة من تجربة
+        المواقع الإخبارية العالمية على الموبايل (هامش صغير يسيب مساحة
+        حقيقية للمحتوى بدل ما ياكلها).
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .wrap {
+    padding: 0 28px;
+  }
+}
+@media (max-width: 768px) {
+  .wrap {
+    padding: 0 18px;
+  }
+}
+@media (max-width: 480px) {
+  .wrap {
+    padding: 0 14px;
+  }
+}
+@media (max-width: 380px) {
+  .wrap {
+    padding: 0 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .search-panel,
+  .modal,
+  .overlay {
+    transition: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   1) الشريط العلوي (topbar) — إعادة أولويات بدل التصغير الأعمى
+   -------------------------------------------------------------------------- */
+
+/* 🐛 إصلاح: mobile.js (قسم 7) بيحقن .topbar-auth-slot في الصفحة على كل
+   المقاسات من غير أي شرط عرض شاشة، والعنصر بياخد data-auth-slot زي نسخة
+   الهيدر بالظبط — وقاعدة [data-auth-slot] الأساسية في styles.css معرّفة
+   display: inline-flex بشكل عام (مفيش أي تخصيص ديسكتوب/موبايل فيها أصلاً).
+   نتيجة كده: الزرارين كانوا ظاهرين في الشريط الكهرماني حتى على الديسكتوب،
+   لأن مفيش قاعدة كانت بتقفلهم برّه الـ media query تحت. القاعدة دي بتخفيهم
+   افتراضيًا، وبيترجعوا يظهروا بس جوه @media (max-width:768px) تحت. */
+.topbar-auth-slot {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* الارتفاع كبر عشان يستوعب زرار دخول/إنشاء حساب المنقولين هنا من
+     الهيدر (كانوا بيعملوا صف تاني تحت الهيدر الأبيض — دلوقتي بقوا جوه
+     الشريط الكهرماني نفسه، يسار الشريط). */
+  .topbar .wrap {
+    height: 35px;
+    min-height: 35px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    gap: 7px;
+  }
+  /* التاريخ الكامل يستهلك مساحة كبيرة على الموبايل — إبقاء الوقت فقط ظاهراً */
+  .topbar-datetime .date-part {
+    display: none;
+  }
+  .topbar-datetime .datetime-separator {
+    display: none;
+  }
+  .topbar .lang {
+    font-size: 10.5px;
+    padding: 3px 6px;
+  }
+
+  /* أيقونات السوشيال ميديا تتكرر في الفوتر والـ Drawer (قسم 4 تحت في
+     نفس الملف بينسخها هناك تلقائيًا) — تختفي من التوب بار من هنا عشان
+     تفسح المكان لزرار دخول/إنشاء حساب، مش حذف للوظيفة.
+     ملحوظة مهمة: بنخفي الروابط (a) جوه .social-icons بس، مش الـ div
+     نفسه — لأن .topbar-auth-slot (الزرارين) محقون جوه نفس الـ div ده
+     (.left)، فلو خبّينا الـ div كامل هيختفي الزرارين معاه بالغلط. */
+  .topbar .social-icons > a {
+    display: none;
+  }
+
+  /* ---- يسار الشريط الكهرماني: زرار دخول/إنشاء حساب ----
+     العنصر [data-auth-slot] هنا نسخة إضافية بتتحقن "أخت" لـ .left جوه
+     .topbar .wrap بالجافاسكريبت (mobile.js — قسم 7)، مش جوه .left
+     نفسه (تفاديًا لتعارضها مع سيلكتور ".social-icons a" العام). بتتملى
+     بنفس منطق app.js (renderAuthSlot) زي نسخة الهيدر بالظبط — شوف قسم
+     2 تحت لإخفاء نسخة الهيدر على الموبايل عشان ما يبقاش فيه تكرار.
+     ترتيبها بعد .left في الـ DOM يخليها هي الأقرب لحافة اليسار الفعلية
+     بفضل justify-content: space-between على .wrap. */
+
+  .topbar-auth-slot {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 4px;
+    animation: topbarAuthIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .topbar-auth-slot .btn {
+    height: 28px !important;
+    min-height: 28px !important;
+    padding: 0 9px !important;
+    font-size: 10.5px;
+    line-height: 30px;
+    box-sizing: border-box;
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 800;
+    white-space: nowrap;
+    letter-spacing: 0;
+
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .topbar-auth-slot .btn:active {
+    transform: scale(0.95);
+  }
+
+  /* دخول — زرار خفيف فاتح، متباين وواضح فوق الكهرماني */
+  .topbar-auth-slot .btn-ghost {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(11, 14, 20, 0.14);
+    color: var(--ink);
+  }
+  .topbar-auth-slot .btn-ghost:hover,
+  .topbar-auth-slot .btn-ghost:active {
+    background: #fff;
+    border-color: var(--ink-2);
+  }
+
+  /* إنشاء حساب — تدرّج أزرق العلامة، أهم زرار فبيبان بارز وله ظل خفيف */
+  .topbar-auth-slot .btn-primary {
+    background: linear-gradient(135deg, var(--blue-2), var(--blue));
+    border: 1px solid transparent;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(15, 40, 90, 0.32);
+  }
+  .topbar-auth-slot .btn-primary:hover,
+  .topbar-auth-slot .btn-primary:active {
+    box-shadow: 0 1px 6px rgba(15, 40, 90, 0.32);
+  }
+
+  /* حالة تسجيل الدخول (افتار بدل الزرارين) */
+  .topbar-auth-slot .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  }
+}
+
+@keyframes topbarAuthIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   1-ب) مساحة إعلانية جديدة بين التوب بار والهيدر — موبايل/تابلت فقط
+        (مخفية افتراضيًا على الديسكتوب، شوف .mobile-ad-slot في styles.css).
+        مقاس الوحدة هنا 320×100 ("Large Mobile Banner") — مقاس إعلاني
+        قياسي حقيقي فعليًا، أصغر بكتير من الصورة المرجعية اللي اتبعتت
+        (كانت شبه بانر ديسكتوب مش موبايل). لازم يتضاف عنصر
+        <div class="mobile-ad-slot">...</div> في كل صفحة بين التوب بار
+        والهيدر — اتضاف بالفعل في كل صفحات الموقع.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .mobile-ad-slot {
+    display: flex;
+    justify-content: center;
+    padding: 10px 18px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-ad-slot__inner {
+    position: relative;
+    width: 100%;
+    max-width: 336px;
+    height: 100px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--paper), #eef1f6);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  }
+  .mobile-ad-slot__inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .mobile-ad-slot__tag {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--text-mute);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    z-index: 1;
+  }
+  .mobile-ad-slot__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: var(--text-mute);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .mobile-ad-slot__placeholder small {
+    font-size: 10px;
+    font-weight: 500;
+    font-family: var(--mono);
+  }
+}
+@media (max-width: 480px) {
+  .mobile-ad-slot {
+    padding: 8px 14px;
+  }
+  .mobile-ad-slot__inner {
+    height: 88px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2) الهيدر الرئيسي — ده الشريط الوحيد الثابت (Sticky) على الموبايل دلوقتي.
+      صف واحد بس: همبرغر + لوجو + بحث. زرار دخول/إنشاء حساب اتنقلوا
+      لجوه التوب بار الكهرماني (قسم 1 فوق) بدل ما يعملوا صف تاني هنا —
+      فمفيش داعي لشريط تنقل تاني تحته يكرر نفس العناصر (قسم 3 تحت بيشيل
+      bluebarr خالص).
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* متغيّر موحّد لارتفاع الهيدر الثابت على الموبايل (يستخدمه أي عنصر
+     محتاج يعرف يبعد قد إيه عن أعلى الشاشة، بدل أرقام مكررة يدوياً —
+     مثال: .atmaen-toolbar تحت في قسم 12). صف واحد بس دلوقتي فالقيمة
+     رجعت أصغر. */
+  :root {
+    --mobile-sticky-header-h: 64px;
+  }
+
+  header.site {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100px;
+    padding: 10px 0;
+  }
+
+  .burger {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    order: -1;
+    font-size: 22px;
+    min-width: 42px;
+    min-height: 42px;
+    border: none;
+    background: transparent;
+  }
+  .logo {
+    flex-direction: row;
+    gap: 9px;
+    font-size: 19px;
+  }
+  .logo-img {
+    height: 34px;
+    width: auto;
+  }
+  .logo-slogan {
+    display: none;
+  } /* موجودة في الـ Drawer بدل ما تزاحم الهيدر */
+
+  /* أسماء رؤساء التحرير: مش حذف — بتتنقل لأعلى الـ Drawer نفسه (مصدر js)  */
+  .masthead-credits {
+    display: none;
+  }
+
+  /* الإعلان القديم جوه الهيدر بقى مكرر مع مساحة الإعلان الجديدة بين
+     التوب بار والهيدر (قسم 1-ب فوق) — بيتخفي هنا على الموبايل فقط،
+     وبيفضل شغال بالظبط زي ما هو على الديسكتوب (styles.css). */
+  .header-ad {
+    display: none;
+  }
+
+  /* header-actions كان بيلف زرار البحث + دخول/إنشاء حساب مع بعض في
+     نفس الصف. display:contents بيشيل "صندوقه" هو بس (زي نفس الحيلة
+     المستخدمة مع hero-slider) عشان زرار البحث يبقى أخ مباشر لباقي
+     عناصر header-inner. */
+  .header-actions {
+    display: contents;
+  }
+
+  .header-actions > [data-open-search] {
+    order: 3;
+    font-size: 19px;
+    min-width: 42px;
+    min-height: 42px;
+  }
+
+  /* نسخة الهيدر من [data-auth-slot] اتخفت خالص على الموبايل/التابلت —
+     زرار دخول/إنشاء حساب بقوا يظهروا بس من جوه التوب بار الكهرماني
+     (النسخة التانية .topbar-auth-slot، محقونة بـ mobile.js قسم 7)،
+     عشان ما يبقاش فيه تكرار لنفس الزرارين مرتين في الصفحة. */
+  .header-actions > [data-auth-slot] {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .logo {
+    font-size: 17px;
+  }
+  .logo-img {
+    height: 70px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3) bluebarr — بيتشال بالكامل على الموبايل. كان شريط تنقل تاني (لوجو +
+      بحث + دخول/إنشاء حساب) بيتكرر تحت الهيدر الأبيض مباشرة بنفس
+      العناصر بالظبط — تكرار بصري مالوش داعي. روابط التصنيفات اللي كانت
+      فيه (nav-links + dropdown "المزيد") موجودة بالكامل جوه الـ Drawer
+      أصلاً (mobile.js بيزامنها تلقائي من نفس bluebarr — القسم رقم 4 في
+      mobile.js — فمفيش أي وظيفة بتضيع).
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .bluebarr {
+    display: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4) الشريط الإخباري المتحرك (ticker) — يبقى كما هو (مناسب للموبايل أصلاً)
+      لكن بحجم خط وارتفاع لمسة مريحة أكتر
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .bluebar {
+    font-size: 12.5px;
+  }
+  .ticker-group span {
+    padding: 0 18px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5) الـ Drawer — تحسينات احترافية: مساحة أمان، تجميع أقسام، لمسة أكبر
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* ⚠️ باگ تاني في التراص (z-index): bluebarr أصلاً z-index:1000 في
+     styles.css، وهو أعلى من z-index الـ Drawer نفسه (211) — يعني لو
+     فتحت الـ Drawer، الشريط الأزرق الثابت كان هيظهر فوقه بدل ما يختفي
+     تحته. بنرفع طبقة الـ Drawer فوق bluebarr هنا. */
+  .drawer-overlay {
+    z-index: 1200;
+  }
+  .drawer {
+    z-index: 1201;
+    width: 88%;
+    max-width: 360px;
+    padding: 18px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer nav a {
+    padding: 14px 6px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+  }
+  .drawer-credits {
+    font-size: 12px;
+    color: var(--text-mute);
+    border-top: 1px solid var(--line);
+    margin-top: 14px;
+    padding-top: 14px;
+    line-height: 1.9;
+  }
+  .drawer-section-title {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin: 14px 0 2px;
+    font-weight: 700;
+  }
+  .drawer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6) نافذة البحث — تجربة ملء الشاشة الحقيقية على الموبايل بدل نافذة عائمة
+      صغيرة في المنتصف. النافذة الفعلية المفعّلة عبر app.js هي
+      #searchPanel / #searchBackdrop (كلاس is-active)، مش .search-overlay
+      القديمة غير المستخدمة فعلياً — التعامل هنا مع العنصر الصحيح فقط.
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .search-panel {
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    transform: translateY(12px);
+    padding-top: calc(14px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+  }
+  .search-panel.is-active {
+    transform: translateY(0);
+  }
+  .search-results,
+  #searchResults {
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+  .search-input-wrapper input#searchInput {
+    font-size: 16px;
+  } /* يمنع تكبير سفاري التلقائي */
+}
+
+/* --------------------------------------------------------------------------
+   7) النوافذ المنبثقة (Modals) — تتحول لملء شاشة مع أزرار سفلية ثابتة
+      (اطمّن على مغتربك أهم نموذج في المنصة حسب المستند التقني)
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  .overlay .modal,
+  .modal {
+    max-width: none;
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    animation: sheetSlideUp 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+  .modal-foot {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 10px;
+  }
+  .modal-foot .btn {
+    flex: 1;
+  }
+  .modal input,
+  .modal select,
+  .modal textarea {
+    font-size: 16px;
+  }
+}
+@keyframes sheetSlideUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8) شبكات المحتوى — عمود واحد حقيقي على الموبايل (مش عمودين ضيقين)،
+      بشكل قوائم إخبارية احترافية زي مانشيت/الجزيرة/بلومبرج: صورة كاملة
+      العرض + عنوان بحجم مريح + سطر بيانات، كل خبر جوه كارت أبيض منفصل
+      بظل خفيف بدل ما الأخبار تكون ملتصقة ببعض.
+
+      ⚠️ باگ حقيقي كان السبب في المشكلة اللي في الصور: عناصر زي قسم
+      "فرص استثمارية" و"الجيل الثاني" فيها inline style في الـ HTML
+      نفسه (style="grid-template-columns: repeat(2,1fr)" و repeat(4,1fr))
+      — والـ inline style بييجي فوق أي قاعدة CSS خارجية مهما كانت
+      الأولوية، حتى لو جوه @media، إلا لو استخدمنا !important. عشان
+      كده القواعد دي هنا لازم !important عشان تكسر الـ inline المكتوب
+      في الصفحة، مش لإهمال في الكتابة.
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  /* عيب موجود فعلاً في الديمو: hero-below بيستخدم إحداثيات مطلقة
+     (right:350px; top:-80px) مبنية على عرض عمود hero-side (350px) في
+     تخطيط الديسكتوب فقط. لما الشبكة تتحول لعمود واحد (القاعدة القديمة
+     أعلى في نفس الملف)، الإحداثيات دي بتفضل شغالة وبتدفع العنوان برّه
+     مكانه/يتراكب فوق الفيديو. هنا بنرجّعه للتدفق الطبيعي. */
+  .hero-below {
+    position: static;
+    margin-top: 14px;
+  }
+  .hero-below h2 {
+    max-width: none;
+  }
+
+  /* ترتيب الهيرو على الموبايل: الفيديو الرئيسي، بعده العنوان/زرار
+     التشغيل (hero-below)، بعده التنقل (hero-nav)، وفي الآخر باقي
+     الفيديوهات المصغّرة. المشكلة إن hero-below وhero-nav إخوات لـ
+     hero-slider مش عناصر جواه، فمينفعش نرتبهم بـ order عادي وهما في
+     حاويتين مختلفتين. الحل: hero-slider يتحول لـ display:contents —
+     بيختفي "صندوقه" هو بس من غير ما يمسح عناصره (يمين/رئيسي/شمال)،
+     فتبقى دول كلهم إخوات مباشرة لـ hero-below وhero-nav جوه نفس
+     حاوية wrap، ونقدر نرتب الخمسة عناصر كلهم بـ order واحد موحّد. */
+#heroSliderSection .wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+#heroSliderSection .hero-slider {
+  display: contents;
+}
+
+#heroSliderSection .hero-main {
+  order: 1;
+}
+
+#heroSliderSection .hero-below {
+  order: 2;
+}
+
+/* الـ 6 فيديوهات */
+#heroSliderSection .hero-side {
+  order: 3;
+  flex-direction: row;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+/* الـ nav بعد الـ 6 فيديوهات */
+#heroSliderSection .hero-nav {
+  order: 4;
+  margin-top: 20px;
+}
+  #heroSliderSection .hero-side:last-of-type {
+    margin-top: 10px;
+  }
+
+  .split-2 {
+    grid-template-columns: 1fr !important;
+    gap: 28px;
+  }
+  .sports-layout {
+    grid-template-columns: 1fr;
+  }
+  .search-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .editorial-columns {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .recirc-cols {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .author-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: right;
+    gap: 16px;
+  }
+  .author-hero-avatar {
+    width: 84px;
+    height: 84px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* عمود واحد حقيقي — مش عمودين، بصرف النظر عن أي inline style مكتوب
+     في الصفحة (2 أو 3 أو 4 أعمدة كلها بترجع لعمود واحد هنا) */
+  .story-grid,
+  .six-grid,
+  .video-grid,
+  .opinion-grid,
+  .media-grid.recirc-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .svc-row {
+    grid-template-columns: unset;
+  } /* السلايدر الأفقي أصلاً أنسب حل للموبايل هنا */
+
+  /* --- شكل الكارت الاحترافي (نمط مانشيت/الجزيرة): صورة كاملة العرض +
+     كارت أبيض منفصل بحواف مدورة وظل خفيف بدل خبر ملزّق في التاني --- */
+  .grid-card,
+  .story-card {
+    display: block;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 10px 10px 14px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  }
+  .grid-card .thumb,
+  .story-card .thumb,
+  .story-card img {
+    height: auto;
+    aspect-ratio: 16 / 10;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  .grid-card .thumb img,
+  .story-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .grid-card h3,
+  .story-card h3 {
+    font-size: 16px;
+    line-height: 1.5;
+    /* سطرين بالظبط بدل ما العنوان يمتد بلا نهاية أو ينكسر بشكل عشوائي */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .grid-card .foot,
+  .story-card .foot {
+    margin-top: 8px;
+    font-size: 12.5px;
+  }
+
+  /* قائمة "الأكثر قراءة" المرقّمة — تفضل قائمة رأسية نضيفة، مش شبكة */
+  .rank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .rank-list .item {
+    padding: 12px 4px;
+  }
+}
+@media (max-width: 480px) {
+  .grid-card,
+  .story-card {
+    padding: 8px 8px 12px;
+    border-radius: 12px;
+  }
+  .grid-card h3,
+  .story-card h3 {
+    font-size: 15px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9) صفحة المقال — شريط المشاركة العائم، شريط الأدوات، الصورة البارزة
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  /* الشريط الجانبي العائم للمشاركة كان بيتموضع بإحداثيات ديسكتوب ثابتة
+     (left:22px) — على الموبايل بيتحول لصف أفقي تحت العنوان مباشرة بدل
+     ما يتعلّق فوق النص أو يتحرك بمنطق غير مناسب للمس */
+  .article-share-rail {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin: 14px 0 0;
+    border-radius: 12px;
+    overflow-x: auto;
+  }
+  .article-toolbar {
+    position: static;
+    margin-top: 16px;
+  }
+}
+@media (max-width: 768px) {
+  .article-title {
+    font-size: clamp(22px, 6vw, 30px);
+  }
+  .article-hero-figure img {
+    border-radius: 8px;
+  }
+  .article-meta {
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    font-size: 12.5px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10) صفحات الفلترة: تصنيف / دولة / كاتب / بحث — الفلاتر تتحول لصف قابل
+       للتمرير الأفقي (نمط تطبيقات الموبايل القياسي) بدل عمود جانبي طويل
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .facet-list {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .facet-group {
+    flex: 0 0 auto;
+  }
+  .chips-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .chips-row .chip,
+  .chips-row .chip-ghost {
+    flex: 0 0 auto;
+  }
+  .category-page-header,
+  .page-header {
+    padding: 20px 0;
+  }
+  .category-heading-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+@media (max-width: 640px) {
+  .pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .pagination a,
+  .pagination button,
+  .pagination span {
+    min-height: 40px;
+    min-width: 40px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11) الفوتر — عمود واحد، نشرة بريدية بعرض كامل، لغة/سوشيال في صف مضغوط
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .foot-v2-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .foot-v2-col h5 {
+    margin-top: 4px;
+  }
+}
+@media (max-width: 768px) {
+  .foot-v2-newsletter-form {
+    flex-direction: column;
+  }
+  .foot-v2-newsletter-form input,
+  .foot-v2-newsletter-form button {
+    width: 100%;
+  }
+  .foot-v2-bottom {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  .foot-v2-bottom-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12) اطمّن على مغتربك — أهم صفحة في المنتج: تجربة Feed اجتماعي حقيقية
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .atmaen-hero {
+    padding: 28px 0 22px;
+  }
+  .atmaen-stats {
+    gap: 16px;
+  }
+  .atmaen-toolbar {
+    position: sticky;
+    top: calc(var(--nav-height, 56px));
+    z-index: 40;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .atmaen-toolbar > * {
+    flex: 0 0 auto;
+  }
+  .post-card {
+    padding: 14px 14px;
+  }
+  .post-head {
+    flex-wrap: wrap;
+  }
+  .reaction-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pinned-strip .pinned-card {
+    min-width: 78vw;
+  }
+  .trust-strip {
+    gap: 14px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 10px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   13) وضع الأزمة (Crisis) — أهم صفحة وقت الطوارئ الفعلية، لازم تكون
+       الأخف والأسرع قراءة على شبكة موبايل ضعيفة
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .crisis-hero__title {
+    font-size: clamp(20px, 6vw, 26px);
+  }
+  .crisis-hero__actions {
+    flex-direction: column;
+  }
+  .crisis-hero__actions .btn {
+    width: 100%;
+  }
+  .crisis-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .crisis-action-grid {
+    grid-template-columns: 1fr;
+  }
+  .crisis-timeline {
+    padding-inline-start: 16px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   14) صفحة اللمّة الحلوة (المعرض/الكاروسيل) — تفاعل لمس بدل أسهم فقط
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .lamma-carousel {
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
+  }
+  .lamma-thumbnails {
+    overflow-x: auto;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .lamma-nav {
+    display: none;
+  } /* الأسهم تُستبدل بالسحب باللمس (touch swipe) — انظر mobile.js */
+}
+
+/* --------------------------------------------------------------------------
+   15) صفحة الفيديوهات — تبويبات قابلة للتمرير + عرض احترافي للمشغّل
+       الرئيسي والأزرار بمقاس مناسب للمس بدل المقاس المكتوب للديسكتوب
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .video-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin: 16px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .video-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .video-tabs > * {
+    flex: 0 0 auto;
+  }
+  .video-tabs button {
+    padding: 8px 18px;
+    font-size: 13.5px;
+  }
+
+  /* المشغّل الرئيسي: ارتفاع متناسب مع عرض الشاشة بدل رقم ثابت كبير،
+     وحواف وحشو أقل زحمة */
+  .video-featured {
+    border-radius: 12px;
+  }
+  .video-featured-media {
+    height: 52vw;
+    min-height: 170px;
+    max-height: 240px;
+  }
+  .video-featured-media .playbtn {
+    width: 56px;
+    height: 56px;
+    font-size: 18px;
+  }
+  .video-featured-body {
+    padding: 24px 16px 14px;
+  }
+  .video-featured-body h2 {
+    font-size: 15.5px;
+    line-height: 1.4;
+  }
+  .video-featured-body .eyebrow {
+    font-size: 11px;
+  }
+}
+@media (max-width: 380px) {
+  .video-featured-media {
+    height: 48vw;
+    min-height: 150px;
+  }
+  .video-tabs button {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   16) طباعة عامة (Typography) — منع تصغير الخط تحت حد القراءة المريح
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+  h2.title,
+  .hero h1 {
+    line-height: 1.3;
+  }
+  .card,
+  .post-card,
+  .crisis-action-card {
+    padding: 16px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17-ب) زر تفعيل وضع الأزمة التجريبي (مؤقت للعروض — راجع التعليق في
+        index.html) — تأمين مسافة عن حافة الشاشة السفلية على الأجهزة
+        بحواف مقوّسة/home indicator
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .crisis-demo-toggle {
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    left: 12px;
+    padding: 9px 14px;
+    font-size: 11.5px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   18) صفحة الدخول/التسجيل — من عمودين ثابتين (460px نموذج + بصري) لعمود
+       واحد، مع تصغير اللوحة البصرية لبانر علوي مختصر بدل حذفها بالكامل
+   -------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .auth-shell {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .auth-visual {
+    padding: 32px 24px;
+    flex: none;
+  }
+  .auth-visual h2 {
+    font-size: 20px;
+  }
+  .auth-visual .quote {
+    font-size: 13px;
+  }
+  .auth-form-side {
+    width: 100%;
+    padding: 28px 20px 48px;
+  }
+  .pw-wrap button {
+    min-height: 32px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  .social-auth {
+    flex-direction: column;
+  }
+  .social-auth button {
+    min-height: 44px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17) الاتجاه العرضي (Landscape) على الموبايل — تقليل ارتفاع الهيدر
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 480px) {
+  .header-inner {
+    min-height: 52px;
+  }
+  .masthead-credits,
+  .header-ad {
+    display: none;
+  }
+  .drawer {
+    padding-top: 10px;
+  }
+}

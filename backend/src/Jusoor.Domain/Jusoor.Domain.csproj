@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Jusoor.Domain</RootNamespace>
+    <!-- Intentionally no package references: the Domain layer must not depend on
+         EF Core, ASP.NET, or any infrastructure concern. If a future PR adds a
+         reference here, that is an architecture violation and should be rejected
+         in review, not "fixed" by adding an exception. -->
+  </PropertyGroup>
+
+</Project>

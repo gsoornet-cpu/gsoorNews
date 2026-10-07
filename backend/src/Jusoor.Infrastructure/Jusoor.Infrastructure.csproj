@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Jusoor.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Versions verified against NuGet on 2026-09-09 for net10.0 compatibility. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+    <!-- Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3 requires EF Core
+         >=10.0.4 <11.0.0 — 10.0.11 above satisfies that. -->
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.11" />
+    <!-- Kept (not unused): Phase 1's SSRF-safe source fetcher registers a
+         named HttpClient via IHttpClientFactory. -->
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
+    <!-- RSS parsing for the first source-worker strategy (Slice 2). No
+         dependencies of its own, net10.0-native. -->
+    <PackageReference Include="System.ServiceModel.Syndication" Version="10.0.2" />
+    <!-- Design-time only (see ApplicationDbContextFactory) — PrivateAssets
+         keeps it out of the published runtime app. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!-- Scheduler (Slice 3), per the original engineering plan's choice of
+         Hangfire over a hand-rolled IHostedService/PeriodicTimer — earns
+         its keep because Phase 4 (crisis detection) and digest emails need
+         a real persistent job runner later, not just this slice's simple
+         recurring sweep. -->
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.24" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.21.1" />
+    <!-- Atmaen OTP provider (Phase 2 decision 1, approved: Twilio Verify V2).
+         Version NOT verified against NuGet from this sandbox — this
+         sandbox's network allowlist does not include api.nuget.org (same
+         restriction noted on every prior slice's verification steps).
+         Confirm 7.12.1 is current/compatible with net10.0 before restoring
+         packages for real; bump if NuGet shows a newer 7.x release. -->
+    <PackageReference Include="Twilio" Version="7.12.1" />
+    <!-- Atmaen Case field encryption (Phase 2 decision 2, approved: EF Core
+         value converters + Azure Key Vault + envelope encryption). Same
+         NOT-verified-against-NuGet caveat as Twilio above — no network
+         access to api.nuget.org from this sandbox. Azure.Identity provides
+         DefaultAzureCredential; no version-compatibility issue expected
+         between the two, since Microsoft ships and tests them together, but
+         that expectation itself is unverified here. -->
+    <PackageReference Include="Azure.Security.KeyVault.Keys" Version="4.7.0" />
+    <PackageReference Include="Azure.Identity" Version="1.13.1" />
+    <!-- Server-side allow-list HTML sanitizer for editorial article bodies
+         (Slice 21, decision D2: HtmlSanitizer / Ganss.Xss). 9.2.x is deliberate:
+         9.0.x (including 9.0.892 and 9.0.967) hard-pins AngleSharp [0.17.1], which
+         NuGet audit flags (NU1902, GHSA-pgww-w46g-26qg / CVE-2026-54570: mutation-XSS
+         through MathML annotation-xml, fixed in AngleSharp 1.5.0). That parser IS the
+         sanitizer's trust boundary, so a vulnerable one is not acceptable here.
+         9.2.x depends on AngleSharp >= 1.7.1. -->
+    <PackageReference Include="HtmlSanitizer" Version="9.2.995" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jusoor.Application\Jusoor.Application.csproj" />
+  </ItemGroup>
+
+</Project>

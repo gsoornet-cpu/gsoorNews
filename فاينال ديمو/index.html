@@ -1,0 +1,1371 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>جسور — أخبار المصريين بالمهجر، اطمّن، وخريطة الجالية</title>
+    <meta
+      name="description"
+      content="منصة المصريين بالمهجر: أخبار الجاليات، خدمة اطمّن على مغتربك وقت الأزمات، وخريطة تفاعلية لأماكن تواجد المصريين حول العالم."
+    />
+    <link rel="icon" href="assets/josour-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mobile.css">
+  </head>
+  <body>
+    
+
+    <!-- ===== Topbar ===== -->
+    <div class="topbar">
+      <div class="wrap">
+        <div class="right topbar-info">
+
+          <div class="topbar-datetime" data-clock dir="rtl">
+                  <span class="date-part"></span>
+                  <span class="datetime-separator" aria-hidden="true">•</span>
+                  <span class="time-part"></span>
+          </div>
+
+          <select class="lang" aria-label="اختر اللغة">
+            <option>العربية</option>
+            <option>English</option>
+            <option>Français</option>
+          </select>
+        </div>
+
+        <div class="left social-icons">
+          <a href="#" aria-label="فيسبوك" class="facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"
+              />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="X" class="x-twitter">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"
+              />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="انستجرام" class="instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="1" />
+            </svg>
+          </a>
+
+          <a href="#" aria-label="يوتيوب" class="youtube">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"
+              />
+              <path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Header ===== -->
+    <header class="site">
+      <div class="wrap header-inner">
+        <button class="icon-btn burger" aria-label="فتح القائمة">☰</button>
+
+        <a class="logo" href="index.html">
+          <img class="logo-img" src="assets/josour-logo.png" alt="جسور">
+          <span class="logo-slogan">صوت المصريين في الخارج</span>
+        </a>
+
+        <div class="masthead-credits">
+          <div class="row">
+            <span class="role">رئيس مجلس الإدارة<br>رئيس التحرير</span>
+            <span class="name">أحمد سليمان</span>
+          </div>
+
+          <div class="row">
+            <span class="role">رئيس التحرير التنفيذي</span>
+            <span class="name">أشرف جبريل</span>
+          </div>
+        </div>
+
+
+        <div class="header-ad">
+          <span>مساحة إعلانية</span>
+          <strong>ضع إعلانك هنا</strong>
+        </div>
+
+        <div class="header-actions">
+          <!-- استبدل زر البحث القديم بهذا الزر -->
+          <button class="icon-btn" data-open-search aria-label="بحث">
+            🔍
+          </button>
+          <span data-auth-slot></span>
+        </div>
+      </div>
+    </header>
+<nav class="bluebarr">
+    <div class="nav-container">
+        
+        <!-- الجانب الأيمن (RTL): اللوجو والروابط -->
+        <div class="nav-brand-group">
+            <button class="bluebarr-burger" id="bluebarrBurger" aria-label="فتح قائمة التنقل" type="button">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-sticky-logo">
+                <a href="index.html" aria-label="الرئيسية">
+                    <img src="assets/josour-logo.png" alt="جسور">
+                </a>
+            </div>
+            
+            <ul class="nav-links">
+            <li><a href="index.html" class="nav-link active">الرئيسية</a></li>
+            <li><a href="category.html?cat=mughtarib" class="nav-link">أخبار المغتربين</a></li>
+            <li><a href="category.html?cat=success" class="nav-link">قصة نجاح</a></li>
+            <li><a href="category.html?cat=egypt" class="nav-link">أخبار مصر</a></li>
+            <li><a href="category.html?cat=opportunities" class="nav-link">فرص استثمارية</a></li>
+            <li><a href="category.html?cat=official" class="nav-link">مع مسئول</a></li>
+            <!--<li><a href="videos.html" class="nav-link">فيديو</a></li>-->
+            <li><a href="category.html?cat=red" class="nav-link">خط أحمر</a></li>
+            
+            <!-- عنصر "المزيد" القابل للدخول بالقائمة المنسدلة -->
+            <li class="dropdown">
+                <a href="#" class="nav-link dropdown-btn">
+                    <i class="fa-solid fa-bars"></i>
+                    المزيد
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+                    <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+                    <li><a href="category.html?cat=sports">رياضة</a></li>
+                    <li><a href="category.html?cat=arts">فنون</a></li>
+                    <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+                    <li><a href="category.html?cat=various">منوعات</a></li>
+                </ul>
+            </li>
+        </ul>
+        </div>
+
+        <!-- الجانب الأيسر (RTL): الأزرار والبحث -->
+        <div class="nav-sticky-actions">
+            <button class="nav-action-btn search-trigger" data-open-search aria-label="بحث">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <div class="auth-group">
+                <a href="auth.html" class="btn-nav btn-ghostt">دخول</a>
+                <a href="auth.html?action=register" class="btn-nav btn-accent">إنشاء حساب</a>
+            </div>
+        </div>
+
+    </div>
+</nav>
+
+<div class="bluebar">
+  <div class="ticker">
+    <div class="ticker-track">
+
+      <!-- المجموعة الأولى -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+
+      <!-- المجموعة الثانية: نسخة مطابقة تمامًا -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+      <!-- المجموعة الأولى -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+      <!-- المجموعة الأولى -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    <main id="main">
+      <!-- ===== HERO VIDEO SLIDER ===== -->
+      <section class="section tight" id="heroSliderSection">
+        <div class="wrap">
+          <div class="hero-slider">
+            <div class="hero-side" id="heroSideR"></div>
+            <div class="hero-main" id="heroMain"></div>
+            <div class="hero-side" id="heroSideL"></div>
+          </div>
+          <div class="hero-below" id="heroBelow"></div>
+          <div class="hero-nav">
+            <button class="btn btn-ghost btn-sm" id="heroPrev">← السابق</button>
+            <div class="hero-dots" id="heroDots"></div>
+            <button class="btn btn-ghost btn-sm" id="heroNext">التالي →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== وضع الأزمة — بطاقة مصغّرة، تظهر تلقائياً فقط عند التفعيل من CMS =====
+           لما وضع الأزمة يبقى شغال، الجافاسكريبت (reorderCrisisSpotlight)
+           بينقل هذا السكشن ليطلع قبل سكشن الفيديو مباشرة — الأولوية وقت
+           الأزمة لازم تبقى للمعلومة العاجلة نفسها، مش للمحتوى الترفيهي/
+           الفيديو المعتاد. بيرجع لمكانه الطبيعي تلقائياً عند إيقاف الوضع. -->
+      <section class="section tight" id="crisisSpotlightSection">
+        <div class="wrap">
+          <div id="crisisSpotlight" hidden></div>
+        </div>
+      </section>
+
+      <!-- ===== SIX-STORY GRID — "مغترب" ===== -->
+      <section class="section tight on-surface">
+        <div class="wrap">
+          <div class="section-head">
+          <!-- تحويل الـ eyebrow لـ Hyperlink -->
+          <a href="category.html?cat=mughtarib" class="eyebrow">أخبار المغتربين</a>
+
+        </div>
+          <div class="six-grid" id="sixGrid"></div>
+        </div>
+      </section>
+
+      <!-- ===== VIDEO RAIL — "جسور فيديو" ===== -->
+      <!--<section class="section tight on-surface video-rail-section">
+        <div class="wrap">
+          <div class="section-head">
+            <a href="videos.html" class="eyebrow">جسور فيديو</a>
+            <a href="videos.html" class="video-rail-cta">شاهد كل الفيديوهات ←</a>
+          </div>
+          <div class="video-rail" id="videoRail"></div>
+        </div>
+      </section>-->
+
+      <!-- ===== خط أحمر — تحديثات عاجلة تمس المصريين بالخارج مباشرة =====
+           بيانات القسم بتيجي من SECTIONS.red (نفس نمط lamma/secondgen —
+           قائمة ids منسّقة) عبر getArticlesBySection("red", 5): أول عنصر
+           بيتحط كـ "ليد" بصورة كاملة، والباقي كقائمة wire مضغوطة. 
+      <section class="redline-band section" id="redline" aria-labelledby="redlineHeading">
+        <div class="wrap">
+          <div class="redline-head">
+            <a href="category.html?cat=red" id="redlineHeading" class="redline-eyebrow">
+              <span class="redline-live"><span class="dot"></span> خط أحمر</span>
+              تحديثات عاجلة تمس المصريين بالخارج مباشرة
+            </a>
+            <a href="category.html?cat=red" class="more on-dark">كل التحديثات ←</a>
+          </div>
+          <div class="redline-body">
+            <a class="redline-feature" id="redlineFeature"></a>
+            <div class="redline-list" id="redlineList"></div>
+          </div>
+        </div>
+      </section>-->
+
+      <!-- ===== BLACK SERVICES BAND ===== -->
+        <section class="services-band" id="services">
+          <div class="wrap">
+            
+            <!-- Header مع توازُن بين العنوان والأسهم -->
+            <div class="services-header-wrap">
+              <div class="section-head-title">
+                <span class="eyebrow-tag">منظومة الخدمات</span>
+                <h2>كل ما يحتاجه المغترب في مكان واحد</h2>
+              </div>
+
+              <div class="svc-controls">
+                <button class="svc-arrow-btn prev" id="svcPrev" aria-label="السابق">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+                <button class="svc-arrow-btn next" id="svcNext" aria-label="التالي">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Container السلايدر -->
+            <div class="svc-slider-container">
+              <div class="svc-row" id="svcRow">
+                
+                <a class="svc-card featured" href="#atmaen" data-open-atmaen="">
+                  <div class="icon-box">
+                    <span class="emoji-icon">🆘</span>
+                    <div class="glow-effect"></div>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">اطمّن على مغتربك</span>
+                    <span class="svc-desc">استجابة وتتبع عاجل</span>
+                  </div>
+                </a>
+
+                <a class="svc-card" href="country.html?c=ae">
+                  <div class="icon-box">
+                    <span class="emoji-icon">🗺️</span>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">خريطة المهجر</span>
+                    <span class="svc-desc">توزيع الجاليات</span>
+                  </div>
+                </a>
+
+                <a class="svc-card" href="#">
+                  <div class="icon-box">
+                    <span class="emoji-icon">🔔</span>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">تنبيهات جغرافية</span>
+                    <span class="svc-desc">إشعارات الطوارئ</span>
+                  </div>
+                </a>
+
+                <a class="svc-card" href="category.html?cat=sports">
+                  <div class="icon-box">
+                    <span class="emoji-icon">⚽</span>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">الرياضيون</span>
+                    <span class="svc-desc">متابعة المحترفين</span>
+                  </div>
+                </a>
+
+                <a class="svc-card" href="#">
+                  <div class="icon-box">
+                    <span class="emoji-icon">🏛️</span>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">دليل السفارات</span>
+                    <span class="svc-desc">المعاملات والتواصل</span>
+                  </div>
+                </a>
+
+                <a class="svc-card" href="auth.html">
+                  <div class="icon-box">
+                    <span class="emoji-icon">👤</span>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">بروفايل المهجر</span>
+                    <span class="svc-desc">إدارة حسابك</span>
+                  </div>
+                </a>
+
+                <a class="svc-card" href="#">
+                  <div class="icon-box">
+                    <span class="emoji-icon">💼</span>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">فرص العمل</span>
+                    <span class="svc-desc">وظائف دولية</span>
+                  </div>
+                </a>
+
+                <a class="svc-card" href="#">
+                  <div class="icon-box">
+                    <span class="emoji-icon">🎓</span>
+                  </div>
+                  <div class="svc-content">
+                    <span class="svc-title">المنح الدراسية</span>
+                    <span class="svc-desc">برامج التأهيل</span>
+                  </div>
+                </a>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      <!-- ===== ATMAEN FEATURE ===== -->
+      <section class="section" id="atmaen">
+        <div class="wrap">
+          <div
+            class="split-2"
+            style="grid-template-columns: 1fr 1fr; align-items: center"
+          >
+            <div>
+              <span class="eyebrow">أهم ميزة في المنصة</span>
+              <h2
+                style="font-size: 23px; margin: 14px 0 12px; line-height: 1.6"
+              >
+                لما تحصل أزمة كبيرة، مش لازم تستنى الأخبار — ابدأ حالة اطمّن
+                فوراً
+              </h2>
+              <p class="text-mute" style="font-size: 14px; line-height: 1.85">
+                نظام حالات خاص بالكامل بين مقدّم الطلب وشبكة استجابة موثوقة — مش
+                قاعدة بيانات عامة للمفقودين. بياناتك مشفّرة، والوصول محدود
+                بموافقة صريحة فقط.
+              </p>
+              <div class="flex gap-8 mt-24">
+                <button class="btn btn-primary" data-open-atmaen>
+                  جرّب النظام الآن</button
+                ><a class="btn btn-ghost" href="atmaen.html"
+                  >تصفّح تحديثات المجتمع ←</a
+                >
+              </div>
+            </div>
+            <div class="cms-panel" style="margin: 0">
+              <div class="status-line active">
+                <span class="dot"></span> اختيار الدولة والمدينة
+              </div>
+              <div class="status-line">
+                <span class="dot"></span> وصف مختصر للحالة
+              </div>
+              <div class="status-line">
+                <span class="dot"></span> تحقق سريع بـ OTP
+              </div>
+              <div class="status-line">
+                <span class="dot"></span> تعيين لشبكة الاستجابة الأقرب
+              </div>
+              <div class="result-note">
+                الصياغة دائماً احتمالية: «هذا آخر ما تحقّقت منه شبكتنا حتى
+                الآن». جسور أداة معلومات، وليست جهة طوارئ رسمية.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SUCCESS STORIES split with ad + sidebar (full fill-images, title below) ===== -->
+      <section class="section on-surface">
+        <div class="wrap">
+          <div class="split-2">
+            <aside class="sidebar-interactive-ad">
+              
+              <!-- الجزء العلوي: استطلاع رأي تفاعلي (Poll) -->
+              <div class="interactive-poll-card">
+                <div class="poll-header">
+                  <span class="poll-badge">⚡ استطلاع اليوم</span>
+                  <h3 class="poll-question">هل تؤيد زيادة الاعتماد على المعاملات الرقمية بالكامل للمغتربين؟</h3>
+                </div>
+
+                <form class="poll-options" id="pollForm">
+                  <label class="poll-option">
+                    <input type="radio" name="poll" value="1">
+                    <span class="opt-label">نعم، تسهل الإجراءات كثيراً</span>
+                    <span class="opt-bar" style="--percent: 72%;"></span>
+                    <span class="opt-percent">72%</span>
+                  </label>
+
+                  <label class="poll-option">
+                    <input type="radio" name="poll" value="2">
+                    <span class="opt-label">لا، أُفضل الطرق التقليدية</span>
+                    <span class="opt-bar" style="--percent: 28%;"></span>
+                    <span class="opt-percent">28%</span>
+                  </label>
+
+                  <button type="submit" class="btn-vote">تصويت</button>
+                </form>
+                <div class="poll-footer">
+                  <span>إجمالي الأصوات: 1,420</span>
+                </div>
+              </div>
+
+              <!-- الجزء السفلي: المساحة الإعلانية (300x400 Standard Display Ad) -->
+              <div class="ad-slot-banner">
+                <span class="ad-label">مساحة إعلانية · Sponsored</span>
+                <div class="ad-placeholder">
+                  <span>مساحة إعلانية متجاوبة</span>
+                </div>
+              </div>
+
+            </aside>
+            <div>
+              <div class="section-head">
+                <h2>
+                  <a href="category.html?cat=success" class="eyebrow">قصص نجاح</a>
+                </h2>
+              </div>
+              <div
+                class="six-grid"
+                id="successGrid"
+                style="grid-template-columns: repeat(2, 1fr)"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== EGYPT SIX-STORY GRID ===== -->
+      <section class="section tight on-surface">
+        <div class="wrap">
+          <div class="section-head">
+            <a href="category.html?cat=egypt" class="eyebrow">أخبار مصر</a>
+          </div>
+          <div class="six-grid" id="egyptGrid"></div>
+        </div>
+      </section>
+
+      <!-- قسمان متجاوران: كل عمود 3 صفوف؛ الصف الأول خبران بصورة وعنوان أسفلها. -->
+      <section class="section editorial-columns-section" aria-label="خط أحمر ومع مسؤول">
+        <div class="wrap">
+          <div class="editorial-columns">
+            <section class="editorial-column editorial-column--red" aria-labelledby="redDeskHeading">
+              <div class="editorial-column__head">
+                <a href="category.html?cat=red" id="redDeskHeading" class="editorial-column__title"><span aria-hidden="true"></span>خط أحمر</a>
+                <a href="category.html?cat=red" class="editorial-column__more">كل التحديثات ←</a>
+              </div>
+              <div class="editorial-top-grid" id="redDeskTop"></div>
+              <div class="editorial-news-rows" id="redDeskRows"></div>
+            </section>
+
+            <section class="editorial-column editorial-column--official" aria-labelledby="officialDeskHeading">
+              <div class="editorial-column__head">
+                <a href="category.html?cat=official" id="officialDeskHeading" class="editorial-column__title"><span aria-hidden="true"></span>مع مسئول</a>
+                <a href="category.html?cat=official" class="editorial-column__more">كل اللقاءات ←</a>
+              </div>
+              <div class="editorial-top-grid" id="officialDeskTop"></div>
+              <div class="editorial-news-rows" id="officialDeskRows"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== COUNTRY SECTION (الإمارات context: news relevant to Egyptians) ===== -->
+      <section class="section" id="country">
+        <div class="wrap country-section-hidden">
+          <div class="country-hero">
+            <div>
+              <span class="flag">🇦🇪</span>
+              <h2>الإمارات — كل ما يخص الجالية المصرية</h2>
+              <p>
+                تجميع تلقائي لأخبار التأشيرات والفعاليات والسفارة والفرص —
+                محدَّث لحظياً
+              </p>
+            </div>
+            <a class="btn btn-ghost" href="country.html?c=ae"
+              >فتح صفحة الدولة ←</a
+            >
+          </div>
+          <div class="story-grid" id="countryGrid"></div>
+        </div>
+      </section>
+
+      <!-- ===== رياضة — نجوم الرياضة المصريين حول العالم =====
+           بيانات القسم من SECTIONS.sports عبر getArticlesBySection
+           ("sports", 6): أول عنصر = الهيرو (صورة كاملة + عنوان فوقها)،
+           والباقي قائمة نصية مضغوطة (#sportsGrid.sports-list) — نفس
+           منطق .redline-list، بدل بطاقات صور تقيلة، عشان يفضل السكشن
+           قريب من ارتفاع سكشن "الجيل الثاني" المجاور له. -->
+     <!--   <section class="sports-band section tight" id="sports" aria-labelledby="sportsHeading">
+        <div class="wrap">
+          <div class="section-head">
+            <a href="category.html?cat=sports" id="sportsHeading" class="eyebrow sports-eyebrow"><span class="sports-eyebrow-icon">⚽</span> رياضة</a>
+            <a href="category.html?cat=sports" class="more on-dark">كل الأخبار الرياضية ←</a>
+          </div>
+          <p class="sports-sub">نجوم الرياضة المصريين وأبناء الجالية في أندية ومنتخبات حول العالم</p>
+          <div class="sports-layout">
+            <a class="sports-hero" id="sportsHero"></a>
+            <div class="sports-list" id="sportsGrid"></div>
+          </div>
+        </div>
+      </section> -->
+
+      <!-- ===== BLACK ARTICLES BAND — مقالات رأي (Opinion Articles) ===== -->
+      <section class="on-ink section tight opinion-section" id="opinion" aria-labelledby="opinionHeading">
+        <div class="wrap">
+          <div class="section-head">
+            <a href="category.html?cat=articles" class="eyebrow" id="opinionHeading">مقالات رأي</a>
+            <a href="category.html?cat=articles" class="more">كل المقالات ←</a>
+          </div>
+          <div class="opinion-grid" id="opinionGrid" data-reveal-group></div>
+        </div>
+      </section>
+
+      <!-- ===== OPPORTUNITIES — same split/division as قصص نجاح (sidebar + six-grid) ===== -->
+      <section class="section on-surface opportunities-section">
+        <div class="wrap">
+          <div class="split-2">
+            <div>
+              <div class="section-head">
+                <a href="category.html?cat=opportunities" class="eyebrow">فرص استثمارية</a>
+              </div>
+              <div
+                class="six-grid"
+                id="oppGrid"
+                style="grid-template-columns: repeat(2, 1fr)"
+              ></div>
+            </div>
+            <aside>
+              <div class="section-head">
+                <h2><span class="eyebrow">الأكثر قراءة</span></h2>
+              </div>
+              <div class="rank-list" id="mostRead"></div>
+            </aside>
+            
+          </div>
+        </div>
+      </section>
+
+<!-- ===== الجيل الثاني ===== -->
+      <section class="section" id="second-gen">
+        <div class="wrap">
+          <div class="section-head">
+            <h2>
+              <a href="category.html?cat=secondgen" class="eyebrow">الجيل الثاني</a>
+            </h2>
+          </div>
+          
+          <!-- شبكة من 4 أعمدة — هذا المحتوى الثابت هو fallback فقط قبل تحميل JS،
+               ثم renderSecondGeneration() في app.js يستبدله بنفس الأخبار عبر
+               getArticlesByCategory من data.js (نفس ids حقيقية وموجودة) -->
+          <div class="six-grid" id="secondGenGrid" style="grid-template-columns: repeat(4, 1fr);">
+
+            <div class="grid-card" onclick="location.href='article.html?id=23'">
+              <div class="thumb">
+                <img loading="lazy" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=900&auto=format&fit=crop" alt="أبناء الجالية">
+              </div>
+              <h3>مبادرة «مصر تستطيع» تفتح باب التطوع عن بُعد لأبناء الجالية بالخارج</h3>
+              <div class="foot"><span>القاهرة</span><span>·</span><span>منذ أسبوع</span></div>
+            </div>
+
+            <div class="grid-card" onclick="location.href='article.html?id=8'">
+              <div class="thumb">
+                <img loading="lazy" src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=900&auto=format&fit=crop" alt="حارس مرمى">
+              </div>
+              <h3>حارس مرمى بالدوري الهولندي مؤهَّل لتمثيل مصر في التصفيات المقبلة</h3>
+              <div class="foot"><span>روتردام</span><span>·</span><span>منذ يومين</span></div>
+            </div>
+
+            <div class="grid-card" onclick="location.href='article.html?id=7'">
+              <div class="thumb">
+                <img loading="lazy" src="https://tse2.mm.bing.net/th/id/OIP.UaAyGVkQp3rE8aAHgCbKygHaGO?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="مهاجم من أصل مصري">
+              </div>
+              <h3>مهاجم من أصل مصري يقترب من الانضمام لأحد أندية الدوري الإسباني</h3>
+              <div class="foot"><span>مدريد</span><span>·</span><span>منذ يوم</span></div>
+            </div>
+
+            <div class="grid-card" onclick="location.href='article.html?id=9'">
+              <div class="thumb">
+                <img loading="lazy" src="https://images.unsplash.com/photo-1560930950-5cc20e80e392?q=80&w=900&auto=format&fit=crop" alt="منح دراسية">
+              </div>
+              <h3>منح دراسية ممولة بالكامل للطلبة المصريين في جامعات برلين وميونخ</h3>
+              <div class="foot"><span>برلين</span><span>·</span><span>منذ 3 أيام</span></div>
+            </div>
+
+          </div>
+        </div>
+      </section>  
+
+      <!-- ===== اللمة الحلوة — لقاءات وتجمعات الجالية ===== -->
+      <section class="section tight on-surface" id="lamma">
+        <div class="wrap">
+          <div class="split-2" style="grid-template-columns:1fr 340px;">
+            <div>
+              <div class="section-head">
+                <a href="category.html?cat=lamma" class="eyebrow">اللمة الحلوة</a>
+                <a href="category.html?cat=lamma" class="more">كل اللمّات ←</a>
+              </div>
+              <div id="lammaFeature" data-reveal></div>
+              <div class="lamma-grid" id="lammaGrid" data-reveal-group></div>
+            </div>
+            <aside data-reveal>
+              <div class="section-head">
+                <h2 style="font-size:14px;">📅 الفعاليات القادمة</h2>
+              </div>
+              <div class="events-widget">
+                <div id="eventsList"></div>
+                <a href="category.html?cat=lamma" class="cta">شاهد كل الفعاليات ←</a>
+              </div>
+              <div class="ad-slot slim">
+                <span class="lbl">مساحة إعلانية · Sponsored</span>
+                <div>ضع إعلانك هنا</div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+        <!-- ===== CTA BANNER ===== -->
+    <section class="section on-surface" style="padding-top:0;">
+      <div class="wrap">
+        <div class="cta-banner">
+          <div><h2>ما تفوّتش أي تحديث يخص بلدك</h2><p>اشترك في تنبيهات المدينة اللي إنت أو أهلك فيها — إشعار لحظي وقت الأزمات فقط، مفيش إزعاج يومي.</p></div>
+          <form class="cta-form" onsubmit="event.preventDefault(); toast('تم الاشتراك في تنبيهات مدينتك ✅');">
+            <input type="email" required placeholder="بريدك الإلكتروني"><button type="submit">اشترك</button>
+          </form>
+        </div>
+      </div>
+    </section>
+      <!-- ===== RECIRCULATION — 3 columns × (1 featured + 3 compact items) ===== -->
+      <section class="section tight recirc-section">
+        <div class="wrap">
+          
+          <!-- شبكة الأعمدة الثلاثة -->
+          <div class="recirc-cols">
+            
+            <!-- العمود الأول: فنون -->
+            <div class="recirc-col">
+              <a href="category.html?cat=arts" class="eyebrow">فنون</a>
+
+              <a class="recirc-feature" data-reveal href="article.html?id=23" aria-label="مبادرة «مصر تستطيع» تفتح باب التطوع عن بُعد لأبناء الجالية بالخارج">
+                <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                <h4>مبادرة «مصر تستطيع» تفتح باب التطوع عن بُعد لأبناء الجالية بالخارج</h4>
+                <div class="foot">القاهرة · منذ أسبوع</div>
+              </a>
+
+              <div class="articles-list">
+                <a class="row-card" data-reveal href="article.html?id=20">
+                  <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                  <div><h4>مبادرة حكومية لربط الكفاءات المصرية بالخارج بمشروعات استثمارية محلية</h4><div class="foot">القاهرة · منذ يومين</div></div>
+                </a>
+                <a class="row-card" data-reveal href="article.html?id=17">
+                  <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                  <div><h4>منحة تدريب مهني مدفوعة الأجر للكفاءات المصرية الشابة في الرياض</h4><div class="foot">الرياض · منذ 4 أيام</div></div>
+                </a>
+                <a class="row-card" data-reveal href="article.html?id=14">
+                  <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                  <div><h4>«جارِ التحقق» تتحول إلى «تواصل مؤكَّد» خلال 40 دقيقة من فتح حالة اطمّن</h4><div class="foot">إسطنبول · منذ أسبوعين</div></div>
+                </a>
+              </div>
+            </div>
+
+            <!-- العمود الثاني: مع مسئول -->
+            <div class="recirc-col">
+              <a href="category.html?cat=sports" class="eyebrow">رياضة</a>
+
+              <a class="recirc-feature" data-reveal href="article.html?id=22" aria-label="طرح وحدات عقارية جديدة بأسعار تفضيلية للمصريين المقيمين بالخارج">
+                <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1476703993599-0035a21b17a9?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                <h4>طرح وحدات عقارية جديدة بأسعار تفضيلية للمصريين المقيمين بالخارج</h4>
+                <div class="foot">القاهرة · منذ 4 أيام</div>
+              </a>
+
+              <div class="articles-list">
+                <a class="row-card" data-reveal href="article.html?id=19">
+                  <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                  <div><h4>تسهيلات جمركية جديدة للمصريين العائدين من الخارج بسياراتهم الخاصة</h4><div class="foot">القاهرة · أمس</div></div>
+                </a>
+                <a class="row-card" data-reveal href="article.html?id=16">
+                  <div class="thumb"><img loading="lazy" src="https://tse4.mm.bing.net/th/id/OIP.WDrN2OxeYPWrVw76wfIwzwHaEH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt=""></div>
+                  <div><h4>جامعات لندن تتوسع في برامج المنح الجزئية لطلبة الدراسات العليا المصريين</h4><div class="foot">لندن · منذ 6 أيام</div></div>
+                </a>
+                <a class="row-card" data-reveal href="article.html?id=13">
+                  <div class="thumb"><img loading="lazy" src="https://tse4.mm.bing.net/th/id/OIP.qKKNpU8EVAYg7vzde-4FtwHaEQ?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt=""></div>
+                  <div><h4>السفارة المصرية بالرياض تمدد ساعات العمل خلال موسم تجديد الجوازات</h4><div class="foot">الرياض · منذ 5 أيام</div></div>
+                </a>
+              </div>
+            </div>
+
+            <!-- العمود الثالث: منوعات -->
+            <div class="recirc-col">
+              <a href="category.html?cat=various" class="eyebrow">منوعات</a>
+
+              <a class="recirc-feature" data-reveal href="article.html?id=21" aria-label="تبسيط إجراءات توكيل الأقارب لإنهاء المعاملات الحكومية عن بُعد">
+                <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                <h4>تبسيط إجراءات توكيل الأقارب لإنهاء المعاملات الحكومية عن بُعد</h4>
+                <div class="foot">الجيزة · منذ 3 أيام</div>
+              </a>
+
+              <div class="articles-list">
+                <a class="row-card" data-reveal href="article.html?id=18">
+                  <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                  <div><h4>قرار جديد يتيح الإقامة المزدوجة للمصريين الحاصلين على جنسيات أجنبية</h4><div class="foot">القاهرة · اليوم</div></div>
+                </a>
+                <a class="row-card" data-reveal href="article.html?id=15">
+                  <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1476703993599-0035a21b17a9?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                  <div><h4>شركات تقنية إماراتية تطرح 300 وظيفة للمهندسين المصريين عن بُعد</h4><div class="foot">دبي · منذ 3 أيام</div></div>
+                </a>
+                <a class="row-card" data-reveal href="article.html?id=12">
+                  <div class="thumb"><img loading="lazy" src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=900&auto=format&fit=crop" alt=""></div>
+                  <div><h4>الجالية المصرية بباريس تحيي احتفالية ثقافية بمناسبة عيد النيل</h4><div class="foot">باريس · منذ أسبوع</div></div>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </main>    <!-- ===== Footer ===== -->
+    <footer class="foot-v2">
+      <div class="wrap foot-v2-top">
+        <div class="foot-v2-grid">
+          <!-- العمود 1: الهوية + الفيديو التعريفي + التواصل الاجتماعي -->
+          <div class="foot-v2-brand">
+            <a href="index.html"><img class="logo-img" src="assets/josour-logo.png" alt="جسور"></a>
+            <p>منصة المصريين بالمهجر — إخبار، ذكاء استخباراتي جغرافي، وشبكة اطمئنان الأسرة.</p>
+
+            <button type="button" class="foot-v2-replay" data-replay-intro>
+              <span class="ico">▶</span> شاهد فيديو التعريف بجسور
+            </button>
+
+            <div class="foot-v2-social social-icons">
+              <a href="#" aria-label="فيسبوك" class="facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"/></svg>
+              </a>
+              <a href="#" aria-label="X" class="x-twitter">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"/></svg>
+              </a>
+              <a href="#" aria-label="انستجرام" class="instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+              </a>
+              <a href="#" aria-label="يوتيوب" class="youtube">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z"/></svg>
+              </a>
+            </div>
+
+            <div class="foot-v2-newsletter">
+              <h5>النشرة الإخبارية</h5>
+              <form class="foot-v2-newsletter-form" data-newsletter-form>
+                <input type="email" required placeholder="بريدك الإلكتروني" aria-label="بريدك الإلكتروني">
+                <button type="submit">اشتراك</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- العمود 2: أقسام الموقع -->
+          <div class="foot-v2-col">
+            <h5>أقسام الموقع</h5>
+            <ul>
+              <li><a href="index.html">الرئيسية</a></li>
+              <li><a href="category.html?cat=mughtarib">أخبار المغتربين</a></li>
+              <li><a href="category.html?cat=egypt">أخبار مصر</a></li>
+              <li><a href="category.html?cat=success">قصة نجاح</a></li>
+              <li><a href="category.html?cat=official">مع مسئول</a></li>
+              <li><a href="category.html?cat=events">فعاليات</a></li>
+              <li><a href="category.html?cat=red">خط أحمر</a></li>
+              <li><a href="videos.html">فيديو</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 3: المزيد من الأقسام -->
+          <div class="foot-v2-col">
+            <h5>&nbsp;</h5>
+            <ul>
+              <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+              <li><a href="category.html?cat=sports">رياضة</a></li>
+              <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+              <li><a href="category.html?cat=arts">فنون</a></li>
+              <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+              <li><a href="category.html?cat=various">منوعات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 4: الخدمات -->
+          <div class="foot-v2-col">
+            <h5>الخدمات</h5>
+            <ul>
+              <li><a href="#atmaen" data-open-atmaen>اطمّن على مغتربك</a></li>
+              <li><a href="country.html?c=ae">خريطة المهجر</a></li>
+              <li><a href="category.html?cat=opportunities">فرص العمل</a></li>
+              <li><a href="category.html?cat=sports">الرياضيون</a></li>
+              <li><a href="auth.html">بروفايل المهجر</a></li>
+              <li><a href="#">دليل السفارات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 5: من نحن + سياسات -->
+          <div class="foot-v2-col">
+            <h5>من نحن</h5>
+            <ul>
+              <li><a href="about.html">عن منصة جسور</a></li>
+              <li><a href="#">فريق العمل</a></li>
+              <li><a href="#">شراكات إعلامية</a></li>
+              <li><a href="#">مساحات إعلانية</a></li>
+              <li><a href="privacy.html">سياسة الخصوصية</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap foot-v2-bottom">
+        <span>© ٢٠٢٦ جسور. جميع الحقوق محفوظة. — منصة المصريين بالمهجر</span>
+        <div class="foot-v2-bottom-links">
+          <a href="privacy.html">الخصوصية</a>
+          <a href="#">شروط الاستخدام</a>
+          <a href="#">قواعد التحرير</a>
+          <a href="#">اتصل بنا</a>
+        </div>
+        <select class="foot-v2-lang" aria-label="اختر اللغة">
+          <option>العربية</option>
+          <option>English</option>
+          <option>Français</option>
+        </select>
+      </div>
+    </footer>
+
+    <!-- ===== Mobile drawer ===== -->
+    <div class="drawer-overlay">
+      <div class="drawer">
+        <div
+          class="flex"
+          style="
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <img
+            class="logo-img"
+            src="assets/josour-logo.png"
+            alt="جسور"
+          /><button class="drawer-close icon-btn">✕</button>
+        </div>
+        <nav>
+          <a href="index.html">الرئيسية</a><a href="country.html?c=ae">الدول</a
+          ><a href="atmaen.html">اطمّن</a
+          ><a href="index.html#services">الخدمات</a
+          ><a href="category.html?cat=sports">رياضة</a
+          ><a href="videos.html">فيديو</a><a href="auth.html">دخول / إنشاء حساب</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ===== Search overlay ===== -->
+    <div class="search-overlay" id="searchOverlay">
+      <div class="search-panel">
+        <input type="text" placeholder="ابحث عن خبر، دولة، أو خدمة..." />
+        <div class="search-suggest"></div>
+      </div>
+    </div>
+
+    <!-- ===== Atmaen SOS modal ===== -->
+    <div class="overlay" id="atmaenOverlay">
+      <div class="modal">
+        <div class="modal-head">
+          <h3>اطمّن على مغتربك</h3>
+          <button data-close>✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="progress"></div>
+          <div class="step-view active" data-step="1">
+            <div class="field">
+              <label>الدولة</label
+              ><select>
+                <option>كندا</option>
+                <option>الإمارات</option>
+                <option>السعودية</option>
+                <option>ألمانيا</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>المدينة</label
+              ><select>
+                <option>تورونتو</option>
+                <option>مونتريال</option>
+                <option>فانكوفر</option>
+              </select>
+            </div>
+          </div>
+          <div class="step-view" data-step="2">
+            <div class="field">
+              <label>صف الحالة أو القلق باختصار</label
+              ><textarea
+                placeholder="مثال: لم أستطع التواصل مع أخي منذ العاصفة الجوية اليوم..."
+              ></textarea>
+            </div>
+            <div class="field">
+              <label>اسم الشخص المعني (إلزامي)</label
+              ><input type="text" placeholder="الاسم بالكامل" />
+            </div>
+            <div class="field">
+              <label>رقم هاتفه (اختياري)</label
+              ><input type="text" placeholder="اختياري" />
+            </div>
+          </div>
+          <div class="step-view" data-step="3">
+            <div class="field">
+              <label>رقم هاتفك للتحقق</label
+              ><input type="text" placeholder="+20 1xx xxx xxxx" />
+            </div>
+            <div class="field">
+              <label>كود التحقق (OTP)</label
+              ><input type="text" placeholder="أُرسل رمز مكوّن من 4 أرقام" />
+            </div>
+            <p style="font-size: 12px; color: var(--text-mute)">
+              التحقق إلزامي لحماية الحالة من الانتحال قبل تعيينها لشبكة
+              الاستجابة.
+            </p>
+          </div>
+          <div class="step-view" data-step="4">
+            <h4 style="font-size: 15px; margin-bottom: 6px">
+              تم إنشاء الحالة — رقم #JS-48291
+            </h4>
+            <p
+              style="
+                font-size: 12.5px;
+                color: var(--text-mute);
+                margin-bottom: 14px;
+              "
+            >
+              تم تعيينها لشبكة الاستجابة في تورونتو تلقائياً بناءً على التغطية
+              الجغرافية.
+            </p>
+            <div class="status-line active">
+              <span class="dot"></span> لا معلومة موثقة بعد
+            </div>
+            <div class="status-line"><span class="dot"></span> جارِ التحقق</div>
+            <div class="status-line">
+              <span class="dot"></span> محاولة تواصل جارية
+            </div>
+            <div class="status-line">
+              <span class="dot"></span> تواصل تم تأكيده
+            </div>
+            <div class="result-note">
+              <strong>مهم:</strong> هذا آخر ما تحقّقت منه شبكتنا حتى الآن. جسور
+              أداة معلومات ومساعدة، وليست جهة طوارئ رسمية.
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" id="atmaenPrev">السابق</button
+          ><button class="btn btn-primary" id="atmaenNext">التالي</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TEMP DEMO ONLY — زر تفعيل/إيقاف "وضع الأزمة" لعروض العميل =====
+         في الوضع الطبيعي (بعد ربط الـ CMS الحقيقي) التفعيل بيتم من لوحة
+         التحكم فقط. الزرار ده مؤقت للعرض على العميل قبل تسليم CMS فعلي —
+         احذف هذا الـ <button> بالكامل عند الانتهاء من العروض التقديمية،
+         الجافاسكريبت المرتبط به (initCrisisDemoToggle) هيتوقف تلقائياً. -->
+    <button type="button" class="crisis-demo-toggle" data-crisis-demo-toggle>
+      🚨 تفعيل وضع الأزمة (تجريبي)
+    </button>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+<script src="mobile.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof ARTICLES === "undefined") return;
+
+        // 1. مقالات مغترب
+        const sixGrid = document.getElementById("sixGrid");
+        if (sixGrid) {
+          sixGrid.innerHTML = ARTICLES.filter(a => a.country !== "مصر")
+            .slice(0, 6)
+            .map(cardGrid)
+            .join("");
+        }
+
+        // 1.5 خط أحمر — أول عنصر كـ "ليد" بصورة كاملة، والباقي كقائمة wire
+        const redlineFeatureEl = document.getElementById("redlineFeature");
+        const redlineListEl = document.getElementById("redlineList");
+        if (redlineFeatureEl && redlineListEl && typeof getArticlesBySection === "function") {
+          const redItems = getArticlesBySection("red", 5);
+          const feature = redItems[0];
+          const rest = redItems.slice(1);
+
+          if (feature) {
+            redlineFeatureEl.href = articleHref(feature);
+            redlineFeatureEl.innerHTML = `
+              <img loading="lazy" src="${escapeHTML(feature.img)}" alt="${escapeHTML(feature.title)}">
+              <div class="redline-feature-body">
+                <span class="redline-feature-tag">عاجل الآن</span>
+                <h3>${escapeHTML(feature.title)}</h3>
+                <div class="foot"><span>${escapeHTML(feature.city || feature.country || "")}</span><span>·</span><span>${escapeHTML(feature.time || "")}</span></div>
+              </div>`;
+          }
+
+          redlineListEl.innerHTML = rest.map(a => `
+            <a class="redline-item" href="${articleHref(a)}">
+              <span class="redline-item-dot"></span>
+              <div class="redline-item-body">
+                <h4>${escapeHTML(a.title)}</h4>
+                <div class="foot"><span>${escapeHTML(a.city || a.country || "")}</span><span>·</span><span>${escapeHTML(a.time || "")}</span></div>
+              </div>
+            </a>`).join("");
+        }
+
+        // 2. قصص النجاح
+        const successGrid = document.getElementById("successGrid");
+        if (successGrid) {
+          successGrid.innerHTML = ARTICLES.filter(a => a.cat === "اطمّن" || a.featured)
+            .slice(0, 4)
+            .map(cardGrid)
+            .join("");
+        }
+
+        // 3. أخبار مصر
+        const egyptGrid = document.getElementById("egyptGrid");
+        if (egyptGrid) {
+          egyptGrid.innerHTML = ARTICLES.filter(a => a.country === "مصر")
+            .slice(0, 6)
+            .map(cardGrid)
+            .join("");
+        }
+
+        // كل قسم = 3 صفوف: صف أول من بطاقتين، ثم صفّان لخبرين إضافيين.
+        function renderEditorialColumn(slug, topId, rowsId) {
+          const top = document.getElementById(topId);
+          const rows = document.getElementById(rowsId);
+          if (!top || !rows || typeof getArticlesBySection !== "function") return;
+          const stories = getArticlesBySection(slug, 4);
+          top.innerHTML = stories.slice(0, 2).map(a => `
+            <a class="editorial-top-card" href="${articleHref(a)}">
+              <img loading="lazy" src="${escapeHTML(a.img)}" alt="${escapeHTML(a.title)}">
+              <h3>${escapeHTML(a.title)}</h3>
+            </a>`).join("");
+          rows.innerHTML = stories.slice(2, 4).map(a => `
+            <a class="editorial-news-row" href="${articleHref(a)}">
+              <img loading="lazy" src="${escapeHTML(a.img)}" alt="${escapeHTML(a.title)}">
+              <span class="editorial-news-row__body">
+                <h3>${escapeHTML(a.title)}</h3>
+                <small>${escapeHTML(a.city || a.country || "")} · ${escapeHTML(a.time || "")}</small>
+              </span>
+            </a>`).join("");
+        }
+        renderEditorialColumn("red", "redDeskTop", "redDeskRows");
+        renderEditorialColumn("official", "officialDeskTop", "officialDeskRows");
+
+        // 4. أخبار الإمارات
+        const countryGrid = document.getElementById("countryGrid");
+        if (countryGrid) {
+          countryGrid.innerHTML = ARTICLES.filter(a => a.country === "الإمارات")
+            .slice(0, 3)
+            .map(cardStory)
+            .join("");
+        }
+
+        // 4.5 رياضة — الهيرو (أول عنصر بصورة كاملة) + شبكة من باقي الأخبار
+        const sportsHeroEl = document.getElementById("sportsHero");
+        const sportsGridEl = document.getElementById("sportsGrid");
+        if (sportsHeroEl && sportsGridEl && typeof getArticlesBySection === "function") {
+          const sportsItems = getArticlesBySection("sports", 6);
+          const hero = sportsItems[0];
+          const rest = sportsItems.slice(1, 5);
+
+          if (hero) {
+            sportsHeroEl.href = articleHref(hero);
+            sportsHeroEl.innerHTML = `
+              <img loading="lazy" src="${escapeHTML(hero.img)}" alt="${escapeHTML(hero.title)}">
+              <div class="sports-hero-body">
+                <span class="sports-hero-tag">⚽ الأبرز</span>
+                <h3>${escapeHTML(hero.title)}</h3>
+                <div class="foot"><span>${escapeHTML(hero.city || hero.country || "")}</span><span>·</span><span>${escapeHTML(hero.time || "")}</span></div>
+              </div>`;
+          }
+
+          // قائمة مضغوطة (نص فقط، بدون صور) بدل شبكة البطاقات البيضاء
+          // القديمة — عشان السكشن يفضل صغير وسريع القراءة.
+          sportsGridEl.innerHTML = rest
+            .map(
+              (a, i) => `
+              <a class="sports-item" href="${articleHref(a)}">
+                <span class="sports-item-num">${i + 1}</span>
+                <div class="sports-item-body">
+                  <h4>${escapeHTML(a.title || "")}</h4>
+                  <div class="foot"><span>${escapeHTML(a.city || a.country || "")}</span><span>·</span><span>${escapeHTML(a.time || "")}</span></div>
+                </div>
+              </a>`
+            )
+            .join("");
+        }
+
+        // 5. مقالات الرأي — real opinion articles (cat: مقالات رأي) mapped
+        // to their real authors via authorId. 4x2 tile grid; the first
+        // (most recent/featured) item carries the accent fill.
+        const opinionGrid = document.getElementById("opinionGrid");
+        if (opinionGrid && typeof getArticlesBySection === "function") {
+          const opinionItems = getArticlesBySection("articles", 8);
+          opinionGrid.innerHTML = opinionItems
+            .map((item, i) => cardOpinionTile(item, i === 0))
+            .join("");
+          [...opinionGrid.querySelectorAll("[data-reveal]")].forEach((el, i) => {
+            el.style.transitionDelay = `${i * 0.05}s`;
+          });
+          if (typeof initScrollReveal === "function") initScrollReveal();
+        }
+
+        // 6. قسم الفرص — نفس تقسيم قصص نجاح: six-grid بنفس البطاقة (cardGrid)
+        const oppGrid = document.getElementById("oppGrid");
+        if (oppGrid) {
+          oppGrid.innerHTML = ARTICLES.filter(a => a.cat === "فرص عمل")
+            .slice(0, 4)
+            .map(cardGrid)
+            .join("");
+        }
+
+        // 7. الأكثر قراءة والرياضة
+        const mostReadEl = document.getElementById("mostRead");
+        if (mostReadEl && typeof mostRead === "function") {
+          mostReadEl.innerHTML = mostRead(6).map(cardRank).join("");
+        }
+
+        // اللمة الحلوة — feature card + supporting grid
+        const lammaFeatureEl = document.getElementById("lammaFeature");
+        const lammaGridEl = document.getElementById("lammaGrid");
+        if (lammaFeatureEl && lammaGridEl && typeof getArticlesBySection === "function") {
+          const lammaItems = getArticlesBySection("lamma", 5);
+          const feature = lammaItems[0];
+          const rest = lammaItems.slice(1);
+
+          if (feature) {
+            lammaFeatureEl.className = "lead-story lamma-feature";
+            lammaFeatureEl.innerHTML = `
+              <div class="lead-story-img">
+                
+                <img loading="lazy" src="${escapeHTML(feature.img)}" alt="${escapeHTML(feature.title)}">
+                <span class="lamma-badge">🤝 لمّة الجالية</span>
+              </div>
+              <div class="lead-story-body">
+                <h2>${escapeHTML(feature.title)}</h2>
+                <p class="sub">${escapeHTML(feature.excerpt || "")}</p>
+                <div class="foot"><span>${escapeHTML(feature.city || feature.country || "")}</span><span>·</span><span>${escapeHTML(feature.time || "")}</span></div>
+              </div>`;
+            lammaFeatureEl.onclick = () => location.href = articleHref(feature);
+          }
+
+          lammaGridEl.innerHTML = rest.map(cardLamma).join("");
+          [...lammaGridEl.children].forEach(el => el.setAttribute("data-reveal", ""));
+          // This block runs in a DOMContentLoaded listener registered AFTER
+          // app.js's own listener (which already called initScrollReveal()
+          // once), so re-run it here to pick up these freshly-added nodes.
+          if (typeof initScrollReveal === "function") initScrollReveal();
+        }
+
+        // الفعاليات القادمة — sidebar events widget
+        const eventsListEl = document.getElementById("eventsList");
+        if (eventsListEl && typeof UPCOMING_EVENTS !== "undefined") {
+          eventsListEl.innerHTML = UPCOMING_EVENTS.map(ev => `
+            <div class="event-item">
+              <div class="event-date"><b>${escapeHTML(ev.day)}</b><span>${escapeHTML(ev.month)}</span></div>
+              <div>
+                <h5>${escapeHTML(ev.title)}</h5>
+                <div class="foot">${escapeHTML(ev.city)} · ${escapeHTML(ev.time)}</div>
+              </div>
+            </div>`).join("");
+        }
+
+        // 8. تشغيل المكونات التفاعلية الرئيسية
+        if (typeof HERO_STORIES !== "undefined" && typeof initHeroSlider === "function") {
+          initHeroSlider(HERO_STORIES);
+        }
+        if (typeof initAtmaenModal === "function") {
+          initAtmaenModal();
+        }
+      });
+    </script>
+    <!-- ضع هذا الكود قبل إغلاق body مباشرة -->
+    <div class="search-modal-backdrop" id="searchBackdrop"></div>
+
+    <div class="search-panel" id="searchPanel" role="dialog" aria-modal="true">
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="ابحث عن خبر، دولة، أو خدمة..." autocomplete="off" />
+        <button class="clear-btn" id="clearSearch" hidden>✕</button>
+      </div>
+
+      <div class="search-suggest" id="searchSuggest">
+        <div class="suggest-group">
+          <span class="group-title">الأكثر بحثاً</span>
+          <div class="suggest-tags">
+            <button class="tag">مصر</button>
+            <button class="tag">أسعار الفائدة</button>
+            <button class="tag">خدمات التصدير</button>
+          </div>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <div class="search-footer">
+        <span><kbd>↵</kbd> للاختيار</span>
+        <span><kbd>↑</kbd> <kbd>↓</kbd> للتنقل</span>
+        <span><kbd>ESC</kbd> للإغلاق</span>
+      </div>
+    </div>
+    
+  </body>
+</html>

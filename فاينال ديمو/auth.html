@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدخول — جسور</title>
+<meta name="description" content="سجّل الدخول أو أنشئ حساباً جديداً في جسور — منصة أخبار وخدمات المصريين بالمهجر.">
+<link rel="icon" href="assets/josour-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+<header class="site"><div class="wrap header-inner">
+  <a class="logo" href="index.html"><img class="logo-img" src="assets/josour-logo.png" alt="جسور"><span class="logo-slogan">صوت المصريين في الخارج</span></a>
+  <a class="btn btn-ghost btn-sm" href="index.html">تصفّح كزائر ←</a>
+</div></header>
+
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div><span class="eyebrow">منصة المصريين بالمهجر</span>
+      <h2 style="margin-top:18px;">أخبارك، خدماتك، وشبكة اطمئنان أسرتك — في مكان واحد.</h2></div>
+    <p class="quote">"جارِ التحقق تحوّلت لـ تواصل مؤكد خلال 40 دقيقة من فتح الحالة" — من قصص نجاح شبكة اطمّن.</p>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button class="tab-btn active" data-tab="login">دخول</button>
+        <button class="tab-btn" data-tab="signup">إنشاء حساب</button>
+        <button class="tab-btn" data-tab="forgot">نسيت كلمة السر</button>
+      </div>
+
+      <!-- LOGIN -->
+      <form class="auth-view active" data-view="login" novalidate onsubmit="return handleLogin(event)">
+        <div class="field"><label for="loginEmail">البريد الإلكتروني</label><input id="loginEmail" type="email" required placeholder="name@example.com"></div>
+        <div class="field"><label for="loginPassword">كلمة السر</label><div class="pw-wrap"><input id="loginPassword" type="password" required minlength="6" placeholder="••••••••"><button type="button" onclick="togglePw(this)">إظهار</button></div>
+          <div class="err">كلمة السر غير صحيحة — حاول مجدداً.</div></div>
+        <div class="flex" style="justify-content:space-between;margin-bottom:16px;">
+          <label class="checkline"><input type="checkbox"> تذكرني</label>
+        </div>
+        <button class="btn btn-primary" style="width:100%;" type="submit">تسجيل الدخول</button>
+        <div class="auth-divider">أو</div>
+        <div class="social-auth"><button type="button" onclick="toast('تسجيل الدخول عبر جوجل (تجريبي)')">Google</button><button type="button" onclick="toast('تسجيل الدخول عبر آبل (تجريبي)')">Apple</button></div>
+      </form>
+
+      <!-- SIGNUP -->
+      <form class="auth-view" data-view="signup" novalidate onsubmit="return handleSignup(event)">
+        <div class="field"><label for="signupName">الاسم بالكامل</label><input id="signupName" type="text" required placeholder="اسمك"></div>
+        <div class="field"><label for="signupEmail">البريد الإلكتروني</label><input id="signupEmail" type="email" required placeholder="name@example.com"></div>
+        <div class="field"><label for="signupCountry">الدولة المقيم بها</label><select id="signupCountry">
+          <option value="">اختر الدولة</option>
+          <option>الإمارات</option><option>السعودية</option><option>أمريكا</option><option>كندا</option><option>ألمانيا</option><option>بريطانيا</option>
+        </select></div>
+        <div class="field"><label for="signupPassword">كلمة السر</label><div class="pw-wrap"><input id="signupPassword" type="password" required minlength="6" placeholder="8 أحرف على الأقل"><button type="button" onclick="togglePw(this)">إظهار</button></div></div>
+        <label class="checkline" style="margin-bottom:16px;"><input type="checkbox" required> أوافق على الشروط وسياسة الخصوصية</label>
+        <button class="btn btn-primary" style="width:100%;" type="submit">إنشاء الحساب</button>
+      </form>
+
+      <!-- FORGOT -->
+      <form class="auth-view" data-view="forgot" novalidate onsubmit="return handleForgot(event)">
+        <p class="text-mute" style="font-size:13px;margin-bottom:16px;">أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة السر.</p>
+        <div class="field"><label for="forgotEmail">البريد الإلكتروني</label><input id="forgotEmail" type="email" required placeholder="name@example.com"></div>
+        <button class="btn btn-primary" style="width:100%;" type="submit">إرسال رابط إعادة التعيين</button>
+        <div id="forgotSuccess" style="display:none;margin-top:16px;" class="badge success" >تم إرسال الرابط — تحقق من بريدك الإلكتروني ✅</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast-stack"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="mobile.js"></script>
+<script>
+  document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.auth-view').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelector(`.auth-view[data-view="${b.dataset.tab}"]`).classList.add('active');
+  }));
+  const wanted = new URLSearchParams(location.search).get('tab');
+  if(wanted) document.querySelector(`.tab-btn[data-tab="${wanted}"]`)?.click();
+
+  function togglePw(btn){ const i=btn.previousElementSibling; if(i.type==='password'){i.type='text';btn.textContent='إخفاء';} else {i.type='password';btn.textContent='إظهار';} }
+
+  function handleLogin(e){
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]'); btn.textContent='جارِ الدخول...'; btn.disabled=true;
+    setTimeout(()=>{
+      AUTH.user = {name:'مستخدم جسور'};
+      toast('تم تسجيل الدخول بنجاح ✅');
+      setTimeout(()=> location.href='index.html', 700);
+    }, 700);
+    return false;
+  }
+  function handleSignup(e){
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]'); btn.textContent='جارِ إنشاء الحساب...'; btn.disabled=true;
+    setTimeout(()=>{ toast('تم إنشاء الحساب — أهلاً بك في جسور 🎉'); AUTH.user={name:'عضو جديد'}; setTimeout(()=>location.href='index.html',700); }, 700);
+    return false;
+  }
+  function handleForgot(e){
+    e.preventDefault();
+    document.getElementById('forgotSuccess').style.display='block';
+    return false;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+/*
+ * Deliberately separate from site.css/site-mobile.css (the demo's own,
+ * unmodified, client-approved stylesheets). Everything in this file is new
+ * because Phase 1's real data has a case the static demo never needed to
+ * handle — never because of a design change. Each rule says why.
+ */
+
+/* .grid-card is now a real <a> (better a11y than the demo's div+onclick),
+   so make sure a visited/plain-anchor underline never appears — same
+   visual result as the original div, just semantically correct markup. */
+.grid-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Same reasoning — .story-card is also now a real <a> for the homepage's
+   lead story. */
+.story-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Homepage featured video follows the client's Final Demo feature player. */
+.home-video-featured .video-featured-media {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.home-video-featured .video-featured-media > img,
+.home-video-featured .video-featured-media > .home-hero-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.home-video-featured .video-featured-media .playbtn {
+  width: 74px;
+  height: 74px;
+  background: var(--amber);
+  border-color: var(--amber);
+}
+
+.home-video-featured:hover .video-featured-media .playbtn {
+  background: var(--amber-2);
+  border-color: var(--amber-2);
+}
+
+.home-video-featured .video-featured-body h2 {
+  padding-inline-end: 56px;
+}
+
+.home-video-date {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+}
+
+.home-video-next {
+  position: absolute;
+  z-index: 4;
+  inset-inline-end: 14px;
+  bottom: 14px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  box-shadow: 0 3px 12px rgba(11, 14, 20, 0.28);
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.home-video-next:hover {
+  background: var(--blue-2);
+  transform: translateX(-2px);
+}
+
+@media (max-width: 640px) {
+  .home-video-featured .video-featured-media {
+    height: auto;
+  }
+
+  .home-video-featured .video-featured-media .playbtn {
+    width: 58px;
+    height: 58px;
+    font-size: 20px;
+  }
+
+  .home-video-featured .video-featured-body {
+    padding: 34px 16px 14px;
+  }
+
+  .home-video-featured .video-featured-body h2 {
+    padding-inline-end: 44px;
+  }
+
+  .home-video-next {
+    inset-inline-end: 8px;
+    bottom: 8px;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Real Article data has no image field yet (Phase 1's RSS ingestion never
+   extracts one) — this fills the exact same .thumb box the demo's <img>
+   would occupy, so card proportions/spacing are pixel-identical to the
+   approved design; only the box's *content* differs until image
+   extraction exists. */
+.thumb-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink-2);
+  color: var(--surface);
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 700;
+  width: 100%;
+  height: 100%;
+}
+
+/* Same reasoning as .thumb-placeholder, for the article page's hero image
+   slot. */
+.article-hero-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink-2);
+  color: var(--surface);
+  font-family: var(--mono);
+  min-height: 220px;
+}
+
+/* Empty/error states for the homepage and article page — the demo never
+   needed these because it always had fake data to show. */
+.state-panel {
+  max-width: 640px;
+  margin: 48px auto;
+  padding: 32px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.state-panel h2 {
+  margin: 0 0 8px;
+}
+
+.state-panel p {
+  color: var(--text-mute);
+  margin: 0;
+}
+
+/* Loading skeletons (app/loading.tsx, app/article/[id]/loading.tsx) — the
+   demo never needed a loading state since its content was always already
+   in the HTML. */
+.skeleton-pulse {
+  pointer-events: none;
+  opacity: 0.6;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.75; }
+}
+
+/* Slice 20 — public "تنويه صحفي / تصحيح" box (decision D4) */
+.article-corrections { border: 1px solid var(--line); border-inline-start: 4px solid var(--blue, #1f4f9a); background: #fafaf8; border-radius: 8px; padding: 14px 18px; margin: 0 0 24px; }
+.article-corrections.is-major { border-inline-start-color: var(--error, #b3261e); background: #fff7f6; }
+.article-corrections h2 { margin: 0 0 8px; font-size: 1rem; }
+.article-corrections ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.article-corrections .correction-kind { font-weight: 700; }
+.article-corrections time { color: var(--text-mute, #6b6b6b); font-size: 0.85rem; }
+.article-corrections p { margin: 4px 0 0; white-space: pre-line; }
+
+/* Slice 26 — functional native players for CMS-selected videos. */
+.video-featured { cursor: default; }
+.video-featured-media video { display: block; width: 100%; height: 100%; object-fit: contain; background: #080a0e; }
+.video-featured-body { pointer-events: none; }
+.video-featured-meta, .video-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; color: var(--text-mute); font-size: .86rem; margin-top: 10px; }
+.video-featured-meta a, .video-card-body h3 a { color: inherit; text-decoration: none; }
+.video-featured-meta a:hover, .video-card-body h3 a:hover { color: var(--blue-2); }
+.video-card { cursor: default; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.video-card .video-card-player { height: auto; margin: 0; background: #080a0e; }
+.video-card-player video { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: contain; }
+.video-card-body { padding: 12px; }
+.video-card-body h3 { margin: 0; }
+.video-card-body p { color: var(--text-mute); font-size: .9rem; margin: 8px 0 0; }
+.video-list-head { margin-top: 40px; }
+.video-pagination { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 28px; }
+/* Live editorial homepage: bridge the presentation markup to the established demo tokens. */
+.home-empty-desk {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px 18px;
+  color: var(--text-mute);
+  text-align: center;
+  background: rgba(15, 23, 42, 0.035);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+.home-empty-desk p { margin: 0; color: var(--text); font-weight: 700; }
+.home-empty-desk > span:first-child { color: var(--amber); font-size: 20px; }
+.home-empty-desk > span:last-child { font-size: 12px; }
+.hero-main-link { position: absolute; inset: 0; z-index: 1; }
+.home-hero-fallback,
+.home-thumb-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, .9);
+  font-size: 30px;
+  font-weight: 900;
+  background: radial-gradient(ellipse at 70% 30%, #345781, #101c30 72%);
+}
+.home-thumb-fallback { font-size: 16px; }
+.hero-below { display: block; }
+.editorial-top-card__image { overflow: hidden; border-radius: 7px; background: #e8edf3; }
+.editorial-top-card__image > span { display: grid; aspect-ratio: 1.48 / 1; place-items: center; color: #687386; font-weight: 800; }
+.editorial-top-card__image img { height: auto; }
+.home-rank-item { color: var(--text); }
+.home-rank-item h5 { margin: 0; }
+.opinion-card {
+  position: relative;
+  display: flex;
+  min-height: 176px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 18px;
+  overflow: hidden;
+  color: #fff;
+  background: var(--ink-2);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius);
+  transition: transform .2s ease, border-color .2s ease;
+}
+.opinion-card:hover, .opinion-card:focus-visible { transform: translateY(-3px); border-color: var(--amber); }
+.opinion-card h3 { margin: 0; color: #fff; font-size: 15px; line-height: 1.65; }
+.opinion-card p { margin: 0; color: rgba(255,255,255,.72); font-size: 12px; line-height: 1.7; }
+.opinion-card__mark { color: var(--amber); font-family: Georgia, serif; font-size: 36px; line-height: .7; }
+.opinion-card .foot { color: rgba(255,255,255,.65); }
+.svc-controls button { cursor: pointer; }
+.video-card-player { position: relative; display: block; overflow: hidden; border-radius: var(--radius); background: var(--ink); }
+.video-card-player video { display: block; width: 100%; height: 155px; object-fit: cover; }
+.video-card-player .playbtn { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%,-50%); color: #fff; }
+@media (max-width: 760px) {
+  .editorial-top-grid { grid-template-columns: 1fr; }
+  .editorial-columns { grid-template-columns: 1fr; }
+  .opinion-card { min-height: 150px; }
+}
+
+/* ---- Home page parity with the Final Demo (no design change, only gaps the live data creates) ---- */
+/* The hero thumbnails are real <button>s (keyboard accessible); the demo used <div>s. */
+.hero-thumb { display: block; width: 100%; padding: 0; background: #080a0e; font: inherit; }
+.hero-thumb:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+/* Editorial row without a cover image: same 112x78 box the demo's <img> would take. */
+.editorial-news-row__ph { grid-column: 1; display: grid; place-items: center; width: 112px; height: 78px; border-radius: 5px; background: #e8edf3; color: #687386; font-weight: 800; font-size: 13px; }
+@media (max-width: 520px) { .editorial-news-row__ph { width: 88px; height: 66px; } }
+/* Lead story / lamma card are real links now (the demo used div + onclick). */
+a.lead-story, a.lamma-card, a.editorial-top-card, a.editorial-news-row { text-decoration: none; }
+.event-item { color: inherit; text-decoration: none; }
+
+/* Hero main: the click target is a real <button> for videos (opens the cinematic player). */
+button.hero-main-button { width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; }
+button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline-offset: -3px; }
+/* Readable headline even when a news slide has no cover image (dark fallback tile). */
+.hero-main .home-hero-fallback + .hero-main-link { z-index: 1; }

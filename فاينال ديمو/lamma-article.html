@@ -1,0 +1,2571 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title id="pageTitle">اللمة الحلوة — جسور</title>
+
+  <meta
+    name="description"
+    id="metaDesc"
+    content="معرض صور من فعاليات ولقاءات الجالية المصرية بالمهجر — جسور."
+  >
+
+  <link rel="icon" href="assets/josour-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile.css">
+
+  <style>
+    /* =====================================================
+       LAMMA GALLERY
+    ===================================================== */
+
+    .lamma-hero-wrap {
+      margin-top: 25px;
+      margin-bottom: 35px;
+    }
+
+    .lamma-carousel {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      background: #101827;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,.16);
+    }
+
+    .lamma-track {
+      position: relative;
+      width: 100%;
+      min-height: 520px;
+    }
+
+    .lamma-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .45s ease;
+    }
+
+    .lamma-slide.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      position: relative;
+    }
+
+    .lamma-slide img {
+      display: block;
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      background: #111827;
+    }
+
+    .lamma-slide::after {
+      content: "";
+      position: absolute;
+      inset: 45% 0 0;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(0,0,0,.72)
+      );
+      pointer-events: none;
+    }
+
+    .lamma-caption {
+      position: absolute;
+      right: 30px;
+      left: 30px;
+      bottom: 25px;
+      z-index: 5;
+      color: #fff;
+      font-size: 16px;
+      line-height: 1.8;
+      text-shadow: 0 2px 5px rgba(0,0,0,.4);
+    }
+
+    .lamma-caption span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      margin-left: 8px;
+      background: #d99a27;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .lamma-caption strong {
+      font-weight: 700;
+    }
+
+    .lamma-nav {
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.92);
+      color: #16243b;
+      cursor: pointer;
+      font-size: 30px;
+      line-height: 1;
+      box-shadow: 0 5px 18px rgba(0,0,0,.2);
+      transition: .2s;
+    }
+
+    .lamma-nav:hover {
+      background: #fff;
+      transform: translateY(-50%) scale(1.06);
+    }
+
+    .lamma-nav.prev {
+      right: 20px;
+    }
+
+    .lamma-nav.next {
+      left: 20px;
+    }
+
+    .lamma-playpause {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      z-index: 20;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(0,0,0,.55);
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .lamma-counter {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      z-index: 20;
+      padding: 7px 13px;
+      background: rgba(0,0,0,.58);
+      color: #fff;
+      border-radius: 30px;
+      font-size: 13px;
+      direction: ltr;
+    }
+
+    .lamma-progress-row {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      z-index: 20;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      max-width: 60%;
+      overflow-x: auto;
+      padding: 4px;
+    }
+
+    .lamma-progress-dot {
+      flex: 0 0 auto;
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.5);
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .lamma-progress-dot.active {
+      width: 25px;
+      border-radius: 20px;
+      background: #d99a27;
+    }
+
+    .lamma-empty {
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      color: #fff;
+      background:
+        radial-gradient(
+          circle at center,
+          #26354d 0,
+          #111827 65%
+        );
+    }
+
+    .lamma-empty-icon {
+      font-size: 55px;
+      margin-bottom: 15px;
+    }
+
+    .lamma-empty h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .lamma-empty p {
+      margin: 0;
+      color: #b7c0cc;
+    }
+
+    .lamma-thumbnails {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      max-width: 1100px;
+      margin: 12px auto 0;
+    }
+
+    .lamma-thumb {
+      position: relative;
+      height: 90px;
+      padding: 0;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      background: #111827;
+      opacity: .72;
+      transition: .25s;
+    }
+
+    .lamma-thumb.active {
+      border-color: #d99a27;
+      opacity: 1;
+    }
+
+    .lamma-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 700px) {
+
+      .lamma-track,
+      .lamma-slide {
+        min-height: 360px;
+      }
+
+      .lamma-slide img {
+        height: 360px;
+      }
+
+      .lamma-nav {
+        width: 40px;
+        height: 40px;
+      }
+
+      .lamma-nav.prev {
+        right: 10px;
+      }
+
+      .lamma-nav.next {
+        left: 10px;
+      }
+
+      .lamma-caption {
+        right: 15px;
+        left: 15px;
+        bottom: 18px;
+        font-size: 13px;
+      }
+
+      .lamma-progress-row {
+        display: none;
+      }
+
+      .lamma-thumbnails {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 7px;
+      }
+
+      .lamma-thumb {
+        height: 65px;
+      }
+
+      .lamma-playpause {
+        left: 10px;
+        bottom: 10px;
+      }
+
+      .lamma-counter {
+        right: 10px;
+        top: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+
+<!-- =========================================================
+     TOPBAR
+========================================================= -->
+
+<div class="topbar">
+  <div class="wrap">
+
+    <div class="right social">
+      <span data-clock></span>
+
+      <select class="lang" aria-label="اختر اللغة">
+        <option>العربية</option>
+        <option>English</option>
+        <option>Français</option>
+      </select>
+    </div>
+
+    <div class="left social-icons">
+
+      <a href="#" aria-label="فيسبوك" class="facebook">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"/>
+        </svg>
+      </a>
+
+      <a href="#" aria-label="X" class="x-twitter">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"/>
+        </svg>
+      </a>
+
+      <a href="#" aria-label="انستجرام" class="instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1"/>
+        </svg>
+      </a>
+
+      <a href="#" aria-label="يوتيوب" class="youtube">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/>
+          <path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z"/>
+        </svg>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="site">
+
+  <div class="wrap header-inner">
+
+    <button class="icon-btn burger" aria-label="فتح القائمة">
+      ☰
+    </button>
+
+    <a class="logo" href="index.html">
+          <img class="logo-img" src="assets/josour-logo.png" alt="جسور">
+          <span class="logo-slogan">صوت المصريين في الخارج</span>
+        </a>
+
+        <div class="masthead-credits">
+          <div class="row">
+            <span class="role">رئيس مجلس الإدارة<br>رئيس التحرير</span>
+            <span class="name">أحمد سليمان</span>
+          </div>
+
+          <div class="row">
+            <span class="role">رئيس التحرير التنفيذي</span>
+            <span class="name">أشرف جبريل</span>
+          </div>
+        </div>
+
+    <div class="header-ad">
+      <span>مساحة إعلانية</span>
+      <strong>ضع إعلانك هنا</strong>
+    </div>
+
+    <div class="header-actions">
+
+      <button
+        class="icon-btn"
+        data-open-search
+        aria-label="بحث"
+      >
+        🔍
+      </button>
+
+      <span data-auth-slot></span>
+
+    </div>
+
+  </div>
+
+</header>
+
+<!-- =========================================================
+     MAIN NAV
+========================================================= -->
+
+<nav class="bluebarr">
+      <div class="nav-container">
+
+        <!-- الجانب الأيمن (RTL): اللوجو والروابط -->
+        <div class="nav-brand-group">
+          <button class="bluebarr-burger" id="bluebarrBurger" aria-label="فتح قائمة التنقل" type="button"><span></span><span></span><span></span></button>
+            <div class="nav-sticky-logo">
+            <a href="index.html" aria-label="الرئيسية">
+              <img src="assets/josour-logo.png" alt="جسور">
+            </a>
+          </div>
+
+          <ul class="nav-links">
+            <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+            <li><a href="category.html?cat=mughtarib" class="nav-link">أخبار المغتربين</a></li>
+            <li><a href="category.html?cat=success" class="nav-link">قصة نجاح</a></li>
+            <li><a href="category.html?cat=egypt" class="nav-link">أخبار مصر</a></li>
+            <li><a href="category.html?cat=official" class="nav-link">مع مسئول</a></li>
+            <!--<li><a href="videos.html" class="nav-link">فيديو</a></li>-->
+            <li><a href="category.html?cat=red" class="nav-link">خط أحمر</a></li>
+
+            <!-- عنصر "المزيد" القابل للدخول بالقائمة المنسدلة -->
+            <li class="dropdown">
+              <a href="#" class="nav-link dropdown-btn">
+                <i class="fa-solid fa-bars"></i>
+                المزيد
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+                <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+                <li><a href="category.html?cat=sports">رياضة</a></li>
+                <li><a href="category.html?cat=arts">فنون</a></li>
+                <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+                <li><a href="category.html?cat=various">منوعات</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- الجانب الأيسر (RTL): الأزرار والبحث -->
+        <div class="nav-sticky-actions">
+          <button class="nav-action-btn search-trigger" data-open-search aria-label="بحث">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <div class="auth-group">
+            <a href="auth.html" class="btn-nav btn-ghostt">دخول</a>
+            <a href="auth.html?action=register" class="btn-nav btn-accent">إنشاء حساب</a>
+          </div>
+        </div>
+
+      </div>
+    </nav>
+
+<!-- =========================================================
+     BLUE TICKER
+========================================================= -->
+
+<div class="bluebar">
+  <div class="ticker">
+    <div class="ticker-track">
+
+      <!-- المجموعة الأولى -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+
+      <!-- المجموعة الثانية: نسخة مطابقة تمامًا -->
+      <div class="ticker-group">
+
+        <span>
+           السيسي يستقبل الرئيس الصيني شي جينبينج في القاهرة لبحث تعزيز العلاقات والتعاون المشترك
+        </span>
+
+        <span>
+           اعتماد نتيجة الدور الثاني للثانوية الأزهرية 2026 بنسبة نجاح 71.11%
+        </span>
+
+        <span>
+           مصرع 16 شخصًا وإصابة 28 في حادث انقلاب أتوبيس بجنوب سيناء
+        </span>
+
+        <span>
+           الدولار يتجاوز 51 جنيهًا للبيع في عدد من البنوك المصرية خلال تعاملات اليوم
+        </span>
+
+        <span>
+           افتتاح المعرض الرئيسي لـ«أهلًا مدارس 2026»
+        </span>
+
+        <span>
+           الأرصاد: طقس حار رطب نهارًا على شمال البلاد اليوم
+        </span>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     READING PROGRESS
+========================================================= -->
+
+<div class="read-progress-track">
+  <div class="bar" id="readProgress"></div>
+</div>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main id="main">
+
+  <!-- Breadcrumb -->
+
+  <div
+    class="wrap"
+    style="padding-top:14px;font-size:12.5px;color:var(--text-mute)"
+  >
+
+    <a href="index.html">
+      الرئيسية
+    </a>
+
+    ←
+
+    <a
+      id="crumbCatLink"
+      href="category.html?cat=lamma"
+    >
+      اللمة الحلوة
+    </a>
+
+    ←
+
+    <span id="crumbTitle">
+      الخبر
+    </span>
+
+  </div>
+
+  <!-- =======================================================
+       ARTICLE HEADER
+  ======================================================== -->
+
+  <div class="article-head wrap">
+
+    <span class="eyebrow" id="artCat">
+      اللمة الحلوة
+    </span>
+
+    <span
+      class="eyebrow lamma-gallery-badge"
+      style="background:var(--blue)"
+    >
+      📷 معرض صور
+    </span>
+
+    <h1 id="artTitle">
+      عنوان الخبر
+    </h1>
+
+    <p class="sub" id="artExcerpt">
+      موجز الخبر يظهر هنا.
+    </p>
+
+    <div class="article-meta" id="artMeta">
+
+      <span class="author">
+
+        <span
+          class="avatar"
+          style="width:26px;height:26px;font-size:11px;"
+        >
+          ج
+        </span>
+
+        <span id="artSource">
+          هيئة تحرير جسور
+        </span>
+
+      </span>
+
+      <span id="artDatetime">
+        اليوم
+      </span>
+
+      <span id="artCity">
+        المدينة
+      </span>
+
+      <span id="artReadTime">
+        ⏱ 3 دقائق قراءة
+      </span>
+
+    </div>
+
+    <!-- Share -->
+
+    <div class="share-row">
+
+      <button
+        title="نسخ الرابط"
+        onclick="
+          navigator.clipboard?.writeText(location.href);
+          toast('تم نسخ الرابط');
+        "
+      >
+        🔗
+      </button>
+
+      <button
+        title="حفظ"
+        onclick="
+          toast('أُضيف الخبر إلى المحفوظات');
+        "
+      >
+        🔖
+      </button>
+
+      <button
+        title="طباعة"
+        onclick="window.print()"
+      >
+        🖨️
+      </button>
+
+      <button
+        title="مشاركة"
+        onclick="
+          if (navigator.share) {
+            navigator.share({
+              title: document.title,
+              url: location.href
+            });
+          } else {
+            navigator.clipboard?.writeText(location.href);
+            toast('تم نسخ الرابط للمشاركة');
+          }
+        "
+      >
+        ↗
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =======================================================
+       FLOATING SHARE
+  ======================================================== -->
+
+  <div class="article-share-rail" aria-hidden="true">
+
+    <button
+      title="نسخ الرابط"
+      onclick="
+        navigator.clipboard?.writeText(location.href);
+        toast('تم نسخ الرابط');
+      "
+    >
+      🔗
+    </button>
+
+    <button
+      title="حفظ"
+      onclick="
+        toast('أُضيف الخبر إلى المحفوظات');
+      "
+    >
+      🔖
+    </button>
+
+    <button
+      title="طباعة"
+      onclick="window.print()"
+    >
+      🖨️
+    </button>
+
+  </div>
+
+  <!-- =======================================================
+       LAMMA PHOTO GALLERY
+  ======================================================== -->
+
+  <div class="lamma-hero-wrap wrap">
+
+    <div
+      class="lamma-carousel"
+      id="lammaCarousel"
+      tabindex="0"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="معرض صور الخبر"
+    >
+
+      <div
+        class="lamma-progress-row"
+        id="lammaProgressRow"
+      ></div>
+
+      <div
+        class="lamma-track"
+        id="lammaTrack"
+      ></div>
+
+      <button
+        type="button"
+        class="lamma-nav prev"
+        id="lammaPrev"
+        aria-label="الصورة السابقة"
+      >
+        ›
+      </button>
+
+      <button
+        type="button"
+        class="lamma-nav next"
+        id="lammaNext"
+        aria-label="الصورة التالية"
+      >
+        ‹
+      </button>
+
+      <button
+        type="button"
+        class="lamma-playpause"
+        id="lammaPlayPause"
+        aria-label="إيقاف التبديل التلقائي بين الصور"
+      >
+        ⏸
+      </button>
+
+      <span
+        class="lamma-counter"
+        id="lammaCounter"
+        aria-live="polite"
+      >
+        0 / 0
+      </span>
+
+    </div>
+
+    <!-- Thumbnails -->
+
+    <div
+      class="lamma-thumbnails"
+      id="lammaThumbnails"
+    ></div>
+
+  </div>
+
+  <!-- =======================================================
+       ARTICLE BODY
+  ======================================================== -->
+
+  <div class="wrap">
+
+    <article
+      class="article-body"
+      id="artBody"
+    ></article>
+
+    <!-- Tags -->
+
+    <div
+      class="article-tags wrap"
+      id="artTags"
+      style="max-width:720px;margin:0 auto;"
+    >
+
+      <span class="tag-pill">
+        مصريون بالمهجر
+      </span>
+
+      <span
+        class="tag-pill"
+        id="tagCountry"
+      >
+        الدولة
+      </span>
+
+      <span
+        class="tag-pill"
+        id="tagCat"
+      >
+        اللمة الحلوة
+      </span>
+
+    </div>
+
+  </div>
+
+  <!-- =======================================================
+       MORE FROM AUTHOR
+  ======================================================== -->
+
+  <section
+    class="section tight on-surface more-from-author"
+    id="moreFromAuthorSection"
+    hidden
+    style="padding-bottom:10px;"
+  >
+
+    <div
+      class="wrap"
+      style="max-width:720px;margin:0 auto;"
+      data-reveal
+    >
+
+      <div class="custom-col-head">
+        <span class="custom-col-link">
+          <span>
+            المزيد من الكاتب
+          </span>
+        </span>
+      </div>
+
+      <div
+        class="news-list"
+        id="moreFromAuthorGrid"
+      ></div>
+
+    </div>
+
+  </section>
+
+  <!-- =======================================================
+       RELATED HEADLINES
+  ======================================================== -->
+
+  <section
+    class="section tight on-surface"
+    style="padding-bottom:10px;"
+  >
+
+    <div
+      class="wrap"
+      style="max-width:720px;margin:0 auto;"
+      data-reveal
+    >
+
+      <div class="custom-col-head">
+        <span class="custom-col-link">
+          <span>
+            أخبار متعلقة
+          </span>
+        </span>
+      </div>
+
+      <ul
+        class="related-links-list"
+        id="relatedLinks"
+      ></ul>
+
+    </div>
+
+  </section>
+
+  <!-- =======================================================
+       RELATED + MOST READ
+  ======================================================== -->
+
+  <section
+    class="section on-surface"
+    style="padding-top:20px;"
+  >
+
+    <div class="wrap">
+
+      <div
+        class="split-2"
+        style="grid-template-columns:1fr 340px;"
+      >
+
+        <!-- Related -->
+
+        <div data-reveal>
+
+          <div class="section-head">
+
+            <h2>
+              <span class="eyebrow">
+                أخبار ذات صلة
+              </span>
+            </h2>
+
+          </div>
+
+          <div
+            class="story-grid"
+            id="relatedGrid"
+          ></div>
+
+        </div>
+
+        <!-- Most Read -->
+
+        <aside data-reveal>
+
+          <div class="section-head">
+
+            <h2 style="font-size:14px;">
+              الأكثر قراءة
+            </h2>
+
+          </div>
+
+          <div
+            class="rank-list"
+            id="topReadRank"
+          ></div>
+
+          <div
+            class="ad-slot"
+            style="margin-top:22px;"
+          >
+
+            <span class="lbl">
+              مساحة إعلانية · Sponsored
+            </span>
+
+            <div>
+              ضع إعلانك هنا
+            </div>
+
+          </div>
+
+        </aside>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+    <!-- ===== Footer ===== -->
+    <footer class="foot-v2">
+      <div class="wrap foot-v2-top">
+        <div class="foot-v2-grid">
+          <!-- العمود 1: الهوية + الفيديو التعريفي + التواصل الاجتماعي -->
+          <div class="foot-v2-brand">
+            <a href="index.html"><img class="logo-img" src="assets/josour-logo.png" alt="جسور"></a>
+            <p>منصة المصريين بالمهجر — إخبار، ذكاء استخباراتي جغرافي، وشبكة اطمئنان الأسرة.</p>
+
+            <button type="button" class="foot-v2-replay" data-replay-intro>
+              <span class="ico">▶</span> شاهد فيديو التعريف بجسور
+            </button>
+
+            <div class="foot-v2-social social-icons">
+              <a href="#" aria-label="فيسبوك" class="facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z"/></svg>
+              </a>
+              <a href="#" aria-label="X" class="x-twitter">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.39L6.48 22H3.37l7.24-8.28L2.8 2h6.4l4.42 5.84L18.9 2zm-1.1 17.7h1.73L8.27 4.2H6.42L17.8 19.7z"/></svg>
+              </a>
+              <a href="#" aria-label="انستجرام" class="instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+              </a>
+              <a href="#" aria-label="يوتيوب" class="youtube">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path class="play" d="M9.75 8.25v7.5L16.25 12l-6.5-3.75z"/></svg>
+              </a>
+            </div>
+
+            <div class="foot-v2-newsletter">
+              <h5>النشرة الإخبارية</h5>
+              <form class="foot-v2-newsletter-form" data-newsletter-form>
+                <input type="email" required placeholder="بريدك الإلكتروني" aria-label="بريدك الإلكتروني">
+                <button type="submit">اشتراك</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- العمود 2: أقسام الموقع -->
+          <div class="foot-v2-col">
+            <h5>أقسام الموقع</h5>
+            <ul>
+              <li><a href="index.html">الرئيسية</a></li>
+              <li><a href="category.html?cat=mughtarib">أخبار المغتربين</a></li>
+              <li><a href="category.html?cat=egypt">أخبار مصر</a></li>
+              <li><a href="category.html?cat=success">قصة نجاح</a></li>
+              <li><a href="category.html?cat=official">مع مسئول</a></li>
+              <li><a href="category.html?cat=red">خط أحمر</a></li>
+              <li><a href="videos.html">فيديو</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 3: المزيد من الأقسام -->
+          <div class="foot-v2-col">
+            <h5>&nbsp;</h5>
+            <ul>
+              <li><a href="category.html?cat=lamma">اللمة الحلوة</a></li>
+              <li><a href="category.html?cat=sports">رياضة</a></li>
+              <li><a href="category.html?cat=secondgen">الجيل الثاني</a></li>
+              <li><a href="category.html?cat=arts">فنون</a></li>
+              <li><a href="category.html?cat=articles">مقالات رأي</a></li>
+              <li><a href="category.html?cat=various">منوعات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 4: الخدمات -->
+          <div class="foot-v2-col">
+            <h5>الخدمات</h5>
+            <ul>
+              <li><a href="country.html?c=ae">خريطة المهجر</a></li>
+              <li><a href="category.html?cat=sports">الرياضيون</a></li>
+              <li><a href="auth.html">بروفايل المهجر</a></li>
+              <li><a href="#">دليل السفارات</a></li>
+            </ul>
+          </div>
+
+          <!-- العمود 5: من نحن + سياسات -->
+          <div class="foot-v2-col">
+            <h5>من نحن</h5>
+            <ul>
+              <li><a href="about.html">عن منصة جسور</a></li>
+              <li><a href="#">فريق العمل</a></li>
+              <li><a href="#">شراكات إعلامية</a></li>
+              <li><a href="#">مساحات إعلانية</a></li>
+              <li><a href="privacy.html">سياسة الخصوصية</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap foot-v2-bottom">
+        <span>© ٢٠٢٦ جسور. جميع الحقوق محفوظة. — منصة المصريين بالمهجر</span>
+        <div class="foot-v2-bottom-links">
+          <a href="privacy.html">الخصوصية</a>
+          <a href="#">الشروط</a>
+          <a href="#">قواعد التحرير</a>
+          <a href="#">اتصل بنا</a>
+        </div>
+        <select class="foot-v2-lang" aria-label="اختر اللغة">
+          <option>العربية</option>
+          <option>English</option>
+          <option>Français</option>
+        </select>
+      </div>
+    </footer>
+
+<!-- =========================================================
+     MOBILE DRAWER
+========================================================= -->
+
+<div class="drawer-overlay">
+
+  <div class="drawer">
+
+    <div
+      class="flex"
+      style="
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:20px;
+      "
+    >
+
+      <img
+        class="logo-img"
+        src="assets/josour-logo.png"
+        alt="جسور"
+      >
+
+      <button class="drawer-close icon-btn">
+        ✕
+      </button>
+
+    </div>
+
+    <nav>
+
+      <a href="index.html">
+        الرئيسية
+      </a>
+
+      <a href="category.html?cat=lamma">
+        اللمة الحلوة
+      </a>
+
+      <a href="country.html?c=ae">
+        الدول
+      </a>
+
+      <a href="atmaen.html">
+        اطمّن
+      </a>
+
+      <a href="index.html#services">
+        الخدمات
+      </a>
+
+      <a href="category.html?cat=sports">
+        رياضة
+      </a>
+
+      <a href="videos.html">
+        فيديو
+      </a>
+
+      <a href="auth.html">
+        دخول / إنشاء حساب
+      </a>
+
+    </nav>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     SEARCH MODAL
+========================================================= -->
+
+<div
+  class="search-modal-backdrop"
+  id="searchBackdrop"
+></div>
+
+<div
+  class="search-panel"
+  id="searchPanel"
+  role="dialog"
+  aria-modal="true"
+>
+
+  <div class="search-input-wrapper">
+
+    <span class="search-icon">
+      🔍
+    </span>
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="ابحث عن خبر، دولة، أو خدمة..."
+      autocomplete="off"
+    >
+
+    <button
+      class="clear-btn"
+      id="clearSearch"
+      hidden
+    >
+      ✕
+    </button>
+
+  </div>
+
+  <div
+    class="search-suggest"
+    id="searchSuggest"
+  >
+
+    <div class="suggest-group">
+
+      <span class="group-title">
+        الأكثر بحثاً
+      </span>
+
+      <div class="suggest-tags">
+
+        <button class="tag">
+          مصر
+        </button>
+
+        <button class="tag">
+          أسعار الفائدة
+        </button>
+
+        <button class="tag">
+          خدمات التصدير
+        </button>
+
+      </div>
+
+    </div>
+
+    <div
+      class="search-results"
+      id="searchResults"
+    ></div>
+
+  </div>
+
+  <div class="search-footer">
+
+    <span>
+      <kbd>↵</kbd>
+      للاختيار
+    </span>
+
+    <span>
+      <kbd>↑</kbd>
+      <kbd>↓</kbd>
+      للتنقل
+    </span>
+
+    <span>
+      <kbd>ESC</kbd>
+      للإغلاق
+    </span>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     IMPORTANT:
+     data.js MUST load before this script
+========================================================= -->
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="mobile.js"></script>
+
+<script>
+
+(function () {
+
+  "use strict";
+
+  /* =====================================================
+     GET ARTICLE
+  ===================================================== */
+
+  const params = new URLSearchParams(location.search);
+
+  const articleId =
+    Number(params.get("id") || 24);
+
+  const article =
+    typeof articleById === "function"
+      ? articleById(articleId)
+      : null;
+
+  if (!article) {
+
+    console.error(
+      "لم يتم العثور على الخبر:",
+      articleId
+    );
+
+    const track =
+      document.getElementById("lammaTrack");
+
+    if (track) {
+
+      track.innerHTML = `
+        <div class="lamma-empty">
+          <div class="lamma-empty-icon">⚠️</div>
+          <h3>لم يتم العثور على الفعالية</h3>
+          <p>تأكد من رقم الخبر الموجود في الرابط.</p>
+        </div>
+      `;
+
+    }
+
+    return;
+
+  }
+
+
+  /* =====================================================
+     CATEGORY
+  ===================================================== */
+
+  const isLamma =
+    article.cat === "فعاليات" ||
+    (
+      Array.isArray(article.tags) &&
+      article.tags.includes("اللمة الحلوة")
+    ) ||
+    (
+      typeof SECTIONS !== "undefined" &&
+      SECTIONS.lamma &&
+      Array.isArray(SECTIONS.lamma.ids) &&
+      SECTIONS.lamma.ids.includes(Number(article.id))
+    );
+
+  const displayCategory =
+    isLamma
+      ? "اللمة الحلوة"
+      : (article.cat || "أخبار");
+
+
+  /* =====================================================
+     CATEGORY SLUG
+  ===================================================== */
+
+  let catSlug = "lamma";
+
+  if (!isLamma && typeof SECTIONS !== "undefined") {
+
+    catSlug =
+      Object.keys(SECTIONS).find(
+        key =>
+          SECTIONS[key].label === article.cat
+      ) || null;
+
+  }
+
+
+  /* =====================================================
+     PAGE TITLE
+  ===================================================== */
+
+  document.title =
+    `${article.title} — جسور`;
+
+  const pageTitle =
+    document.getElementById("pageTitle");
+
+  if (pageTitle) {
+    pageTitle.textContent =
+      `${article.title} — جسور`;
+  }
+
+
+  /* =====================================================
+     META DESCRIPTION
+  ===================================================== */
+
+  const metaDesc =
+    document.getElementById("metaDesc");
+
+  if (metaDesc) {
+
+    metaDesc.setAttribute(
+      "content",
+      (
+        article.excerpt ||
+        article.title ||
+        ""
+      ).slice(0, 160)
+    );
+
+  }
+
+
+  /* =====================================================
+     BREADCRUMB
+  ===================================================== */
+
+  const crumbCatLink =
+    document.getElementById("crumbCatLink");
+
+  if (crumbCatLink) {
+
+    crumbCatLink.textContent =
+      displayCategory;
+
+    crumbCatLink.href =
+      catSlug
+        ? `category.html?cat=${catSlug}`
+        : "index.html";
+
+  }
+
+  const crumbTitle =
+    document.getElementById("crumbTitle");
+
+  if (crumbTitle) {
+
+    crumbTitle.textContent =
+      (article.title || "").length > 40
+        ? article.title.slice(0, 40) + "…"
+        : article.title;
+
+  }
+
+
+  /* =====================================================
+     ARTICLE HEADER
+  ===================================================== */
+
+  document.getElementById("artCat").textContent =
+    displayCategory;
+
+  document.getElementById("artTitle").textContent =
+    article.title || "";
+
+  document.getElementById("artExcerpt").textContent =
+    article.excerpt || "";
+
+  document.getElementById("artSource").textContent =
+    article.source || "هيئة تحرير جسور";
+
+  document.getElementById("artDatetime").textContent =
+    article.datetime ||
+    article.time ||
+    "اليوم";
+
+  document.getElementById("artCity").textContent =
+    article.city ||
+    article.country ||
+    "—";
+
+  document.getElementById("tagCountry").textContent =
+    article.country ||
+    "الدولة";
+
+  document.getElementById("tagCat").textContent =
+    displayCategory;
+
+
+  /* =====================================================
+     ARTICLE TAGS
+  ===================================================== */
+
+  const tagsWrap =
+    document.getElementById("artTags");
+
+  if (tagsWrap) {
+
+    const existingTags =
+      new Set(
+        Array.from(
+          tagsWrap.querySelectorAll(".tag-pill")
+        ).map(el => el.textContent.trim())
+      );
+
+    (article.tags || []).forEach(tag => {
+
+      if (existingTags.has(tag)) {
+        return;
+      }
+
+      const span =
+        document.createElement("span");
+
+      span.className =
+        "tag-pill";
+
+      span.textContent =
+        tag;
+
+      tagsWrap.appendChild(span);
+
+    });
+
+  }
+
+
+  /* =====================================================
+     ARTICLE BODY
+  ===================================================== */
+
+  function renderBody(article) {
+
+    if (
+      Array.isArray(article.body) &&
+      article.body.length
+    ) {
+
+      const paragraphs =
+        article.body.map(
+          p => `<p>${p}</p>`
+        );
+
+      if (article.quote) {
+
+        paragraphs.splice(
+          1,
+          0,
+          `
+          <blockquote>
+            «${article.quote}»
+            <cite>
+              — ${
+                article.quoteAuthor ||
+                "مصدر جسور"
+              }
+            </cite>
+          </blockquote>
+          `
+        );
+
+      }
+
+      return paragraphs.join("");
+
+    }
+
+    return `
+      <p>
+        ${
+          article.excerpt ||
+          (
+            "تتابع جسور فعاليات الجالية المصرية في " +
+            (
+              article.city ||
+              article.country ||
+              "المهجر"
+            ) +
+            "."
+          )
+        }
+      </p>
+
+      <p>
+        وتشهد فعاليات اللمة الحلوة حضوراً متزايداً
+        من أبناء الجالية المصرية، في أجواء تجمع بين
+        التواصل الاجتماعي والحفاظ على العادات والتقاليد
+        المصرية خارج الوطن.
+      </p>
+
+      <p>
+        وتواصل جسور متابعة هذه الفعاليات ونقل أبرز
+        تفاصيلها وصور المشاركين، بما يعكس قصص وتجارب
+        المصريين حول العالم.
+      </p>
+    `;
+
+  }
+
+  document.getElementById("artBody").innerHTML =
+    renderBody(article);
+
+
+  /* =====================================================
+     GALLERY
+  ===================================================== */
+
+  function getGallery(article) {
+
+    let images = [];
+
+    /*
+      الأولوية:
+
+      gallery
+      images
+      photos
+      img
+    */
+
+    if (Array.isArray(article.gallery)) {
+
+      images =
+        article.gallery;
+
+    }
+
+    else if (Array.isArray(article.images)) {
+
+      images =
+        article.images;
+
+    }
+
+    else if (Array.isArray(article.photos)) {
+
+      images =
+        article.photos;
+
+    }
+
+    else if (article.img) {
+
+      images = [
+        article.img
+      ];
+
+    }
+
+    return images
+
+      .filter(Boolean)
+
+      .map(item => {
+
+        if (typeof item === "string") {
+
+          return {
+            src: item,
+            caption: article.title
+          };
+
+        }
+
+        return {
+
+          src:
+            item.src ||
+            item.img ||
+            item.url,
+
+          caption:
+            item.caption ||
+            item.alt ||
+            item.title ||
+            article.title
+
+        };
+
+      })
+
+      .filter(
+        item => item.src
+      );
+
+  }
+
+
+  function initGallery(article) {
+
+    const carousel =
+      document.getElementById(
+        "lammaCarousel"
+      );
+
+    const track =
+      document.getElementById(
+        "lammaTrack"
+      );
+
+    const progress =
+      document.getElementById(
+        "lammaProgressRow"
+      );
+
+    const counter =
+      document.getElementById(
+        "lammaCounter"
+      );
+
+    const thumbnails =
+      document.getElementById(
+        "lammaThumbnails"
+      );
+
+    const prev =
+      document.getElementById(
+        "lammaPrev"
+      );
+
+    const next =
+      document.getElementById(
+        "lammaNext"
+      );
+
+    const playPause =
+      document.getElementById(
+        "lammaPlayPause"
+      );
+
+
+    if (!track) {
+      return;
+    }
+
+
+    const images =
+      getGallery(article);
+
+
+    /* ===================================================
+       NO IMAGES
+    =================================================== */
+
+    if (!images.length) {
+
+      track.innerHTML = `
+        <div class="lamma-empty">
+          <div class="lamma-empty-icon">
+            📷
+          </div>
+
+          <h3>
+            صور الفعالية قريبًا
+          </h3>
+
+          <p>
+            سيتم إضافة صور هذه اللمّة إلى المعرض قريبًا.
+          </p>
+        </div>
+      `;
+
+      if (progress) {
+        progress.innerHTML = "";
+      }
+
+      if (thumbnails) {
+        thumbnails.innerHTML = "";
+      }
+
+      if (counter) {
+        counter.textContent = "0 / 0";
+      }
+
+      if (prev) {
+        prev.style.display = "none";
+      }
+
+      if (next) {
+        next.style.display = "none";
+      }
+
+      if (playPause) {
+        playPause.style.display = "none";
+      }
+
+      return;
+
+    }
+
+
+    /* ===================================================
+       RENDER SLIDES
+    =================================================== */
+
+    track.innerHTML =
+      images.map(
+        (image, index) => {
+
+          return `
+            <div
+              class="lamma-slide ${
+                index === 0
+                  ? "active"
+                  : ""
+              }"
+              data-slide="${index}"
+              aria-hidden="${
+                index === 0
+                  ? "false"
+                  : "true"
+              }"
+            >
+
+              <img
+                src="${image.src}"
+                alt="${
+                  image.caption ||
+                  article.title
+                }"
+                loading="${
+                  index === 0
+                    ? "eager"
+                    : "lazy"
+                }"
+                decoding="async"
+                onerror="
+                  this.style.display='none';
+                  this.parentElement.style.background='#111827';
+                "
+              >
+
+              <div class="lamma-caption">
+
+                <span>
+                  ${index + 1}
+                </span>
+
+                <strong>
+                  ${
+                    image.caption ||
+                    article.title
+                  }
+                </strong>
+
+              </div>
+
+            </div>
+          `;
+
+        }
+      ).join("");
+
+
+    /* ===================================================
+       PROGRESS DOTS
+    =================================================== */
+
+    if (progress) {
+
+      progress.innerHTML =
+        images.map(
+          (_, index) => `
+            <button
+              type="button"
+              class="lamma-progress-dot ${
+                index === 0
+                  ? "active"
+                  : ""
+              }"
+              data-index="${index}"
+              aria-label="عرض الصورة ${index + 1}"
+            ></button>
+          `
+        ).join("");
+
+    }
+
+
+    /* ===================================================
+       THUMBNAILS
+    =================================================== */
+
+    if (thumbnails) {
+
+      thumbnails.innerHTML =
+        images.map(
+          (image, index) => `
+            <button
+              type="button"
+              class="lamma-thumb ${
+                index === 0
+                  ? "active"
+                  : ""
+              }"
+              data-index="${index}"
+              aria-label="فتح الصورة ${index + 1}"
+            >
+
+              <img
+                src="${image.src}"
+                alt=""
+                loading="lazy"
+              >
+
+            </button>
+          `
+        ).join("");
+
+    }
+
+
+    const slides =
+      Array.from(
+        track.querySelectorAll(
+          ".lamma-slide"
+        )
+      );
+
+    const dots =
+      progress
+        ? Array.from(
+            progress.querySelectorAll(
+              ".lamma-progress-dot"
+            )
+          )
+        : [];
+
+    const thumbs =
+      thumbnails
+        ? Array.from(
+            thumbnails.querySelectorAll(
+              ".lamma-thumb"
+            )
+          )
+        : [];
+
+
+    let current = 0;
+
+    let timer = null;
+
+    let playing = true;
+
+    const autoPlayDelay =
+      5000;
+
+
+    /* ===================================================
+       SHOW SLIDE
+    =================================================== */
+
+    function showSlide(index) {
+
+      if (!slides.length) {
+        return;
+      }
+
+      current =
+        (
+          index +
+          slides.length
+        ) %
+        slides.length;
+
+
+      slides.forEach(
+        (slide, i) => {
+
+          slide.classList.toggle(
+            "active",
+            i === current
+          );
+
+          slide.setAttribute(
+            "aria-hidden",
+            i === current
+              ? "false"
+              : "true"
+          );
+
+        }
+      );
+
+
+      dots.forEach(
+        (dot, i) => {
+
+          dot.classList.toggle(
+            "active",
+            i === current
+          );
+
+        }
+      );
+
+
+      thumbs.forEach(
+        (thumb, i) => {
+
+          thumb.classList.toggle(
+            "active",
+            i === current
+          );
+
+        }
+      );
+
+
+      if (counter) {
+
+        counter.textContent =
+          `${current + 1} / ${slides.length}`;
+
+      }
+
+    }
+
+
+    /* ===================================================
+       NEXT / PREVIOUS
+    =================================================== */
+
+    function nextSlide() {
+
+      showSlide(
+        current + 1
+      );
+
+    }
+
+
+    function prevSlide() {
+
+      showSlide(
+        current - 1
+      );
+
+    }
+
+
+    /* ===================================================
+       AUTOPLAY
+    =================================================== */
+
+    function stopAutoPlay() {
+
+      if (timer) {
+
+        clearInterval(timer);
+
+        timer = null;
+
+      }
+
+    }
+
+
+    function startAutoPlay() {
+
+      stopAutoPlay();
+
+      if (
+        !playing ||
+        images.length <= 1
+      ) {
+        return;
+      }
+
+      timer =
+        setInterval(
+          nextSlide,
+          autoPlayDelay
+        );
+
+    }
+
+
+    function restartAutoPlay() {
+
+      startAutoPlay();
+
+    }
+
+
+    /* ===================================================
+       BUTTONS
+    =================================================== */
+
+    next?.addEventListener(
+      "click",
+      () => {
+
+        nextSlide();
+
+        restartAutoPlay();
+
+      }
+    );
+
+
+    prev?.addEventListener(
+      "click",
+      () => {
+
+        prevSlide();
+
+        restartAutoPlay();
+
+      }
+    );
+
+
+    /* ===================================================
+       DOTS
+    =================================================== */
+
+    dots.forEach(
+      dot => {
+
+        dot.addEventListener(
+          "click",
+          () => {
+
+            showSlide(
+              Number(
+                dot.dataset.index
+              )
+            );
+
+            restartAutoPlay();
+
+          }
+        );
+
+      }
+    );
+
+
+    /* ===================================================
+       THUMBNAILS
+    =================================================== */
+
+    thumbs.forEach(
+      thumb => {
+
+        thumb.addEventListener(
+          "click",
+          () => {
+
+            showSlide(
+              Number(
+                thumb.dataset.index
+              )
+            );
+
+            restartAutoPlay();
+
+          }
+        );
+
+      }
+    );
+
+
+    /* ===================================================
+       PLAY / PAUSE
+    =================================================== */
+
+    playPause?.addEventListener(
+      "click",
+      () => {
+
+        playing =
+          !playing;
+
+
+        if (playing) {
+
+          playPause.textContent =
+            "⏸";
+
+          playPause.setAttribute(
+            "aria-label",
+            "إيقاف التبديل التلقائي بين الصور"
+          );
+
+          startAutoPlay();
+
+        }
+
+        else {
+
+          playPause.textContent =
+            "▶";
+
+          playPause.setAttribute(
+            "aria-label",
+            "تشغيل التبديل التلقائي بين الصور"
+          );
+
+          stopAutoPlay();
+
+        }
+
+      }
+    );
+
+
+    /* ===================================================
+       MOUSE
+    =================================================== */
+
+    carousel?.addEventListener(
+      "mouseenter",
+      () => {
+
+        stopAutoPlay();
+
+      }
+    );
+
+
+    carousel?.addEventListener(
+      "mouseleave",
+      () => {
+
+        if (playing) {
+
+          startAutoPlay();
+
+        }
+
+      }
+    );
+
+
+    /* ===================================================
+       KEYBOARD
+    =================================================== */
+
+    carousel?.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "ArrowRight"
+        ) {
+
+          prevSlide();
+
+          restartAutoPlay();
+
+        }
+
+        else if (
+          event.key === "ArrowLeft"
+        ) {
+
+          nextSlide();
+
+          restartAutoPlay();
+
+        }
+
+        else if (
+          event.key === " "
+        ) {
+
+          event.preventDefault();
+
+          playPause?.click();
+
+        }
+
+      }
+    );
+
+
+    /* ===================================================
+       TOUCH / SWIPE
+    =================================================== */
+
+    let touchStartX = 0;
+
+    let touchEndX = 0;
+
+
+    carousel?.addEventListener(
+      "touchstart",
+      event => {
+
+        touchStartX =
+          event.changedTouches[0].screenX;
+
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    carousel?.addEventListener(
+      "touchend",
+      event => {
+
+        touchEndX =
+          event.changedTouches[0].screenX;
+
+        const difference =
+          touchStartX -
+          touchEndX;
+
+
+        if (
+          Math.abs(difference) <
+          45
+        ) {
+          return;
+        }
+
+
+        if (difference > 0) {
+
+          nextSlide();
+
+        } else {
+
+          prevSlide();
+
+        }
+
+        restartAutoPlay();
+
+      },
+      {
+        passive: true
+      }
+    );
+
+
+    /* ===================================================
+       INIT
+    =================================================== */
+
+    showSlide(0);
+
+    startAutoPlay();
+
+  }
+
+
+  /* =====================================================
+     RELATED HEADLINES
+  ===================================================== */
+
+  const allArticles =
+    typeof ARTICLES !== "undefined"
+      ? ARTICLES
+      : [];
+
+
+  const relatedByTag =
+    allArticles
+
+      .filter(
+        x =>
+          x.id !== article.id &&
+          (
+            (
+              article.tags ||
+              []
+            ).some(
+              tag =>
+                (
+                  x.tags ||
+                  []
+                ).includes(tag)
+            ) ||
+            x.city === article.city
+          )
+      )
+
+      .slice(0, 4);
+
+
+  const relatedFallback =
+    allArticles
+
+      .filter(
+        x =>
+          x.id !== article.id &&
+          (
+            x.cat === article.cat ||
+            (
+              isLamma &&
+              Array.isArray(x.tags) &&
+              x.tags.includes(
+                "اللمة الحلوة"
+              )
+            )
+          )
+      )
+
+      .slice(0, 4);
+
+
+  const related =
+    relatedByTag.length
+      ? relatedByTag
+      : relatedFallback;
+
+
+  const relatedLinks =
+    document.getElementById(
+      "relatedLinks"
+    );
+
+
+  if (relatedLinks) {
+
+    relatedLinks.innerHTML =
+      related.length
+
+        ? related
+            .map(
+              x => `
+                <li>
+                  <a href="${articleHref(x)}">
+                    ${x.title}
+                  </a>
+                </li>
+              `
+            )
+            .join("")
+
+        : `
+          <li
+            style="
+              color:var(--text-mute);
+              padding:12px 0;
+            "
+          >
+            لا توجد أخبار متعلقة حالياً
+          </li>
+        `;
+
+  }
+
+
+  /* =====================================================
+     RELATED IMAGE CARDS
+  ===================================================== */
+
+  const relatedGrid =
+    document.getElementById(
+      "relatedGrid"
+    );
+
+
+  if (
+    relatedGrid &&
+    typeof cardStory === "function"
+  ) {
+
+    const cards =
+      allArticles
+
+        .filter(
+          x =>
+            x.id !== article.id &&
+            (
+              x.cat === article.cat ||
+              x.country === article.country ||
+              (
+                isLamma &&
+                Array.isArray(x.tags) &&
+                x.tags.includes(
+                  "اللمة الحلوة"
+                )
+              )
+            )
+        )
+
+        .slice(0, 4);
+
+
+    relatedGrid.innerHTML =
+      cards
+        .map(cardStory)
+        .join("");
+
+  }
+
+
+  /* =====================================================
+     MOST READ
+  ===================================================== */
+
+  const topReadRank =
+    document.getElementById(
+      "topReadRank"
+    );
+
+
+  if (
+    topReadRank &&
+    typeof mostRead === "function" &&
+    typeof cardRank === "function"
+  ) {
+
+    topReadRank.innerHTML =
+      mostRead(6)
+        .map(cardRank)
+        .join("");
+
+  }
+
+
+  /* =====================================================
+     AUTHOR
+  ===================================================== */
+
+  if (
+    typeof authorById === "function" &&
+    article.authorId
+  ) {
+
+    const author =
+      authorById(
+        article.authorId
+      );
+
+
+    if (author) {
+
+      const authorSpan =
+        document.querySelector(
+          "#artMeta .author"
+        );
+
+
+      if (authorSpan) {
+
+        authorSpan.outerHTML = `
+          <a
+            class="author"
+            rel="author"
+            href="author.html?slug=${encodeURIComponent(author.slug)}"
+          >
+
+            <img
+              class="avatar-img"
+              src="${author.avatar}"
+              alt="${author.name}"
+            >
+
+            <span id="artSource">
+              ${author.name}
+            </span>
+
+          </a>
+        `;
+
+      }
+
+    }
+
+  }
+
+
+  /* =====================================================
+     START GALLERY
+  ===================================================== */
+
+  initGallery(article);
+
+
+})();
+
+</script>
+
+</body>
+</html>

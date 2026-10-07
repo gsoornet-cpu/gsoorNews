@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مستند المواصفات التقنية الكامل | منصة المصريين بالمهجر — إخبار، ذكاء استخباراتي، وشبكة اطمئنان الأسرة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1B2A;
+    --ink-2:#152A3F;
+    --paper:#F5F1E7;
+    --paper-2:#FFFFFF;
+    --bronze:#B07A3E;
+    --bronze-light:#D6A968;
+    --teal:#0E5C55;
+    --teal-light:#177F72;
+    --text:#1B2430;
+    --text-mute:#5B6672;
+    --line:#DED6C3;
+    --line-dark:rgba(255,255,255,.14);
+    --radius:3px;
+    --maxw:1180px;
+    --mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;direction:rtl;text-align:right;background:var(--paper);color:var(--text);
+    font-family:'IBM Plex Sans Arabic','Cairo',sans-serif;font-size:16px;line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,.disp{font-family:'Cairo',sans-serif;font-weight:800;margin:0;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+  .section{padding:88px 0;position:relative;}
+  .section.tight{padding:56px 0;}
+  .section.on-paper2{background:var(--paper-2);}
+  .section.on-ink{background:var(--ink);color:#EAE7DE;}
+  .section.on-teal{background:var(--teal);color:#EAF3F0;}
+  .section + .section{border-top:1px solid var(--line);}
+  .section.on-ink + .section.on-ink{border-top:1px solid var(--line-dark);}
+
+  .eyebrow{display:flex;align-items:center;gap:14px;font-family:'Cairo',sans-serif;font-weight:700;font-size:13px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--bronze);margin-bottom:22px;}
+  .eyebrow .num{font-weight:900;font-size:13px;color:var(--ink);background:var(--bronze-light);
+    padding:5px 11px;border-radius:2px;font-family:var(--mono);letter-spacing:0;}
+  .on-ink .eyebrow .num,.on-teal .eyebrow .num{background:var(--bronze);color:var(--ink);}
+  .on-ink .eyebrow,.on-teal .eyebrow{color:var(--bronze-light);}
+
+  h2.title{font-size:clamp(26px,3.2vw,40px);line-height:1.28;max-width:860px;}
+  h3.sub{font-size:21px;font-weight:700;margin-bottom:14px;}
+  .lead{font-size:18px;line-height:1.9;color:var(--text-mute);max-width:780px;margin-top:20px;}
+  .on-ink .lead,.on-teal .lead{color:#C7D0CC;}
+  p.body-p{color:var(--text-mute);line-height:1.9;margin:0 0 14px;}
+  .on-ink p.body-p,.on-teal p.body-p{color:#C5CECA;}
+
+  .divider{height:1px;background:var(--line);border:0;margin:40px 0;}
+  .on-ink .divider,.on-teal .divider{background:var(--line-dark);}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  @media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+  .card{background:var(--paper-2);border:1px solid var(--line);padding:26px 26px;border-radius:var(--radius);}
+  .on-ink .card{background:rgba(255,255,255,.04);border-color:var(--line-dark);}
+  .card h4{font-size:17px;margin-bottom:10px;}
+  .card .k{font-family:'Cairo',sans-serif;font-weight:900;color:var(--bronze);font-size:13px;margin-bottom:8px;display:block;letter-spacing:.02em;}
+  .card p{font-size:14.5px;color:var(--text-mute);margin:0;}
+  .on-ink .card p{color:#BFC8C4;}
+
+  .stat{border-right:2px solid var(--bronze);padding-right:16px;}
+  .stat .n{font-family:'Cairo',sans-serif;font-weight:900;font-size:34px;line-height:1;color:var(--ink);}
+  .on-ink .stat .n,.on-teal .stat .n{color:#fff;}
+  .stat .l{font-size:13.5px;color:var(--text-mute);margin-top:8px;}
+  .on-ink .stat .l,.on-teal .stat .l{color:#B4BFBA;}
+
+  table{width:100%;border-collapse:collapse;font-size:14.5px;}
+  th,td{padding:14px 13px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-family:'Cairo',sans-serif;font-weight:700;color:var(--ink);background:#EDE7D8;font-size:12.5px;letter-spacing:.03em;}
+  .on-ink th{background:rgba(255,255,255,.06);color:#fff;}
+  .on-ink td{border-bottom:1px solid var(--line-dark);}
+  tr:last-child td{border-bottom:none;}
+  code, .mono{font-family:var(--mono);font-size:.92em;background:#EFE9DA;padding:2px 6px;border-radius:3px;}
+  .on-ink code,.on-ink .mono{background:rgba(255,255,255,.08);}
+
+  .pill{display:inline-block;font-size:11.5px;font-weight:700;font-family:'Cairo',sans-serif;
+    padding:4px 11px;border:1px solid var(--bronze);color:var(--bronze);border-radius:20px;margin:2px 4px 2px 0;}
+  .on-ink .pill,.on-teal .pill{border-color:var(--bronze-light);color:var(--bronze-light);}
+
+  .flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px;}
+  .flow .step{background:var(--ink);color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:12.5px;
+    padding:9px 14px;border-radius:20px;white-space:nowrap;}
+  .on-ink .flow .step{background:var(--bronze);color:var(--ink);}
+  .flow .arrow{color:var(--bronze);font-weight:900;}
+
+  .toc-bar{position:sticky;top:0;z-index:60;background:rgba(14,27,42,.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--line-dark);}
+  .toc-inner{max-width:var(--maxw);margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:54px;}
+  .toc-inner .brand{font-family:'Cairo',sans-serif;font-weight:800;color:#fff;font-size:14.5px;}
+  .toc-inner .brand span{color:var(--bronze-light);}
+  .toc-select{background:transparent;color:#EAE6DC;border:1px solid var(--line-dark);font-family:'IBM Plex Sans Arabic',sans-serif;
+    font-size:12.5px;padding:6px 9px;border-radius:2px;max-width:56vw;}
+  .toc-select option{color:#000;}
+
+  .hero{background:linear-gradient(180deg,var(--ink) 0%,var(--ink-2) 100%);color:#fff;padding:100px 0 80px;position:relative;overflow:hidden;}
+  .hero:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 119px,rgba(176,122,62,.06) 120px);pointer-events:none;}
+  .hero .tag{font-family:'Cairo',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.18em;color:var(--bronze-light);text-transform:uppercase;margin-bottom:24px;}
+  .hero h1{font-size:clamp(30px,4.6vw,52px);line-height:1.22;max-width:920px;}
+  .hero h1 em{color:var(--bronze-light);font-style:normal;}
+  .hero .lead{color:#C7D0CC;max-width:660px;}
+  .hero-meta{display:flex;gap:40px;margin-top:50px;border-top:1px solid var(--line-dark);padding-top:30px;flex-wrap:wrap;}
+
+  .badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px;}
+  .badge{font-family:var(--mono);font-size:12px;color:#C7D0CC;border:1px solid var(--line-dark);padding:5px 10px;border-radius:3px;}
+
+  .warn{border-right:3px solid #B4453A;background:#FBEDEA;padding:16px 18px;border-radius:2px;}
+  .on-ink .warn{background:rgba(180,69,58,.14);}
+  .warn strong{color:#8C2E24;}
+  .on-ink .warn strong{color:#E39187;}
+  .ok{border-right:3px solid var(--teal);background:#E9F3F1;padding:16px 18px;border-radius:2px;}
+  .on-ink .ok{background:rgba(23,127,114,.14);}
+
+  ul.clean{margin:0;padding:0;list-style:none;}
+  ul.clean li{padding:10px 0 10px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--text-mute);}
+  .on-ink ul.clean li{border-bottom:1px solid var(--line-dark);color:#C5CECA;}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li b{color:var(--text);font-family:'Cairo',sans-serif;font-weight:700;}
+  .on-ink ul.clean li b{color:#fff;}
+
+  .num-list{counter-reset:sec;}
+  .num-list .card{position:relative;padding-top:34px;}
+  .num-list .card:before{counter-increment:sec;content:counter(sec,decimal-leading-zero);
+    position:absolute;top:14px;left:20px;font-family:var(--mono);font-size:12px;color:var(--bronze);}
+
+  footer{background:var(--ink);color:#8A93A0;padding:34px 0;font-size:13px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="toc-bar">
+  <div class="toc-inner">
+    <div class="brand">مستند المواصفات <span>— منصة المهجر المصري (.NET)</span></div>
+    <select class="toc-select" onchange="location.href=this.value">
+      <option value="#top">فهرس المحتويات</option>
+      <option value="#s01">01 — المقدمة والهدف من المستند</option>
+      <option value="#s02">02 — نظرة عامة على المنتج والجمهور</option>
+      <option value="#s03">03 — المبادئ التوجيهية الملزمة</option>
+      <option value="#s04">04 — الاسم المؤقت وخريطة المنصة</option>
+      <option value="#s05">05 — طبقات مصادر الأخبار السبع</option>
+      <option value="#s06">06 — خط أنابيب الذكاء الاصطناعي الإخباري</option>
+      <option value="#s07">07 — محرك ملاءمة الأخبار للمصريين</option>
+      <option value="#s08">08 — كشف التكرار وتجميع القصص</option>
+      <option value="#s09">09 — الذكاء الجغرافي وخريطة المهجر</option>
+      <option value="#s10">10 — نظام «اطمّن على مغتربك»</option>
+      <option value="#s11">11 — وضع الأزمات وصفحة «ماذا حدث؟»</option>
+      <option value="#s12">12 — بروفايل المهجر ومستويات الخصوصية</option>
+      <option value="#s13">13 — التحقق من الأزمات ومنع سوء الاستخدام</option>
+      <option value="#s14">14 — شبكة المساهمين والمراسلين</option>
+      <option value="#s15">15 — الرياضيون المصريون بالخارج</option>
+      <option value="#s16">16 — السيو وGoogle News/Discover</option>
+      <option value="#s17">17 — البحث الدلالي وخريطة المعرفة</option>
+      <option value="#s18">18 — البنية التقنية الكاملة (.NET)</option>
+      <option value="#s19">19 — بنية الذكاء الاصطناعي</option>
+      <option value="#s20">20 — استراتيجية تكلفة الذكاء الاصطناعي</option>
+      <option value="#s21">21 — نموذج قاعدة البيانات</option>
+      <option value="#s22">22 — الأمان</option>
+      <option value="#s23">23 — الخصوصية وحماية البيانات</option>
+      <option value="#s24">24 — مكافحة التضليل والتحقق</option>
+      <option value="#s25">25 — لوحة تحكم غرفة الأخبار والأدوار</option>
+      <option value="#s26">26 — محرك التنبيهات</option>
+      <option value="#s27">27 — الأداء وقابلية التوسّع</option>
+      <option value="#s28">28 — خارطة الطريق MVP إلى V2</option>
+      <option value="#s29">29 — ما لن نبنيه الآن (ولماذا)</option>
+      <option value="#s30">30 — التوصية النهائية</option>
+      <option value="#s31">31 — الخطة التسعيرية</option>
+      <option value="#s32">32 — الجدول الزمني ودفعات السداد</option>
+    </select>
+  </div>
+</div>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="tag">مستند مواصفات تقنية وتحريرية — نسخة للمبرمج</div>
+    <h1>منصة <em>المصريين بالمهجر</em>: إخبار، ذكاء استخباراتي جغرافي، وشبكة اطمئنان الأسرة</h1>
+    <p class="lead">هذا المستند مرجع تقني وتحريري كامل لفريق التطوير. يشرح كل نظام في المنصة بالتفصيل — من محرك الذكاء الاصطناعي الإخباري إلى نظام «اطمّن على مغتربك» — مع القرارات المعمارية النهائية المبنية على <strong>‎.NET 10 / ASP.NET Core</strong>، ونموذج قاعدة البيانات، وحدود كل ميزة، وأسباب استبعاد ما تم استبعاده. الهدف أن يبدأ أي مبرمج ينضم للفريق العمل من هذا المستند مباشرة دون الرجوع لأي محادثة سابقة.</p>
+    <div class="badge-row">
+      <div class="badge">ASP.NET Core 10 · Clean Architecture</div>
+      <div class="badge">PostgreSQL + pgvector</div>
+      <div class="badge">Redis · Elasticsearch/OpenSearch</div>
+      <div class="badge">Azure OpenAI · Semantic Kernel</div>
+      <div class="badge">Hangfire · Azure Service Bus</div>
+      <div class="badge">SignalR للتنبيهات اللحظية</div>
+    </div>
+    <div class="hero-meta">
+      <div class="stat"><div class="n">٧</div><div class="l">طبقات لمصادر الأخبار، من الرسمية للمجتمعية</div></div>
+      <div class="stat"><div class="n">٢٢</div><div class="l">مرحلة في خط أنابيب معالجة الخبر الواحد</div></div>
+      <div class="stat"><div class="n">MVP→V2</div><div class="l">خارطة طريق مقسّمة بدقّة لتفادي المبالغة الهندسية</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 -->
+<section class="section on-paper2" id="s01">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">01</span> المقدمة والهدف من المستند</div>
+    <h2 class="title">هذا المستند بديل عن كل نقاش شفهي — كل قرار معماري موجود هنا ومبرَّر</h2>
+    <p class="lead">المشروع يهدف لبناء منصة رقمية عالمية المستوى مخصّصة حصرياً للمصريين المقيمين خارج مصر، وللأسر في مصر التي تريد متابعة ما يحدث لأبنائها بالخارج. المنصة ليست موقعاً إخبارياً عاماً — هي طبقة استخبارات معلوماتية جغرافية مبنية حول مبدأ واحد: <b>هل هذا الخبر يخصّ المصريين بالخارج فعلياً؟</b></p>
+    <div class="divider"></div>
+    <div class="grid-3">
+      <div class="card"><span class="k">لمن هذا المستند</span><p>لكل مبرمج .NET ينضم للمشروع: Backend، Frontend، DevOps، مهندس ذكاء اصطناعي. لا حاجة لقراءة أي ملف آخر قبل البدء.</p></div>
+      <div class="card"><span class="k">ما لا يغطيه</span><p>هذا مستند معماري ومنتجي، وليس عقد تسعير أو جدولاً زمنياً تجارياً. الأسعار والجدولة التجارية في مستند منفصل.</p></div>
+      <div class="card"><span class="k">حالة القرارات هنا</span><p>القرارات المعمارية (اللغة، القاعدة، الاستضافة) نهائية. تفاصيل التنفيذ الدقيقة (أسماء الجداول الفرعية، إلخ) قابلة للتطوير أثناء العمل.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="section" id="s02">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">02</span> نظرة عامة على المنتج والجمهور</div>
+    <h2 class="title">جمهوران أساسيان بحاجة مختلفة تماماً — والمنصة تخدم الاثنين بنفس الثقة</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h4>الجمهور الأول — المصري بالخارج</h4>
+        <p>يريد أخباراً تخصّه: تغييرات الإقامة والتأشيرات، إعلانات السفارة، أخبار جاليته المحلية، فرصاً ومجتمعاً، وتنبيهات فورية عند وقوع حدث في مدينته.</p>
+      </div>
+      <div class="card">
+        <h4>الجمهور الثاني — الأسرة في مصر</h4>
+        <p>أمّ في مصر تريد أن تفهم ما يحدث في المدينة التي يعيش فيها ابنها. عند وقوع حادث كبير، تحتاج معلومة موثوقة سريعة، وطريقة آمنة للاطمئنان.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="warn"><strong>مبدأ تحريري حاكم:</strong> المنصة ليست موقعاً إخبارياً عاماً يعيد نشر كل ما يحدث في العالم. كل خبر يمرّ أولاً على «محرك الملاءمة» (قسم 07) الذي يقرر إن كان يخصّ المصريين بالخارج فعلياً قبل أي معالجة أخرى.</div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="section on-ink" id="s03">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">03</span> المبادئ التوجيهية الملزمة</div>
+    <h2 class="title" style="color:#fff;">سبعة مبادئ يجب أن يحتكم إليها أي قرار تقني أو تحريري لاحق</h2>
+    <div class="divider"></div>
+    <div class="grid-3 num-list">
+      <div class="card"><h4>السرعة الموثَّقة لا السرعة العمياء</h4><p>الهدف «أسرع خبر موثّق» وليس «أسرع خبر». لا نشر بدون مصدر واحد على الأقل من الطبقة 1-3، أو تحقق بشري في الحالات الحسّاسة.</p></div>
+      <div class="card"><h4>الذكاء الاصطناعي مساعد لا رئيس تحرير</h4><p>الذكاء الاصطناعي يكتشف، يصنّف، يلخّص، يقترح. النشر النهائي، والوفيات، والاتهامات الجنائية، وحالات الأشخاص المفقودين تتطلب موافقة بشرية دائماً.</p></div>
+      <div class="card"><h4>الخصوصية بالتصميم لا كإضافة لاحقة</h4><p>لا تُجمع بيانات دقيقة (GPS، عنوان، رقم هاتف) إلا لغرض منتج واضح وبموافقة صريحة. لا قاعدة بيانات عامة تكشف أماكن أشخاص.</p></div>
+      <div class="card"><h4>لا نظام يَعِد بضمان السلامة</h4><p>المنصة أداة معلومات ومساعدة، وليست جهة طوارئ. أي واجهة تذكر حالة شخص يجب أن تستخدم صياغة احتمالية لا قطعية (قسم 10).</p></div>
+      <div class="card"><h4>لا تكرار — كل حدث قصة واحدة</h4><p>عشرون مصدراً ينشرون نفس الحادث = مقال واحد على المنصة مع تحديثات، لا عشرون مقالاً (قسم 08).</p></div>
+      <div class="card"><h4>لا مبالغة هندسية (No Over-engineering)</h4><p>كل ميزة تُبنى في مرحلتها الصحيحة (MVP / V1 / V2) لا قبلها. قسم 28 يحدّد الترتيب بدقة.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="section on-paper2" id="s04">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">04</span> الاسم المؤقت وخريطة المنصة</div>
+    <h2 class="title">اسم عمل مؤقت للتطوير، وخريطة معلومات كاملة للموقع</h2>
+    <p class="lead">حتى اعتماد الهوية النهائية بعد بحث السوق والعلامة التجارية، يُستخدم اسم العمل المؤقت <b>«رابطة» (Rabta)</b> داخل الكود، الحزم، وأسماء قواعد البيانات — قابل للاستبدال لاحقاً عبر متغيرات الإعداد فقط دون أي نص مُثبَّت (hardcoded) في الواجهة.</p>
+    <div class="divider"></div>
+    <h3 class="sub">خريطة المسارات (Sitemap) الأساسية</h3>
+    <table>
+      <tr><th>المسار</th><th>المحتوى</th></tr>
+      <tr><td class="mono">/</td><td>الصفحة الرئيسية — عاجل، القصة الرئيسية، أحدث الأخبار، تنبيهات الأزمات، اطمّن على مغتربك</td></tr>
+      <tr><td class="mono">/{country}/</td><td>صفحة الدولة — تجميع تلقائي لكل ما يخص مصريي هذه الدولة</td></tr>
+      <tr><td class="mono">/{country}/{city}/</td><td>صفحة المدينة — أخبار محلية، جالية، سفارة/قنصلية، فعاليات</td></tr>
+      <tr><td class="mono">/immigration/</td><td>مركز رصد الهجرة والتأشيرات والإقامة</td></tr>
+      <tr><td class="mono">/crisis/{event-slug}/</td><td>صفحة حدث أزمة تفاعلية (قسم 11)</td></tr>
+      <tr><td class="mono">/safety/check-on-someone/</td><td>نظام اطمّن على مغتربك (قسم 10)</td></tr>
+      <tr><td class="mono">/athletes/</td><td>الرياضيون المصريون بالخارج (قسم 15)</td></tr>
+      <tr><td class="mono">/community/</td><td>فعاليات وأخبار الجاليات</td></tr>
+      <tr><td class="mono">/embassies/{country}/</td><td>معلومات رسمية للسفارات والقنصليات</td></tr>
+      <tr><td class="mono">/account/my-places/</td><td>لوحة المستخدم — بروفايل المهجر (قسم 12)</td></tr>
+      <tr><td class="mono">/newsroom/</td><td>لوحة تحكم غرفة الأخبار (تتطلب صلاحية — قسم 25)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="section" id="s05">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">05</span> طبقات مصادر الأخبار السبع</div>
+    <h2 class="title">لا مصدر واحد يقرر — نظام تقييم مصداقية يحكم كل مصدر داخل</h2>
+    <p class="lead">جدول <code>Source</code> في قاعدة البيانات يخزّن كل مصدر مع طبقته الأساسية، وسجل <code>ReliabilityScore</code> يتحدّث ديناميكياً بعد كل خبر يمر عبره.</p>
+    <div class="divider"></div>
+    <table>
+      <tr><th>الطبقة</th><th>الوصف</th><th>طريقة الإدخال التقنية</th></tr>
+      <tr><td><b>1 — رسمية</b></td><td>سفارات، وزارة الخارجية، شرطة، مطارات، محاكم</td><td>Worker مخصّص لكل جهة (RSS/API عند توفره، وإلا مراقبة صفحة رسمية)</td></tr>
+      <tr><td><b>2 — إعلام مهني موثوق</b></td><td>وكالات ومؤسسات إخبارية دولية ومحلية معتمدة</td><td>RSS/API رسمي فقط — لا استخراج (scraping) دون ترخيص</td></tr>
+      <tr><td><b>3 — إعلام الجالية المصرية</b></td><td>منشورات ومنظمات مصرية مهاجرة معروفة</td><td>RSS إن وُجد، أو Worker استخراج محترم لشروط الاستخدام</td></tr>
+      <tr><td><b>4 — سوشيال ميديا عامة</b></td><td>صفحات/مجموعات/قنوات عامة على فيسبوك، تيليجرام، إكس</td><td>عبر APIs الرسمية فقط حيث تتوفر؛ لا استخراج يخالف شروط المنصة</td></tr>
+      <tr><td><b>5 — تقارير المستخدمين</b></td><td>بلاغات يرسلها المستخدمون مباشرة</td><td>نموذج داخلي + طابور مراجعة إلزامي قبل أي نشر</td></tr>
+      <tr><td><b>6 — مراسلون شركاء</b></td><td>مساهمون محليون تم التحقق منهم</td><td>لوحة مساهم داخلية (قسم 14)</td></tr>
+      <tr><td><b>7 — شبكة التحقق المجتمعي</b></td><td>أفراد موثوقون يمكنهم تأكيد حوادث محلية</td><td>جزء من نظام تصعيد الأزمات (قسم 13)</td></tr>
+    </table>
+    <div class="divider"></div>
+    <h3 class="sub">Source Reliability Score — عوامل الحساب</h3>
+    <div class="grid-4">
+      <div class="card"><p><b>السمعة التاريخية:</b> نسبة الأخبار التي أثبتت صحتها من هذا المصدر</p></div>
+      <div class="card"><p><b>الحالة الرسمية:</b> هل المصدر جهة رسمية معتمدة</p></div>
+      <div class="card"><p><b>التطابق الجغرافي:</b> مدى قرب المصدر من مكان الحدث</p></div>
+      <div class="card"><p><b>التوافق مع مصادر أخرى:</b> عدد المصادر المستقلة التي تؤكد نفس الخبر</p></div>
+    </div>
+    <p class="body-p" style="margin-top:18px;">تقنياً: يُخزَّن كـ <code>decimal(4,2)</code> بين 0 و10 على مستوى <code>Source</code>، ويُعاد حسابه عبر Hangfire Job دوري وبعد كل قرار تحرير بشري (تأكيد/تصحيح).</p>
+  </div>
+</section>
+
+<!-- 06 -->
+<section class="section on-ink" id="s06">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">06</span> خط أنابيب الذكاء الاصطناعي الإخباري</div>
+    <h2 class="title" style="color:#fff;">٢٢ مرحلة من اكتشاف الخبر حتى النشر والمتابعة</h2>
+    <p class="lead">كل مرحلة عبارة عن Handler مستقل داخل معمارية Pipeline قائمة على <code>MediatR</code> (Pipeline Behaviors) أو طابور رسائل عبر <code>Azure Service Bus</code> للمعالجة غير المتزامنة — بحيث يمكن استبدال أو تطوير أي مرحلة دون كسر الباقي.</p>
+    <div class="flow">
+      <div class="step">اكتشاف المصدر</div><span class="arrow">←</span>
+      <div class="step">الإدخال</div><span class="arrow">←</span>
+      <div class="step">التوحيد القياسي</div><span class="arrow">←</span>
+      <div class="step">كشف اللغة</div><span class="arrow">←</span>
+      <div class="step">استخراج الكيانات</div><span class="arrow">←</span>
+      <div class="step">استخراج الموقع</div><span class="arrow">←</span>
+      <div class="step">تصنيف الملاءمة المصرية</div><span class="arrow">←</span>
+      <div class="step">تقييم القيمة الخبرية</div><span class="arrow">←</span>
+      <div class="step">تقييم مصداقية المصدر</div><span class="arrow">←</span>
+      <div class="step">كشف الحدث</div><span class="arrow">←</span>
+      <div class="step">كشف التكرار</div><span class="arrow">←</span>
+      <div class="step">تجميع القصة</div><span class="arrow">←</span>
+      <div class="step">التحقق من الحقائق</div><span class="arrow">←</span>
+      <div class="step">كشف التعارض</div><span class="arrow">←</span>
+      <div class="step">مراجعة تحريرية</div><span class="arrow">←</span>
+      <div class="step">صياغة بالذكاء الاصطناعي</div><span class="arrow">←</span>
+      <div class="step">تحويل الأسلوب التحريري</div><span class="arrow">←</span>
+      <div class="step">تحسين السيو</div><span class="arrow">←</span>
+      <div class="step">موافقة بشرية</div><span class="arrow">←</span>
+      <div class="step">النشر</div><span class="arrow">←</span>
+      <div class="step">التوزيع</div><span class="arrow">←</span>
+      <div class="step">المراقبة والتحديث</div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>المراحل الحتمية (Deterministic)</h4><p>الإدخال، التوحيد، كشف اللغة، الاستخراج الجغرافي الأساسي، والتوزيع تُنفَّذ بكود عادي بلا LLM — أسرع وأرخص وأكثر ثباتاً.</p></div>
+      <div class="card"><h4>مراحل الذكاء الاصطناعي (LLM-assisted)</h4><p>تصنيف الملاءمة، التحقق، الصياغة، وتحويل الأسلوب تستخدم Azure OpenAI عبر Semantic Kernel، مع Prompt مُصدَّر ومُختبَر بإصدارات (قسم 19).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="section on-paper2" id="s07">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">07</span> محرك ملاءمة الأخبار للمصريين</div>
+    <h2 class="title">السؤال الوحيد الذي يقرر كل شيء: هل هذا الخبر يخص المصريين بالخارج؟</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>المستوى</th><th>مثال</th><th>الإجراء</th></tr>
+      <tr><td><b>ملاءمة عالية</b></td><td>مصري توفي/اعتُقل بالخارج، إعلان سفارة، قانون هجرة يمسّ المصريين مباشرة</td><td>معالجة كاملة عبر الخط بالكامل + أولوية نشر</td></tr>
+      <tr><td><b>ملاءمة متوسطة</b></td><td>حدث كبير في مدينة بها تجمّع مصري كثيف قد يمسّهم</td><td>معالجة قياسية، بلا أولوية عاجلة</td></tr>
+      <tr><td><b>ملاءمة منخفضة</b></td><td>خبر دولي عام في نفس المدينة بلا رابط مصري مباشر</td><td>لا يُنشر كمقال مستقل؛ يُحفظ كسياق فقط</td></tr>
+      <tr><td><b>مرفوض</b></td><td>خبر دولي لا علاقة له إطلاقاً</td><td>يُهمَل بعد التصنيف الأولي</td></tr>
+    </table>
+    <div class="divider"></div>
+    <p class="body-p"><b>التنفيذ التقني:</b> مصنِّف هجين — نموذج تصنيف خفيف ورخيص (Embeddings + قواعد Keyword/Entity حتمية) يفلتر أولاً، ثم نموذج LLM أقوى يُستدعى فقط للحالات الحدّية (Confidence بين 0.4 و0.7) لتقليل تكلفة الاستدعاء (تفاصيل التكلفة في قسم 20).</p>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="section" id="s08">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">08</span> كشف التكرار وتجميع القصص</div>
+    <h2 class="title">عشرون مصدراً، حدث واحد، مقال واحد يتطوّر لا يتكرر</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>هوية الحدث (Event Identity)</h4><p>لكل خبر جديد، يُستخرَج توقيع (Event Signature) من: الأشخاص، المكان، التاريخ/الوقت، الجهات، الموضوع. يُحوَّل لمتجه (Embedding) ويُقارَن بمتجهات <code>pgvector</code> للأحداث المفتوحة خلال آخر 72 ساعة جغرافياً وموضوعياً قريبة.</p></div>
+      <div class="card"><h4>التصنيفات الناتجة</h4>
+        <ul class="clean">
+          <li><b>تكرار مطابق</b> — يُدمَج كمصدر إضافي على نفس المقال</li>
+          <li><b>تكرار معاد الصياغة</b> — نفس الحدث بصياغة أخرى، يُدمَج</li>
+          <li><b>قصة متطوّرة</b> — تحديث حي على نفس المقال</li>
+          <li><b>متابعة</b> — تطوّر جوهري جديد، مقال منفصل مرتبط</li>
+          <li><b>حدث مرتبط مختلف</b> — يبقى منفصلاً تماماً</li>
+        </ul>
+      </div>
+    </div>
+    <p class="body-p" style="margin-top:20px;">جدول <code>Story</code> يمثّل «الحدث» ككيان مستقل عن <code>Article</code> (المقال المنشور)؛ عدة <code>SourceItem</code> ترتبط بنفس <code>Story</code>، ومقال واحد أو أكثر (تحديث حي) يُبنى من هذا الـ Story.</p>
+  </div>
+</section>
+
+<!-- 09 -->
+<section class="section on-teal" id="s09">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">09</span> الذكاء الجغرافي وخريطة المهجر</div>
+    <h2 class="title" style="color:#fff;">هرمية جغرافية كاملة تربط كل خبر ومستخدم وموارد بمكان محدد</h2>
+    <div class="divider"></div>
+    <div class="flow">
+      <div class="step">الدولة</div><span class="arrow">←</span>
+      <div class="step">المنطقة/الولاية</div><span class="arrow">←</span>
+      <div class="step">المدينة</div><span class="arrow">←</span>
+      <div class="step">الحي (اختياري)</div><span class="arrow">←</span>
+      <div class="step">مدى وجود تجمّع مصري</div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>خريطة المهجر (Diaspora Map)</h4><p>طبقة عرض تفاعلية فوق بيانات مُجمَّعة (Aggregated) فقط — لا تعرض بيانات مستخدم فردي إطلاقاً. المصدر: بيانات سكانية رسمية معروفة + إشارات مُجمَّعة من اختيارات المستخدمين الطوعية (بحدّ أدنى للمجموعة، انظر قسم 23).</p></div>
+      <div class="card"><h4>الفصل الإلزامي بين المصدرين</h4><p>كل عنصر عرض يُميَّز بوضوح بين «بيانات سكانية رسمية» و«إشارة مُستمدّة من المنصة» — لا يُعرض أي منهما كأنه الآخر.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="section on-paper2" id="s10">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">10</span> نظام «اطمّن على مغتربك»</div>
+    <h2 class="title">أهم ميزة في المنصة — ويجب أن تُبنى بأعلى معايير الخصوصية والأمان</h2>
+    <p class="lead">اسم العمل المؤقت: <b>«اطمّن»</b>. النظام لا ينشئ قاعدة بيانات عامة للمفقودين؛ هو نظام حالات (Case Management) خاص بالكامل بين مقدّم الطلب وشبكة الاستجابة الموثوقة.</p>
+    <div class="divider"></div>
+    <h3 class="sub">تدفّق الاستخدام (8 خطوات)</h3>
+    <table>
+      <tr><th>#</th><th>الخطوة</th><th>ملاحظة تقنية</th></tr>
+      <tr><td>1</td><td>اختيار الدولة</td><td>مرتبط بجدول <code>Country</code></td></tr>
+      <tr><td>2</td><td>اختيار المنطقة/المدينة</td><td>مرتبط بجدول <code>City</code></td></tr>
+      <tr><td>3</td><td>وصف الحالة/القلق</td><td>حقل نصّي حرّ + تصنيف تلقائي بالذكاء الاصطناعي لدرجة الإلحاح</td></tr>
+      <tr><td>4</td><td>تقديم الحد الأدنى من المعلومات</td><td>اسم الشخص المعني فقط إلزامي؛ الهاتف/التفاصيل اختيارية</td></tr>
+      <tr><td>5</td><td>التحقق من هوية مقدّم الطلب</td><td>OTP عبر الهاتف + Rate Limiting صارم لمنع الانتحال</td></tr>
+      <tr><td>6</td><td>إنشاء الحالة</td><td>سجل <code>Case</code> بمعرّف فريد، مشفَّر عند التخزين (Field-level Encryption)</td></tr>
+      <tr><td>7</td><td>تعيين الحالة لشبكة الاستجابة</td><td>خوارزمية توزيع حسب التغطية الجغرافية (قسم 14)</td></tr>
+      <tr><td>8</td><td>متابعة الحالة</td><td>واجهة حالة حيّة عبر SignalR</td></tr>
+    </table>
+    <div class="divider"></div>
+    <h3 class="sub">حالات الحالة (Case Status) — الصياغة الإلزامية</h3>
+    <div class="grid-4">
+      <div class="card"><p><b>لا معلومة موثقة بعد</b></p></div>
+      <div class="card"><p><b>جارِ التحقق</b></p></div>
+      <div class="card"><p><b>محاولة تواصل جارية</b></p></div>
+      <div class="card"><p><b>تواصل تم تأكيده</b></p></div>
+      <div class="card"><p><b>الهوية مؤكَّدة</b></p></div>
+      <div class="card"><p><b>تم إبلاغ الأسرة</b></p></div>
+      <div class="card"><p><b>معلومة رسمية متاحة</b></p></div>
+      <div class="card"><p><b>تعذّر التحقق</b></p></div>
+    </div>
+    <div class="warn" style="margin-top:20px;"><strong>قاعدة صارمة:</strong> الواجهة يجب ألا تعرض جملة مثل «نضمن أن قريبك بخير». الصياغة دائماً احتمالية: «هذا آخر ما تحقّقت منه شبكتنا حتى الآن».</div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="section on-ink" id="s11">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">11</span> وضع الأزمات وصفحة «ماذا حدث؟»</div>
+    <h2 class="title" style="color:#fff;">عند وقوع حدث كبير، تتحوّل الصفحة الرئيسية تلقائياً لمركز أزمة</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>مُشغِّل وضع الأزمة (Trigger)</h4><p>Job خلفي يراقب: تكرار غير طبيعي لأحداث من نفس المنطقة الجغرافية خلال نافذة زمنية قصيرة + تصنيف شدّة من مصادر الطبقة 1-2. عند تجاوز عتبة معينة، يُنشأ سجل <code>Crisis</code> ويُفعَّل تلقائياً.</p></div>
+      <div class="card"><h4>محتوى صفحة الحدث</h4>
+        <ul class="clean">
+          <li>ماذا حدث؟ · أين؟ · متى؟</li>
+          <li>ما نعرفه — وما لا نعرفه بعد (بصراحة)</li>
+          <li>هل يتأثر مصريون؟</li>
+          <li>بيانات رسمية + معلومات السفارة</li>
+          <li>خط زمني حيّ + خريطة</li>
+          <li>زر «اطمّن على مغتربك» مباشر</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="section on-paper2" id="s12">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">12</span> بروفايل المهجر ومستويات الخصوصية</div>
+    <h2 class="title">لا موقع دقيق افتراضياً — أربعة مستويات، وواحد منها فقط اختياري بشدة</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>المستوى</th><th>البيانات</th><th>الحالة</th></tr>
+      <tr><td><b>0</b></td><td>بلا موقع إطلاقاً</td><td>المنصة تبقى كاملة الوظائف</td></tr>
+      <tr><td><b>1</b></td><td>الدولة فقط</td><td>افتراضي مقترح عند التسجيل</td></tr>
+      <tr><td><b>2</b></td><td>المنطقة/الولاية</td><td>اختياري</td></tr>
+      <tr><td><b>3</b></td><td>المدينة</td><td>اختياري — يُفعِّل التخصيص الكامل والتنبيهات المحلية</td></tr>
+      <tr><td><b>4 — موقع دقيق</b></td><td>غير مفعَّل في المنتج حالياً</td><td>مرفوض هندسياً إلا كوضع طوارئ مؤقت صريح لاحقاً (30 دقيقة قابلة للإلغاء، بدون تخزين دائم) — يُقيَّم في V2 فقط</td></tr>
+    </table>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>البيانات المسموح جمعها</h4><p>حالة الاغتراب، الدولة/المنطقة/المدينة (اختياري)، اللغة المفضّلة، المواضيع المتابَعة، تفضيلات الإشعارات.</p></div>
+      <div class="card"><h4>بيانات ممنوعة افتراضياً</h4><p>العنوان الدقيق، GPS، جهة العمل، رقم الهاتف (إلا لغرض تحقق محدد كنظام اطمّن)، هوية أفراد الأسرة تلقائياً — يحدّدها المستخدم يدوياً فقط عند الحاجة.</p></div>
+    </div>
+    <div class="divider"></div>
+    <h3 class="sub">«أماكني» (My Places) بدل «قائمة العائلة»</h3>
+    <p class="body-p">بدلاً من قاعدة بيانات علاقات عائلية، يتابع المستخدم أماكن فقط (مثال: القاهرة، تورونتو) دون إلزامه بإدخال أسماء أو صفة القرابة — أكثر أماناً وكافٍ لتحقيق نفس الفائدة المنتجية.</p>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="section" id="s13">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">13</span> التحقق من الأزمات ومنع سوء الاستخدام</div>
+    <h2 class="title">شبكة تحقق متعددة المصادر، مع حماية صارمة ضد التتبّع والانتحال</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>مصادر أدلّة الحالة الواحدة</h4><p>مصادر رسمية + إعلام مهني + مساهمون موثوقون + مساهمات مجتمعية + بلاغات مستخدمين + تسجيل دخول أمان مباشر من المستخدم نفسه (Check-In).</p></div>
+      <div class="card"><h4>قاعدة حاكمة</h4><p>ثقة الذكاء الاصطناعي لا تحل محل التحقق البشري في أي حالة عالية الخطورة (وفاة، اعتقال، شخص مفقود). دائماً Human-in-the-loop.</p></div>
+    </div>
+    <div class="divider"></div>
+    <h3 class="sub">حماية من سوء الاستخدام — إلزامية قبل الإطلاق</h3>
+    <div class="grid-3">
+      <div class="card"><p><b>منع العدّ التعدادي (Anti-enumeration):</b> لا يمكن الاستعلام «كم مصرياً في هذا الحي؟» أو «هل فلان مسجَّل؟» — يُمنع تقنياً على مستوى API، لا سياسياً فقط.</p></div>
+      <div class="card"><p><b>منع الانتحال:</b> OTP + Rate Limiting + كشف أنماط تسجيل مشبوهة لكل حالة اطمّن.</p></div>
+      <div class="card"><p><b>منع الحصاد (Scraping):</b> لا صفحة عامة تعرض قوائم مستخدمين بموقع؛ كل بيانات الخريطة مُجمَّعة فقط بحدّ أدنى (k-anonymity) — راجع قسم 23.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="section on-paper2" id="s14">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">14</span> شبكة المساهمين والمراسلين</div>
+    <h2 class="title">شبكة لامركزية — لا شخص واحد هو المصدر الوحيد لأي منطقة</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>الدور</th><th>الصلاحيات</th></tr>
+      <tr><td>قارئ / متبرّع بمعلومة</td><td>إرسال بلاغ يدخل طابور المراجعة فقط</td></tr>
+      <tr><td>مساهم مجتمعي موثَّق (Verified Contributor)</td><td>إرسال محتوى بعلامة «غير مراجَع» تظهر للمحرر بأولوية</td></tr>
+      <tr><td>مراسل محلي (Local Correspondent)</td><td>تغطية منطقة جغرافية محدّدة، تاريخ أداء مسجَّل</td></tr>
+      <tr><td>منسّق إقليمي أول</td><td>إشراف على عدة مراسلين + تصعيد حالات اطمّن</td></tr>
+      <tr><td>غرفة الأخبار</td><td>الموافقة النهائية والنشر (قسم 25)</td></tr>
+    </table>
+    <p class="body-p" style="margin-top:16px;">جدول <code>Contributor</code> يحمل: المنطقة المُكلَّف بها، سجل الأداء، عدد التصحيحات، وحالة التحقق — لا ترقية تلقائية بناءً على النشاط فقط، بل مراجعة يدوية إلزامية.</p>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="section" id="s15">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">15</span> الرياضيون المصريون بالخارج</div>
+    <h2 class="title">قاعدة بيانات استخباراتية رياضية — وليس قسماً رياضياً عاماً</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>نطاق التغطية</h4><p>لاعبون وحُكّام ومدرّبون مصريون بالخارج، لاعبون مؤهَّلون لتمثيل مصر (Dual Nationals)، لاعبون قيد متابعة الاتحاد المصري لكرة القدم.</p></div>
+      <div class="card"><h4>حقول جدول Player</h4><p>الجنسية، الأهلية، النادي، الدوري، المركز، الأداء، حالة المنتخب، تصريحات علنية، اهتمام الاتحاد، حالة الانتقال.</p></div>
+    </div>
+    <div class="warn" style="margin-top:20px;"><strong>قاعدة تحريرية:</strong> لا يُنشر أي ادّعاء أهلية تمثيل منتخب دون مصدر موثَّق منشور — لا استنتاج داخلي بالذكاء الاصطناعي لهذه النقطة تحديداً.</div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="section on-paper2" id="s16">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">16</span> السيو وGoogle News / Discover</div>
+    <h2 class="title">بنية تقنية تسمح لمحركات البحث بفهم المنصة والثقة بها بشكل طبيعي</h2>
+    <div class="divider"></div>
+    <div class="grid-3">
+      <div class="card"><h4>Schema.org إلزامي</h4><p>NewsArticle، Organization، Person، BreadcrumbList، FAQPage عند الاقتضاء — مُولَّد تلقائياً من نموذج المقال عبر Server-Side Rendering.</p></div>
+      <div class="card"><h4>البنية التقنية</h4><p>Sitemap عام + News Sitemap منفصل يتحدّث لحظياً، hreflang للعربية/الإنجليزية، عناوين قانونية (Canonical) صارمة لتفادي تكرار المحتوى المُجمَّع.</p></div>
+      <div class="card"><h4>إشارات الثقة</h4><p>صفحات مؤلف حقيقية، شفافية المصادر، تاريخ آخر تحديث، سجل تصحيحات علني — كلها عوامل تؤثر على الأهلية لـ Google News.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 17 -->
+<section class="section" id="s17">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">17</span> البحث الدلالي وخريطة المعرفة</div>
+    <h2 class="title">بحث يفهم القصد، لا فقط الكلمات المفتاحية</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>محرك البحث</h4><p><code>Elasticsearch/OpenSearch</code> للبحث النصي الكلاسيكي (شخص، مدينة، موضوع، تاريخ) + <code>pgvector</code> للبحث الدلالي بالمعنى — مثال: «ماذا حدث للمصريين في كاليفورنيا هذا الأسبوع؟».</p></div>
+      <div class="card"><h4>خريطة المعرفة الداخلية (Knowledge Graph)</h4><p>كيانات: أشخاص، أماكن، منظمات، سفارات، أحداث، لاعبون. علاقات: شخص→يعيش في→مدينة، لاعب→يلعب لـ→نادٍ، حدث→وقع في→مدينة. تُبنى تدريجياً بدءاً من V1 لا MVP.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 18 -->
+<section class="section on-ink" id="s18">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">18</span> البنية التقنية الكاملة (.NET)</div>
+    <h2 class="title" style="color:#fff;">Clean Architecture على ‎.NET 10 — قرار نهائي مع كل مكوّناته</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>الطبقة</th><th>التقنية</th></tr>
+      <tr><td>واجهة برمجية (API)</td><td>ASP.NET Core Web API — Minimal APIs للمسارات البسيطة، Controllers للأكثر تعقيداً</td></tr>
+      <tr><td>التطبيق (Application)</td><td>MediatR للـ CQRS، FluentValidation، AutoMapper/Mapperly</td></tr>
+      <tr><td>المجال (Domain)</td><td>كيانات ومنطق أعمال خالٍ من أي اعتماد خارجي (POCO)</td></tr>
+      <tr><td>البنية التحتية (Infrastructure)</td><td>Entity Framework Core + Npgsql (PostgreSQL)، تكاملات المصادر الخارجية</td></tr>
+      <tr><td>قاعدة البيانات الأساسية</td><td>PostgreSQL 17 + امتداد <code>pgvector</code> للبحث الدلالي</td></tr>
+      <tr><td>التخزين المؤقت</td><td>Redis — جلسات، Rate Limiting، Cache للصفحات الجغرافية عالية الزيارة</td></tr>
+      <tr><td>البحث</td><td>Elasticsearch أو OpenSearch</td></tr>
+      <tr><td>معالجة الخلفية</td><td>Hangfire للمهام المجدولة + Azure Service Bus لطوابير خط أنابيب الأخبار</td></tr>
+      <tr><td>الوقت الحقيقي</td><td>SignalR — تحديثات الأزمات وحالات اطمّن اللحظية</td></tr>
+      <tr><td>الواجهة الأمامية</td><td>Next.js (React/TypeScript) لأسباب الأداء والسيو (SSR)، تتواصل عبر REST/GraphQL مع الـ API</td></tr>
+      <tr><td>التطبيق المحمول (لاحقاً)</td><td>نفس الـ API — لا حاجة لإعادة بناء الخلفية</td></tr>
+      <tr><td>التخزين والملفات</td><td>Azure Blob Storage + Azure CDN/Front Door</td></tr>
+      <tr><td>الاستضافة والنشر</td><td>Azure App Service أو AKS حسب الحمل، مع Container عبر Docker</td></tr>
+      <tr><td>المراقبة</td><td>Application Insights / OpenTelemetry</td></tr>
+      <tr><td>المصادقة</td><td>ASP.NET Core Identity + JWT، MFA اختياري للمستخدمين وإلزامي لفريق التحرير</td></tr>
+    </table>
+    <div class="divider"></div>
+    <div class="ok"><strong>لماذا PostgreSQL لا SQL Server:</strong> امتداد <code>pgvector</code> يوفّر بحثاً دلالياً وكشف تكرار مدمجَين دون قاعدة بيانات متجهات منفصلة، وتكلفة الاستضافة على Azure أقل — قرار مبني على حاجة فعلية للمشروع لا موضة تقنية.</div>
+  </div>
+</section>
+
+<!-- 19 -->
+<section class="section on-paper2" id="s19">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">19</span> بنية الذكاء الاصطناعي</div>
+    <h2 class="title">بوابة ذكاء اصطناعي موحّدة داخل .NET — لا استدعاء مباشر متناثر</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>AI Gateway</h4><p>طبقة وسيطة مبنية على <code>Microsoft.SemanticKernel</code> فوق Azure OpenAI: توجيه النموذج (Model Routing)، مخرجات مُهيكَلة (Structured Outputs عبر JSON Schema)، Prompt مُصدَّر بإصدارات (Prompt Versioning) قابل للمراجعة في Git.</p></div>
+      <div class="card"><h4>ضوابط إلزامية</h4><p>تقييم دوري للهلوسة (Hallucination Eval) على عيّنات، Fallback لنموذج أرخص عند فشل الأساسي، Cache للنتائج المتكررة، حدّ أقصى للتكلفة لكل Job.</p></div>
+    </div>
+    <div class="divider"></div>
+    <h3 class="sub">أين نستخدم LLM وأين لا</h3>
+    <table>
+      <tr><th>المهمة</th><th>الحل</th></tr>
+      <tr><td>كشف اللغة، الاستخراج الجغرافي الأساسي</td><td>مكتبات حتمية (لا LLM)</td></tr>
+      <tr><td>تصنيف الملاءمة الأولي</td><td>Embeddings + قواعد، ثم LLM فقط للحالات الحدّية</td></tr>
+      <tr><td>الصياغة التحريرية والتلخيص</td><td>LLM إلزامي، بمراجعة بشرية قبل النشر</td></tr>
+      <tr><td>كشف التكرار</td><td>Embeddings + تشابه متجهي، بلا LLM لكل مقارنة</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 20 -->
+<section class="section" id="s20">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">20</span> استراتيجية تكلفة الذكاء الاصطناعي</div>
+    <h2 class="title">لا كل مقال يحتاج أغلى نموذج — تقدير تكلفة حسب الحجم</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>الحجم</th><th>النهج</th></tr>
+      <tr><td>~1,000 مقال/يوم</td><td>نموذج خفيف للتصنيف، نموذج متوسط للصياغة، Cache قوي — تكلفة منخفضة ويمكن تشغيلها ببنية بسيطة</td></tr>
+      <tr><td>~10,000 مقال/يوم</td><td>معالجة دفعية (Batch) للتصنيف، فصل واضح بين نموذج رخيص للفلترة الأولى ونموذج أقوى للحالات الحدّية فقط</td></tr>
+      <tr><td>~100,000 عنصر مصدر خام/يوم</td><td>إلزامي: إزالة التكرار عبر Embeddings قبل أي استدعاء LLM، وإلا التكلفة تتضاعف بلا داعٍ</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 21 -->
+<section class="section on-paper2" id="s21">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">21</span> نموذج قاعدة البيانات</div>
+    <h2 class="title">الكيانات الأساسية وعلاقاتها — جاهزة للبدء بتصميم EF Core Migrations</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>الكيان</th><th>الوصف المختصر</th></tr>
+      <tr><td class="mono">Article / Story / SourceItem</td><td>المقال المنشور ← يُبنى من Story (الحدث) ← يُغذّى من عدة SourceItem</td></tr>
+      <tr><td class="mono">Source</td><td>المصدر مع طبقته ودرجة مصداقيته</td></tr>
+      <tr><td class="mono">Person / Organization / Location</td><td>كيانات مستخرَجة، مرتبطة بـ Country → Region → City</td></tr>
+      <tr><td class="mono">Embassy</td><td>سفارات/قنصليات مصرية مع معلومات رسمية</td></tr>
+      <tr><td class="mono">Contributor / Author</td><td>مساهمون ومراسلون بصلاحيات وسجل أداء</td></tr>
+      <tr><td class="mono">User / UserPlace</td><td>حساب المستخدم + قائمة «أماكني» المتابَعة</td></tr>
+      <tr><td class="mono">Alert / Notification</td><td>تنبيهات مُرسَلة، مربوطة بتفضيلات المستخدم الجغرافية</td></tr>
+      <tr><td class="mono">Crisis</td><td>حدث أزمة نشِط، مربوط بعدة Story</td></tr>
+      <tr><td class="mono">Case</td><td>حالة «اطمّن على مغتربك» — مشفَّرة على مستوى الحقل</td></tr>
+      <tr><td class="mono">Verification / Claim / Evidence</td><td>سجل التحقق من كل ادّعاء داخل قصة</td></tr>
+      <tr><td class="mono">Correction</td><td>سجل تصحيحات المقالات، علني وقابل للتتبع</td></tr>
+      <tr><td class="mono">SportsPlayer / Club</td><td>قاعدة بيانات الرياضيين المصريين بالخارج</td></tr>
+      <tr><td class="mono">ImmigrationUpdate / Policy</td><td>تتبّع تغييرات سياسات الهجرة لكل دولة</td></tr>
+      <tr><td class="mono">CommunityOrganization / EventCalendarItem</td><td>الفعاليات والمنظمات المجتمعية</td></tr>
+      <tr><td class="mono">AIJob / AIOutput</td><td>سجل كل استدعاء ذكاء اصطناعي — للتدقيق والتكلفة</td></tr>
+      <tr><td class="mono">AuditLog</td><td>سجل تدقيق إلزامي لكل عملية حسّاسة (Case، النشر، الصلاحيات)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 22 -->
+<section class="section on-ink" id="s22">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">22</span> الأمان</div>
+    <h2 class="title" style="color:#fff;">منصة إعلامية جادة تتطلب معايير أمان مؤسسية من اليوم الأول</h2>
+    <div class="divider"></div>
+    <div class="grid-3">
+      <div class="card"><h4>الأساسيات</h4><p>MFA لفريق التحرير، RBAC كامل عبر ASP.NET Identity، تشفير أثناء النقل والتخزين، إدارة أسرار عبر Azure Key Vault.</p></div>
+      <div class="card"><h4>حماية التطبيق</h4><p>WAF أمام الـ API، حماية CSRF/XSS/SQL Injection عبر EF Core Parameterized Queries، حماية SSRF عند جلب أي رابط خارجي.</p></div>
+      <div class="card"><h4>لنظام اطمّن تحديداً</h4><p>تصنيف أمني أعلى من باقي المنصة: تشفير على مستوى الحقل (Field-level Encryption)، سجل تدقيق كامل لكل وصول للحالة، صلاحيات محدودة جداً (Need-to-know).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 23 -->
+<section class="section on-paper2" id="s23">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">23</span> الخصوصية وحماية البيانات</div>
+    <h2 class="title">تصنيف بيانات واضح — وحدّ أدنى صارم قبل أي عرض مُجمَّع</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>التصنيف</th><th>القاعدة</th></tr>
+      <tr><td>بيانات عامة</td><td>آمنة للعرض للجميع (مقالات، صفحات جغرافية)</td></tr>
+      <tr><td>بيانات مُجمَّعة</td><td>تُعرض فقط بعد تجاوز حدّ أدنى للمجموعة (k-anonymity — لا يُعرض رقم لمجموعة أقل من عتبة معيّنة، مثلاً 20 مستخدماً)</td></tr>
+      <tr><td>بيانات خاصة بالمستخدم</td><td>لا يصل إليها إلا المستخدم نفسه</td></tr>
+      <tr><td>بيانات مُصرَّح بها للطوارئ</td><td>حالات اطمّن — وصول محدود بموافقة صريحة فقط</td></tr>
+      <tr><td>بيانات مقيَّدة تشغيلياً</td><td>يصل إليها فريق مصرّح له فقط، مسجَّل بالكامل في AuditLog</td></tr>
+    </table>
+    <div class="divider"></div>
+    <p class="body-p"><b>الاحتفاظ بالبيانات:</b> تفضيلات الموقع تُحتفَظ بها طالما الحساب نشِط؛ حالات اطمّن تُؤرشَف بعد إغلاقها بفترة محدَّدة ثم تُخفى الهوية (Anonymize)؛ سجلات التدقيق تُحتفَظ بها للمتطلبات القانونية فقط.</p>
+  </div>
+</section>
+
+<!-- 24 -->
+<section class="section" id="s24">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">24</span> مكافحة التضليل والتحقق</div>
+    <h2 class="title">طبقة تحقق واضحة — والذكاء الاصطناعي لا يصدر حكم «كذب» بمفرده</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>لكل ادّعاء داخل قصة</h4><p>تحديد المصدر، الدليل، مقارنة مع مصادر أخرى، كشف تعارض، كشف معلومة قديمة مُعاد تدويرها، درجة ثقة ظاهرة للمحرر.</p></div>
+      <div class="card"><h4>قاعدة حاكمة</h4><p>لا يُصنَّف أي محتوى «مضلِّل» تلقائياً لمجرد أن نموذج الذكاء الاصطناعي يعتقد ذلك — التصنيف النهائي بشري دائماً.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 25 -->
+<section class="section on-paper2" id="s25">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">25</span> لوحة تحكم غرفة الأخبار والأدوار</div>
+    <h2 class="title">CMS مبني كغرفة أخبار حقيقية لا كمدوّنة</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>لوحة التحكم تعرض</h4><p>القصص الواردة، تنبيهات المصادر، تجمّعات التكرار، طابور التحقق، مسودات الذكاء الاصطناعي، طابور المراجعة البشرية، المقالات المجدولة والمنشورة، التصحيحات، تنبيهات الأزمات.</p></div>
+      <div class="card"><h4>الأدوار</h4><p>مراسل، باحث، محرّر ذكاء اصطناعي، محرّر لغوي، محرّر أول، مدير التحرير، رئيس التحرير، مدقّق حقائق، محرّر سيو، محرّر أزمات، مسؤول نظام — كل دور بصلاحيات RBAC محددة.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 26 -->
+<section class="section" id="s26">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">26</span> محرك التنبيهات</div>
+    <h2 class="title">تنبيه لا يُرسَل لمجرد وجود خبر — يُرسَل عند تجاوز عتبة أهمية فعلية</h2>
+    <div class="divider"></div>
+    <p class="body-p">نموذج تسجيل نقاط يجمع: تفضيلات المستخدم + الملاءمة الجغرافية + شدّة الحدث + الملاءمة المصرية + مصداقية المصدر. حادث مروري بسيط لا يُرسَل كتنبيه عالمي؛ حريق كبير قرب تجمّع مصري كثيف قد يُرسَل.</p>
+    <div class="divider"></div>
+    <table>
+      <tr><th>القناة</th><th>التقنية</th></tr>
+      <tr><td>داخل الموقع/التطبيق (لحظي)</td><td>SignalR</td></tr>
+      <tr><td>Push Notification</td><td>Azure Notification Hubs</td></tr>
+      <tr><td>بريد إلكتروني</td><td>خدمة بريد عبر SendGrid/Azure Communication Services</td></tr>
+      <tr><td>واتساب/SMS</td><td>تُقيَّم في V1 — تتطلب شراكة/تكلفة إضافية، ليست MVP</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 27 -->
+<section class="section on-paper2" id="s27">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">27</span> الأداء وقابلية التوسّع</div>
+    <h2 class="title">الصفحات الجغرافية والتصنيفات مصمَّمة لتحمّل ذروة زيارات وقت الأزمات</h2>
+    <div class="divider"></div>
+    <div class="grid-3">
+      <div class="card"><p><b>SSR + CDN:</b> صفحات المقالات والدول/المدن تُصفَّر عبر Next.js SSR ثم تُخزَّن على Azure CDN</p></div>
+      <div class="card"><p><b>Cache متعدد الطبقات:</b> Redis لبيانات شبه ثابتة (صفحات دول/مدن)، إبطال ذكي (Cache Invalidation) عند التحديث</p></div>
+      <div class="card"><p><b>استقلالية الخدمات:</b> خط أنابيب الذكاء الاصطناعي معزول في Workers مستقلة عن الـ API الرئيسي — ذروة معالجة الأخبار لا تبطئ الموقع</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 28 -->
+<section class="section on-ink" id="s28">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">28</span> خارطة الطريق</div>
+    <h2 class="title" style="color:#fff;">من MVP إلى منصة استخباراتية كاملة — بالترتيب الصحيح فقط</h2>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>MVP</h4>
+        <ul class="clean">
+          <li>خط أنابيب الأخبار الأساسي (بلا كشف تكرار متقدّم)</li>
+          <li>محرك الملاءمة المصرية (نسخة أولى قائمة على قواعد + Embeddings)</li>
+          <li>صفحات الدول/المدن الأساسية</li>
+          <li>«اطمّن على مغتربك» — نسخة أولى بشرية بالكامل خلف الكواليس</li>
+          <li>بروفايل المهجر — مستويات 0 إلى 3 فقط</li>
+          <li>لوحة تحرير أساسية</li>
+        </ul>
+      </div>
+      <div class="card"><h4>V1</h4>
+        <ul class="clean">
+          <li>كشف التكرار وتجميع القصص الكامل</li>
+          <li>وضع الأزمات التلقائي</li>
+          <li>محرك التنبيهات الجغرافي</li>
+          <li>شبكة المساهمين الأولى</li>
+          <li>قسم الرياضيين المصريين بالخارج</li>
+        </ul>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card"><h4>V2</h4>
+        <ul class="clean">
+          <li>خريطة المهجر المُجمَّعة والذكاء الجغرافي الكامل</li>
+          <li>خريطة المعرفة (Knowledge Graph)</li>
+          <li>البحث الدلالي المتقدّم</li>
+          <li>تصعيد أزمات متعدد المستويات مع منظمات شريكة</li>
+        </ul>
+      </div>
+      <div class="card"><h4>طويل المدى</h4>
+        <ul class="clean">
+          <li>مؤشر استخبارات المهجر (B2B، بيانات مُجمَّعة فقط)</li>
+          <li>تطبيق جوال مستقل</li>
+          <li>واجهة API لشركاء إعلاميين</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 29 -->
+<section class="section on-paper2" id="s29">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">29</span> ما لن نبنيه الآن (ولماذا)</div>
+    <h2 class="title">قرارات استبعاد صريحة لتفادي إهدار وقت الفريق</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>الفكرة</th><th>سبب التأجيل/الاستبعاد</th></tr>
+      <tr><td>الموقع الدقيق (GPS) الدائم للمستخدم</td><td>مخاطرة خصوصية عالية مقابل فائدة منتجية محدودة — لا يخدم إلا حالة طوارئ نادرة يمكن تغطيتها بمستوى 3 (المدينة)</td></tr>
+      <tr><td>قاعدة بيانات عامة للمفقودين</td><td>خطر أمان وخصوصية جسيم؛ نظام Case خاص يحقق نفس الهدف بأمان</td></tr>
+      <tr><td>تصنيف «معلومة مضلِّلة» تلقائي بالكامل</td><td>يتطلب حكماً بشرياً؛ الأتمتة الكاملة تُنتج أخطاء تضرّ بالثقة</td></tr>
+      <tr><td>ترقية المساهمين تلقائياً حسب النشاط</td><td>يفتح باباً لسوء الاستخدام؛ المراجعة اليدوية إلزامية</td></tr>
+      <tr><td>واتساب/SMS كقناة أساسية في MVP</td><td>تكلفة وتعقيد تكامل إضافي لا يبرَّر قبل إثبات الطلب الفعلي</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- 30 -->
+<section class="section on-ink" id="s30" style="padding-bottom:60px;">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">30</span> التوصية النهائية</div>
+    <h2 class="title" style="color:#fff;max-width:760px;">ابدأ بالثقة قبل الحجم: خبر مصري موثوق بسرعة، ثم اطمّن على مغتربك، ثم كل الباقي</h2>
+    <p class="lead">لو كان القرار استثماراً شخصياً، الأولوية القصوى تكون: (1) محرك ملاءمة مصري دقيق حتى لو بسيط تقنياً، (2) نظام اطمّن على مغتربك بأعلى معايير الخصوصية حتى في أبسط نسخة MVP لأنه صانع الثقة الحقيقي والفارق التنافسي الذي لا يمكن نسخه بسهولة، (3) صفحات الدول/المدن لأنها بوابة السيو الطبيعية. كل ما عدا ذلك (الرسوم البيانية للمعرفة، الاستخبارات المُجمَّعة، الرياضة) قيمة حقيقية لكنها تأتي بعد إثبات أن الجمهورين الأساسيين يثقان بالمنصة فعلاً.</p>
+  </div>
+</section>
+
+<!-- 31 PRICING -->
+<section class="section on-paper2" id="s31">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">31</span> الخطة التسعيرية</div>
+    <h2 class="title">تسعير مربوط بمراحل خارطة الطريق نفسها — لا باقات معزولة عن المعمارية</h2>
+    <p class="lead">التسعير هنا تقديري مبني على حجم وتعقيد كل مرحلة كما وُصفت في قسم 28، ويُعتمَد نهائياً بعد ورشة اكتشاف (Discovery) أولى تحدّد نطاق كل مرحلة بدقة. كل مرحلة تُسلَّم كنظام يعمل فعلياً وقابل للاستخدام، لا كنموذج تجريبي.</p>
+    <div class="divider"></div>
+    <div class="grid-3" style="align-items:stretch;">
+      <div class="card">
+        <span class="k">المرحلة 1 — MVP</span>
+        <h4>منصة إخبارية موثوقة + اطمّن (نسخة أولى)</h4>
+        <p style="margin-bottom:14px;">خط الأخبار الأساسي، محرك الملاءمة المصرية، صفحات الدول/المدن، بروفايل المهجر (مستوى 0-3)، لوحة تحرير أساسية، ونظام اطمّن على مغتربك بأعلى معايير الخصوصية من أول نسخة.</p>
+        <p style="font-family:'Cairo',sans-serif;font-weight:900;color:var(--bronze);font-size:20px;margin:0;">28,000 – 38,000$</p>
+      </div>
+      <div class="card" style="border:2px solid var(--bronze);">
+        <span class="k">المرحلة 2 — V1</span>
+        <h4>الأتمتة والذكاء الجغرافي</h4>
+        <p style="margin-bottom:14px;">كشف التكرار وتجميع القصص الكامل، وضع الأزمات التلقائي، محرك التنبيهات الجغرافي، شبكة المساهمين الأولى، وقسم الرياضيين المصريين بالخارج.</p>
+        <p style="font-family:'Cairo',sans-serif;font-weight:900;color:var(--bronze);font-size:20px;margin:0;">24,000 – 32,000$</p>
+      </div>
+      <div class="card">
+        <span class="k">المرحلة 3 — V2</span>
+        <h4>الاستخبارات الاستراتيجية</h4>
+        <p style="margin-bottom:14px;">خريطة المهجر المُجمَّعة، خريطة المعرفة (Knowledge Graph)، البحث الدلالي المتقدّم، وتصعيد الأزمات متعدد المستويات مع شركاء.</p>
+        <p style="font-family:'Cairo',sans-serif;font-weight:900;color:var(--bronze);font-size:20px;margin:0;">22,000 – 30,000$</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h4>تكلفة تشغيل الذكاء الاصطناعي (منفصلة عن التنفيذ)</h4>
+        <p>تكلفة شهرية متغيّرة على Azure OpenAI تعتمد على حجم الأخبار المُعالَجة فعلياً: MVP تقريباً 250–500$ شهرياً، وترتفع مع دخول V1 (كشف تكرار وتجميع مستمر) إلى 600–1,200$ شهرياً، ثم 1,500–3,000$ شهرياً مع نضج V2.</p>
+      </div>
+      <div class="card">
+        <h4>البنية التحتية والاستضافة (Azure)</h4>
+        <p>استضافة الإنتاج (App Service/AKS + PostgreSQL + Redis + Elasticsearch + CDN) تُقدَّر بين 300–700$ شهرياً في MVP، وترتفع تدريجياً مع الزيارات وحجم البيانات في V1/V2. الدومين والهوية يبقيان مملوكين بالكامل للمالك.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="ok"><strong>ملاحظة تسعير:</strong> يمكن تنفيذ المرحلة الأولى (MVP) فقط والتوقف عندها بمنتج كامل وقابل للإطلاق فعلياً — الترابط بين المراحل معماري لا تعاقدي، أي قرار الاستمرار لـ V1/V2 يُتَّخذ بعد قياس أداء MVP فعلياً في السوق.</div>
+  </div>
+</section>
+
+<!-- 32 TIMELINE -->
+<section class="section on-ink" id="s32">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num">32</span> الجدول الزمني ودفعات السداد</div>
+    <h2 class="title" style="color:#fff;">حوالي 40 أسبوعاً من الانطلاق حتى اكتمال V2 — موزّعة على ثلاث مراحل تسليم مستقلة</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>المرحلة</th><th>المدة التقديرية</th><th>أهم المخرجات القابلة للمعاينة</th></tr>
+      <tr><td><b>MVP</b></td><td>14–18 أسبوعاً</td><td>منصة حيّة + اطمّن على مغتربك + لوحة تحرير تعمل فعلياً</td></tr>
+      <tr><td><b>V1</b></td><td>+10–12 أسبوعاً</td><td>كشف تكرار تلقائي، وضع أزمات، تنبيهات جغرافية حيّة</td></tr>
+      <tr><td><b>V2</b></td><td>+12–14 أسبوعاً</td><td>خريطة المهجر، خريطة المعرفة، بحث دلالي متقدّم</td></tr>
+      <tr><td><b>الإجمالي حتى نهاية V2</b></td><td>≈ 36–44 أسبوعاً</td><td>—</td></tr>
+    </table>
+    <div class="divider"></div>
+    <h3 class="sub" style="color:#fff;">دفعات السداد لكل مرحلة (تُطبَّق على كل مرحلة على حدة)</h3>
+    <table>
+      <tr><th>الدفعة</th><th>النسبة</th><th>الشرط</th></tr>
+      <tr><td>دفعة الانطلاق</td><td>25%</td><td>عند توقيع نطاق المرحلة وبدء العمل</td></tr>
+      <tr><td>اعتماد المعمارية/التصميم</td><td>20%</td><td>عند اعتماد نموذج البيانات لهذه المرحلة وواجهاتها الأساسية</td></tr>
+      <tr><td>منتصف التنفيذ</td><td>25%</td><td>عند توفر بيئة Staging حيّة بالوظائف الأساسية للمرحلة</td></tr>
+      <tr><td>اجتياز الاختبار</td><td>15%</td><td>عند اجتياز اختبار الوظائف والأمان (خاصة نظام اطمّن في MVP)</td></tr>
+      <tr><td>التسليم النهائي</td><td>15%</td><td>عند النشر الفعلي وتسليم كود المرحلة كاملاً موثَّقاً</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">مستند مواصفات تقني داخلي — إعداد لفريق التطوير. جميع القرارات المعمارية والتسعيرية قابلة للمراجعة عبر ورشة اكتشاف موثَّقة، لا عبر نقاش شفهي. الأسعار والمدد تقديرية وتُعتمَد نهائياً بعد تحديد نطاق كل مرحلة بدقة.</div>
+</footer>
+
+</body>
+</html>
