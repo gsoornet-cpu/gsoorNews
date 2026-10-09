@@ -1,6 +1,7 @@
 using Jusoor.Application.Common.Security;
 using Jusoor.Application.Common.Interfaces;
 using Jusoor.Application.Editorial;
+using Jusoor.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,9 +39,10 @@ public sealed class EditorialMediaController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> List([FromQuery] int page = 1, [FromQuery] int pageSize = 24, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> List([FromQuery] int page = 1, [FromQuery] int pageSize = 24,
+        [FromQuery] EditorialMediaKind? kind = null, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new ListEditorialMediaQuery(page, pageSize), cancellationToken);
+        var result = await _mediator.Send(new ListEditorialMediaQuery(page, pageSize, kind), cancellationToken);
         return Ok(result);
     }
 

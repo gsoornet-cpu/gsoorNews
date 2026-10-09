@@ -14,7 +14,9 @@ public class JwtOptions
     public required string Issuer { get; set; }
     public required string Audience { get; set; }
     public required string SigningKey { get; set; }
-    public int AccessTokenMinutes { get; set; } = 30;
+    // Newsroom editors commonly spend time drafting and uploading large media files.
+    // Keep a work session alive through a publishing shift; deployments can still override this.
+    public int AccessTokenMinutes { get; set; } = 480;
 }
 
 /// <summary>

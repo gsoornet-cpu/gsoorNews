@@ -75,8 +75,10 @@ async function postJson<T>(path: string, value?: unknown): Promise<T> {
 }
 
 export const cmsMedia = {
-  async list(): Promise<MediaPage> {
-    const response = await fetch("/cms-api/media?page=1&pageSize=100", {
+  async list(page = 1, pageSize = 24, kind?: CmsMediaAsset["kind"]): Promise<MediaPage> {
+    const query = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
+    if (kind) query.set("kind", kind);
+    const response = await fetch(`/cms-api/media?${query.toString()}`, {
       credentials: "same-origin",
       cache: "no-store",
     });

@@ -18,7 +18,9 @@ export default function CmsLoginPage() {
 
     try {
       await cms.login(email.trim(), password);
-      router.replace("/cms");
+      const requestedReturn = new URLSearchParams(window.location.search).get("returnTo");
+      const returnTo = requestedReturn?.startsWith("/") && !requestedReturn.startsWith("//") ? requestedReturn : "/cms";
+      router.replace(returnTo);
     } catch (e) {
       setError(e instanceof CmsError ? e.message : "تعذّر تسجيل الدخول.");
       setBusy(false);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
 import { EditorContent, Node, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Table, TableCell, TableHeader, TableRow } from "@tiptap/extension-table";
@@ -39,6 +40,9 @@ export function RichTextEditor({
   const [mediaBusy, setMediaBusy] = useState(false);
   const [mediaError, setMediaError] = useState<string | null>(null);
   const [mediaItems, setMediaItems] = useState<CmsMediaAsset[]>([]);
+  const [mediaLibraryExpanded, setMediaLibraryExpanded] = useState(false);
+  const [mediaPage, setMediaPage] = useState(1);
+  const [mediaTotalCount, setMediaTotalCount] = useState(0);
   const [mediaProgress, setMediaProgress] = useState<number | null>(null);
   const [altText, setAltText] = useState("");
   const [credit, setCredit] = useState("");
@@ -182,8 +186,29 @@ export function RichTextEditor({
   async function openMediaLibrary() {
     setMediaError(null);
     setMediaOpen(true);
-    try { setMediaItems((await cmsMedia.list()).items); }
+    setMediaLibraryExpanded(false);
+    setMediaPage(1);
+    try {
+      const page = await cmsMedia.list(1, 24);
+      setMediaItems(page.items);
+      setMediaTotalCount(page.totalCount);
+    }
     catch (error) { setMediaError(error instanceof Error ? error.message : "تعذّر تحميل مكتبة الوسائط."); }
+  }
+
+  function expandMediaLibrary() {
+    setMediaLibraryExpanded(true);
+  }
+
+  async function loadMoreMedia() {
+    const nextPage = mediaPage + 1;
+    setMediaBusy(true);
+    try {
+      const page = await cmsMedia.list(nextPage, 24);
+      setMediaItems((current) => [...current, ...page.items]);
+      setMediaPage(nextPage);
+    } catch (error) { setMediaError(error instanceof Error ? error.message : "تعذّر تحميل المزيد من الوسائط."); }
+    finally { setMediaBusy(false); }
   }
 
   function insertMedia(asset: CmsMediaAsset) {
@@ -277,16 +302,14 @@ export function RichTextEditor({
         </ToolButton>
       </div>
 
-      <EditorContent editor={editor} />
-
       {linkError && (
         <div className="cms-msg error" role="alert">
           {linkError}
         </div>
       )}
 
-      {mediaOpen && <section className="cms-media-picker" aria-label="مكتبة الوسائط">
-        <div className="cms-media-picker-head"><strong>مكتبة الوسائط</strong><button type="button" onClick={() => setMediaOpen(false)}>إغلاق</button></div>
+      {mediaOpen && <section className="cms-media-picker" aria-label="مكتبة الوسائط" aria-live="polite">
+        <div className="cms-media-picker-head"><strong>إضافة صورة أو ملف إلى موضع الكتابة</strong><button type="button" onClick={() => setMediaOpen(false)}>إغلاق</button></div>
         <form onSubmit={event => { event.preventDefault(); void uploadMedia(new FormData(event.currentTarget)); }}>
           <label>اختر صورة أو فيديو أو PDF<input name="media-file" type="file" accept="image/jpeg,image/png,image/webp,image/avif,video/mp4,video/webm,application/pdf" required disabled={mediaBusy} onChange={event => { const isImage = event.target.files?.[0]?.type.startsWith("image/") ?? false; setSelectedImage(isImage); if (!isImage) { setFocalX(""); setFocalY(""); } }} /></label>
           <label>الوصف البديل أو وصف الملف<input value={altText} onChange={e => setAltText(e.target.value)} maxLength={500} required /></label>
@@ -296,8 +319,15 @@ export function RichTextEditor({
           <button type="submit" disabled={mediaBusy}>{mediaBusy ? `جارٍ الرفع ${mediaProgress ?? 0}%` : "رفع وإدراج"}</button>
         </form>
         {mediaError && <p role="alert" className="cms-msg error">{mediaError}</p>}
-        <ul>{mediaItems.map(asset => <li key={asset.id}><button type="button" disabled={mediaBusy} onClick={() => insertMedia(asset)}>{asset.kind === "Image" ? "صورة" : asset.kind === "Video" ? "فيديو" : "PDF"}: {asset.caption || asset.fileName} · {asset.credit}</button></li>)}</ul>
+        <div className="cms-media-grid">{(mediaLibraryExpanded ? mediaItems : mediaItems.slice(0, 6)).map(asset => <button className="cms-media-card" key={asset.id} type="button" disabled={mediaBusy} onClick={() => insertMedia(asset)}>
+          {asset.kind === "Image" ? <Image src={asset.publicUrl} alt="" width={260} height={176} unoptimized /> : <span className="cms-media-file-icon">{asset.kind === "Video" ? "▶" : "PDF"}</span>}
+          <span>{asset.caption || asset.fileName}</span>
+        </button>)}</div>
+        {!mediaLibraryExpanded && mediaTotalCount > 6 && <button type="button" className="cms-btn" onClick={expandMediaLibrary}>فتح مكتبة الوسائط كاملة ({mediaTotalCount.toLocaleString("ar-EG")})</button>}
+        {mediaLibraryExpanded && mediaItems.length < mediaTotalCount && <button type="button" className="cms-btn" disabled={mediaBusy} onClick={() => void loadMoreMedia()}>{mediaBusy ? "جارٍ تحميل الملفات…" : "تحميل المزيد"}</button>}
       </section>}
+
+      <EditorContent editor={editor} />
 
       <div className="rte-counters cms-hint" aria-live="off">
         <span>{state.words} كلمة</span>

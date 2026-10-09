@@ -35,6 +35,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const [transitionReason, setTransitionReason] = useState("");
   const [reason, setReason] = useState("");
   const [ready, setReady] = useState(articleId === null);
+  const [draftHydrated, setDraftHydrated] = useState(false);
   const [title, setTitle] = useState("");
   const [authorName, setAuthorName] = useState("");
   const [summary, setSummary] = useState("");
@@ -44,6 +45,9 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [coverPickerOpen, setCoverPickerOpen] = useState(false);
   const [coverAssets, setCoverAssets] = useState<CmsMediaAsset[]>([]);
+  const [coverLibraryExpanded, setCoverLibraryExpanded] = useState(false);
+  const [coverPage, setCoverPage] = useState(1);
+  const [coverTotalCount, setCoverTotalCount] = useState(0);
   const [coverLoading, setCoverLoading] = useState(false);
   const [coverUploadBusy, setCoverUploadBusy] = useState(false);
   const [coverUploadProgress, setCoverUploadProgress] = useState<number | null>(null);
@@ -51,8 +55,11 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const [coverCredit, setCoverCredit] = useState("");
   const [editReason, setEditReason] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [sessionExpired, setSessionExpired] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const draftKey = `cms-article-draft:${articleId ?? "new"}`;
+  const loginHref = `/cms/login?returnTo=${encodeURIComponent(`/cms/articles/${articleId ?? "new"}`)}`;
 
   function fill(a: CmsArticle) {
     setArticle(a);
@@ -68,9 +75,26 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
 
   useEffect(() => {
     void (async () => {
+      let savedDraft: Record<string, unknown> | null = null;
+      try {
+        const rawDraft = sessionStorage.getItem(draftKey);
+        savedDraft = rawDraft ? JSON.parse(rawDraft) as Record<string, unknown> : null;
+      } catch {
+        // A malformed or unavailable local draft must never block the editor.
+      }
+      const restoreDraft = (draft: Record<string, unknown> | null) => {
+        if (!draft) return;
+        if (typeof draft.title === "string") setTitle(draft.title);
+        if (typeof draft.authorName === "string") setAuthorName(draft.authorName);
+        if (typeof draft.summary === "string") setSummary(draft.summary);
+        if (typeof draft.body === "string") setBody(draft.body);
+        if (Array.isArray(draft.presentationDesks) && draft.presentationDesks.every((item) => typeof item === "string")) setPresentationDesks(draft.presentationDesks as string[]);
+        if (typeof draft.featuredVideoMediaAssetId === "string") setFeaturedVideoMediaAssetId(draft.featuredVideoMediaAssetId);
+        if (typeof draft.coverImageUrl === "string") setCoverImageUrl(draft.coverImageUrl);
+      };
       const session = await cms.session();
       if (!session.authenticated) {
-        router.replace("/cms/login");
+        router.replace(loginHref);
         return;
       }
       setRoles(session.roles);
@@ -78,27 +102,43 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       if (articleId) {
         try {
           fill(await cms.get(articleId));
+          restoreDraft(savedDraft);
         } catch (e) {
           if (e instanceof CmsError && e.status === 401) {
-            router.replace("/cms/login");
+            router.replace(loginHref);
             return;
           }
           setError(e instanceof CmsError ? e.message : "تعذّر تحميل المقال.");
         }
       }
+      if (!articleId) restoreDraft(savedDraft);
       setReady(true);
+      setDraftHydrated(true);
     })();
-  }, [articleId, router]);
+  }, [articleId, draftKey, loginHref, router]);
+
+  useEffect(() => {
+    if (!draftHydrated) return;
+    try {
+      const draft = { title, authorName, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl };
+      if (title || authorName || summary || body || coverImageUrl || presentationDesks.length || featuredVideoMediaAssetId) sessionStorage.setItem(draftKey, JSON.stringify(draft));
+      else sessionStorage.removeItem(draftKey);
+    } catch {
+      // Storage can be disabled or full; editing and server-side saves still work.
+    }
+  }, [draftHydrated, draftKey, title, authorName, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl]);
 
   async function run(action: () => Promise<void>) {
     setBusy(true);
     setError(null);
     setNotice(null);
+    setSessionExpired(false);
     try {
       await action();
     } catch (e) {
       if (e instanceof CmsError && e.status === 401) {
-        router.replace("/cms/login");
+        setSessionExpired(true);
+        setError("انتهت جلسة الدخول. احتفظنا بمسودتك على هذا الجهاز؛ سجّل الدخول للمتابعة.");
         return;
       }
       setError(e instanceof CmsError ? e.message : "حدث خطأ غير متوقع.");
@@ -137,17 +177,43 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       // fill() re-reads the cover from what the server actually stored, so the preview
       // can never show a cover that was not really saved.
       fill(saved);
-      if (!article) router.replace(`/cms/articles/${saved.id}`);
+      if (!article) {
+        setDraftHydrated(false);
+        try { sessionStorage.removeItem(draftKey); } catch { /* Best-effort cleanup. */ }
+        router.replace(`/cms/articles/${saved.id}`);
+      }
       else setNotice("تم حفظ التعديلات.");
     });
 
   async function openCoverPicker() {
     setCoverPickerOpen(true);
     setCoverLoading(true);
+    setCoverLibraryExpanded(false);
+    setCoverPage(1);
     try {
-      setCoverAssets((await cmsMedia.list()).items.filter((asset) => asset.kind === "Image"));
+      const page = await cmsMedia.list(1, 24, "Image");
+      setCoverAssets(page.items);
+      setCoverTotalCount(page.totalCount);
     } catch (e) {
       setError(e instanceof Error ? e.message : "تعذّر تحميل مكتبة الصور.");
+    } finally {
+      setCoverLoading(false);
+    }
+  }
+
+  function expandCoverLibrary() {
+    setCoverLibraryExpanded(true);
+  }
+
+  async function loadMoreCoverImages() {
+    const nextPage = coverPage + 1;
+    setCoverLoading(true);
+    try {
+      const page = await cmsMedia.list(nextPage, 24, "Image");
+      setCoverAssets((current) => [...current, ...page.items]);
+      setCoverPage(nextPage);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "تعذّر تحميل المزيد من الصور.");
     } finally {
       setCoverLoading(false);
     }
@@ -291,6 +357,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       {error && (
         <div className="cms-msg error" role="alert">
           {error}
+          {sessionExpired && <p><Link href={loginHref}>تسجيل الدخول والعودة للمقال</Link></p>}
         </div>
       )}
       {notice && (
@@ -360,12 +427,14 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
               {coverUploadProgress !== null && <progress max={100} value={coverUploadProgress} aria-label="تقدم رفع صورة الغلاف" />}
             </div>
             {coverUploadBusy ? <p role="status">جارٍ رفع الغلاف…</p> : null}
-            {coverLoading ? <p>جارٍ تحميل الصور…</p> : coverAssets.length ? <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr))", gap: 12 }}>
-              {coverAssets.map((asset) => <button key={asset.id} type="button" className="cms-btn" onClick={() => { setCoverImageUrl(asset.publicUrl); setCoverPickerOpen(false); }} style={{ padding: 8 }}>
+            {coverLoading && !coverAssets.length ? <p>جارٍ تحميل الصور…</p> : coverAssets.length ? <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(150px,1fr))", gap: 12 }}>
+              {(coverLibraryExpanded ? coverAssets : coverAssets.slice(0, 6)).map((asset) => <button key={asset.id} type="button" className="cms-btn" onClick={() => { setCoverImageUrl(asset.publicUrl); setCoverPickerOpen(false); }} style={{ padding: 8 }}>
                 <Image src={asset.publicUrl} alt={asset.altText || asset.fileName} width={300} height={220} unoptimized style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6 }} />
                 <span>{asset.caption || asset.fileName}</span>
               </button>)}
-            </div> : <p>لا توجد صور في المكتبة. ارفع الصورة أولًا من زر «إدراج وسائط» داخل المحرر، ثم اخترها هنا كغلاف.</p>}
+            </div> : !coverLoading ? <p>لا توجد صور في المكتبة. ارفع صورة أولًا من محرر النص ثم اخترها هنا كغلاف.</p> : null}
+            {!coverLibraryExpanded && coverTotalCount > 6 && <button className="cms-btn" type="button" disabled={coverLoading} onClick={expandCoverLibrary}>عرض مكتبة الصور كاملة ({coverTotalCount.toLocaleString("ar-EG")})</button>}
+            {coverLibraryExpanded && coverAssets.length < coverTotalCount && <button className="cms-btn" type="button" disabled={coverLoading} onClick={() => void loadMoreCoverImages()}>{coverLoading ? "جارٍ تحميل الصور…" : "تحميل المزيد من الصور"}</button>}
             <div className="cms-actions"><button className="cms-btn" type="button" disabled={coverUploadBusy} onClick={() => setCoverPickerOpen(false)}>إغلاق</button></div>
           </div>}
         </section>

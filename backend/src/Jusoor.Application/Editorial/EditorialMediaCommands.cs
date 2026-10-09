@@ -39,7 +39,7 @@ public sealed class CreateEditorialMediaUploadCommandValidator : AbstractValidat
 public sealed record FinalizeEditorialMediaUploadCommand(Guid AssetId, string ActorUserId)
     : IRequest<EditorialMediaResult>;
 
-public sealed record ListEditorialMediaQuery(int Page, int PageSize) : IRequest<PagedEditorialMedia>;
+public sealed record ListEditorialMediaQuery(int Page, int PageSize, EditorialMediaKind? Kind = null) : IRequest<PagedEditorialMedia>;
 
 public sealed record EditorialMediaUploadResult(
     EditorialMediaOutcome Outcome, Guid? AssetId, string? UploadUrl, string? UploadToken,
@@ -217,6 +217,7 @@ public sealed class ListEditorialMediaQueryHandler : IRequestHandler<ListEditori
     public async Task<PagedEditorialMedia> Handle(ListEditorialMediaQuery request, CancellationToken cancellationToken)
     {
         var query = _context.EditorialMediaAssets.AsNoTracking().Where(x => x.Status == EditorialMediaStatus.Ready);
+        if (request.Kind.HasValue) query = query.Where(x => x.Kind == request.Kind.Value);
         var count = await query.CountAsync(cancellationToken);
         var items = await query.OrderByDescending(x => x.ReadyAtUtc).ThenBy(x => x.Id)
             .Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToListAsync(cancellationToken);
