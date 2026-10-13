@@ -173,8 +173,8 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
 function AtmaenFeature() {
   return (
     <section className="section" id="atmaen"><div className="wrap"><div className="split-2" style={{ gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
-      <div><span className="eyebrow">على منصة جسور فقط</span><h2 style={{ fontSize: 23, margin: "14px 0 12px", lineHeight: 1.6 }}>لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
-        <div className="flex gap-8 mt-24"><Link className="btn btn-primary" href="/category?cat=mughtarib">تعرّف على أخبار المغتربين</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر التحديثات ←</Link></div>
+      <div><span className="eyebrow">على منصة جسور فقط</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
+        <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/category?cat=mughtarib">اتطمن على مغتربك</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر تحديثات الأزمة</Link></div>
       </div>
       <aside className="atmaen-ad-slot" aria-label="إعلان ممول">
         <span className="atmaen-ad-slot__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>

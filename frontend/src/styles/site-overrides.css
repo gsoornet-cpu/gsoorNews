@@ -150,6 +150,12 @@
   border-radius: 8px;
   object-fit: contain;
 }
+.atmaen-feature-title {
+  margin: 14px 0 12px;
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.6;
+}
 @media (max-width: 860px) {
   .home-ad-placement { display: block; }
   .home-ad-placement__frame { width: min(100%, 420px); }
@@ -162,6 +168,26 @@
   .atmaen-ad-slot__label { padding-bottom: 6px; font-size: 10px; }
 }
 @media (max-width: 640px) {
+  .atmaen-feature-title {
+    font-size: clamp(17px, 4.7vw, 20px);
+    font-weight: 700;
+    line-height: 1.55;
+  }
+  .atmaen-feature-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .atmaen-feature-actions .btn {
+    min-width: 0;
+    min-height: 48px;
+    padding-inline: 10px;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    font-size: 14px;
+    line-height: 1.4;
+  }
   .home-ad-placement { padding: 16px 0; }
   .home-ad-placement__frame { width: min(100%, 360px); padding: 8px; border-radius: 12px; }
   .home-ad-placement__label { padding-bottom: 6px; font-size: 10px; }
