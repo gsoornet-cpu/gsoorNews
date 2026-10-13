@@ -175,10 +175,10 @@ export function RichTextEditor({
 
   function setEmbed() {
     if (!editor) return;
-    const value = window.prompt("ألصق رابط فيديو YouTube أو رابط التضمين الرسمي من Vimeo أو X أو Instagram أو Facebook أو TikTok:");
+    const value = window.prompt("ألصق رابط الفيديو أو كود iframe الرسمي من YouTube أو Vimeo أو X أو Instagram أو Facebook أو TikTok:");
     if (!value) return;
     const safe = normalizeEmbedUrl(value.trim());
-    if (!safe) { setMediaError("رابط التضمين غير مدعوم. استخدم رابط embed رسميًا من أحد المزودين المعتمدين."); setMediaOpen(true); return; }
+    if (!safe) { setMediaError("تعذّر التعرّف على الفيديو. ألصق رابطًا مباشرًا أو كود iframe رسميًا من أحد المزودين المعتمدين."); setMediaOpen(true); return; }
     setMediaError(null);
     editor.chain().focus().insertContent({ type: "mediaEmbed", attrs: safe }).run();
   }
@@ -396,7 +396,18 @@ const MediaVideo = Node.create({
 
 function normalizeEmbedUrl(value: string): { src: string; provider: string } | null {
   try {
-    const u = new URL(value);
+    // Editors often paste the whole iframe snippet. Parse it as inert HTML and
+    // use only its src; the URL still goes through the provider allowlist below.
+    let source = value.trim();
+    if (source.startsWith("<")) {
+      const doc = new DOMParser().parseFromString(source, "text/html");
+      const iframes = doc.body.querySelectorAll("iframe");
+      if (iframes.length !== 1 || doc.body.children.length !== 1 || doc.body.firstElementChild !== iframes[0]) return null;
+      source = iframes[0].getAttribute("src")?.trim() ?? "";
+      if (!source) return null;
+    }
+
+    const u = new URL(source);
     if (u.protocol !== "https:" || u.username || u.password || u.port || u.hash) return null;
     const path = u.pathname.replace(/\/$/, "");
     let provider = "";
@@ -422,9 +433,8 @@ function normalizeEmbedUrl(value: string): { src: string; provider: string } | n
     else if (u.hostname === "www.facebook.com" && path === "/plugins/video.php" && isFacebookUrl(u.searchParams.get("href") ?? "")) provider = "Facebook";
     else if (u.hostname === "www.tiktok.com" && /^\/embed\/v2\/\d{5,30}$/.test(path)) provider = "TikTok";
     if (!provider) return null;
-    const normalized = new URL(value); normalized.pathname = path;
-    for (const key of [...normalized.searchParams.keys()]) if (provider === "X" ? key !== "id" : provider === "Facebook" ? key !== "href" : true) normalized.searchParams.delete(key);
-    return { src: normalized.toString(), provider };
+    for (const key of [...u.searchParams.keys()]) if (provider === "X" ? key !== "id" : provider === "Facebook" ? key !== "href" : true) u.searchParams.delete(key);
+    return { src: u.toString(), provider };
   } catch { return null; }
 }
 
