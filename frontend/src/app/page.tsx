@@ -238,17 +238,21 @@ export default async function HomePage() {
       <ServicesBand />
       <AtmaenFeature />
 
-      {/* قصص نجاح — poll sidebar beside the story grid, as in the approved demo. */}
+      {/* الويب يحتفظ بمساحة الإعلان الجانبية؛ إعلانات الموبايل تظهر بعد السكشن. */}
       <section className="section on-surface">
         <div className="wrap">
           <div className="split-2">
-            <div>
+            <aside className="sidebar-interactive-ad home-success-aside">
+              <HomePollCard />
+              <div className="ad-slot-banner home-success-desktop-ad">
+                <span className="ad-label">مساحة إعلانية · Sponsored</span>
+                <div className="ad-placeholder"><span>مساحة إعلانية متجاوبة</span></div>
+              </div>
+            </aside>
+            <div className="home-success-stories">
               <Head label={deskLabels.success} slug="success" asHeading />
               <DeskGrid stories={desks.success.slice(0, 4)} label={deskLabels.success} columns={2} />
             </div>
-            <aside className="home-success-aside">
-              <HomePollCard />
-            </aside>
           </div>
         </div>
       </section>

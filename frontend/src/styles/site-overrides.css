@@ -85,6 +85,7 @@
 /* Homepage sponsored placements: keep the original artwork intact, balanced
    with the editorial flow, and small enough to avoid overwhelming the feed. */
 .home-ad-placement {
+  display: none;
   padding: clamp(18px, 3vw, 30px) 0;
   border-block: 1px solid var(--line);
   background: linear-gradient(180deg, #f2f4f7 0%, #fff 48%, #f2f4f7 100%);
@@ -123,7 +124,13 @@
   height: auto;
 }
 @media (max-width: 860px) {
+  .home-ad-placement { display: block; }
+  .home-ad-placement__frame { width: min(100%, 420px); }
   .home-success-aside { max-width: 100%; }
+  .home-success-stories { order: 1; }
+  .home-success-aside { order: 2; }
+  .home-success-desktop-ad,
+  .ad-slot.slim { display: none; }
 }
 @media (max-width: 640px) {
   .home-ad-placement { padding: 16px 0; }
