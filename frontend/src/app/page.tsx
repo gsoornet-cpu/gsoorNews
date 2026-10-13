@@ -174,10 +174,12 @@ function AtmaenFeature() {
   return (
     <section className="section" id="atmaen"><div className="wrap"><div className="split-2" style={{ gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
       <div><span className="eyebrow">على منصة جسور فقط</span><h2 style={{ fontSize: 23, margin: "14px 0 12px", lineHeight: 1.6 }}>لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
-        <p className="text-mute" style={{ fontSize: 14, lineHeight: 1.85 }}>نظام حالات خاص بين مقدّم الطلب وشبكة استجابة موثوقة. بيانات الحالات لا تُعرض للعامة، والوصول محدود بالأدوار والصلاحيات.</p>
         <div className="flex gap-8 mt-24"><Link className="btn btn-primary" href="/category?cat=mughtarib">تعرّف على أخبار المغتربين</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر التحديثات ←</Link></div>
       </div>
-      <div className="cms-panel" style={{ margin: 0 }}><div className="status-line active"><span className="dot" /> اختيار الدولة والمدينة</div><div className="status-line"><span className="dot" /> وصف مختصر للحالة</div><div className="status-line"><span className="dot" /> تحقق سريع بـ OTP</div><div className="status-line"><span className="dot" /> تعيين لشبكة الاستجابة الأقرب</div><div className="result-note">جسور أداة معلومات وتواصل، وليست جهة طوارئ رسمية.</div></div>
+      <aside className="atmaen-ad-slot" aria-label="إعلان ممول">
+        <span className="atmaen-ad-slot__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>
+        <Image src="/assets/advertisements/we-ramadan-offer.jpeg" alt="إعلان WE عن عروض رمضان غير أي حد" width={1424} height={745} unoptimized loading="lazy" />
+      </aside>
     </div></div></section>
   );
 }
