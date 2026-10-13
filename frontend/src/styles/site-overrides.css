@@ -156,6 +156,15 @@
   font-weight: 800;
   line-height: 1.6;
 }
+.atmaen-feature-eyebrow {
+  min-height: 50px;
+  height: auto;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
 @media (max-width: 860px) {
   .home-ad-placement { display: block; }
   .home-ad-placement__frame { width: min(100%, 420px); }
@@ -168,6 +177,12 @@
   .atmaen-ad-slot__label { padding-bottom: 6px; font-size: 10px; }
 }
 @media (max-width: 640px) {
+  .atmaen-feature-eyebrow {
+    min-height: 46px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 19px;
+  }
   .atmaen-feature-title {
     font-size: clamp(17px, 4.7vw, 20px);
     font-weight: 700;
