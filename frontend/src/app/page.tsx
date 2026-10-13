@@ -173,7 +173,7 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
 function AtmaenFeature() {
   return (
     <section className="section" id="atmaen"><div className="wrap"><div className="split-2" style={{ gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
-      <div><span className="eyebrow">أهم ميزة في المنصة</span><h2 style={{ fontSize: 23, margin: "14px 0 12px", lineHeight: 1.6 }}>لما تحصل أزمة كبيرة، مش لازم تستنى الأخبار — ابدأ حالة اطمّن فوراً</h2>
+      <div><span className="eyebrow">على منصة جسور فقط</span><h2 style={{ fontSize: 23, margin: "14px 0 12px", lineHeight: 1.6 }}>لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
         <p className="text-mute" style={{ fontSize: 14, lineHeight: 1.85 }}>نظام حالات خاص بين مقدّم الطلب وشبكة استجابة موثوقة. بيانات الحالات لا تُعرض للعامة، والوصول محدود بالأدوار والصلاحيات.</p>
         <div className="flex gap-8 mt-24"><Link className="btn btn-primary" href="/category?cat=mughtarib">تعرّف على أخبار المغتربين</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر التحديثات ←</Link></div>
       </div>
