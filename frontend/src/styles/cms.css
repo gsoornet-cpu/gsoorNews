@@ -108,3 +108,57 @@
 .rte .cms-msg { margin: 8px 12px 0; }
 .cms-snapshot .cms-snapshot-body { max-width: none; margin: 8px 0 0; padding: 0; font-size: 16px; line-height: 1.9; }
 .cms-snapshot .cms-snapshot-body > p:first-of-type::first-letter { float: none; margin: 0; font: inherit; color: inherit; line-height: inherit; }
+
+/* Mobile CMS: preserve every workflow action while turning the dense desktop
+   article table into readable, touch-friendly editorial cards. */
+@media (max-width: 640px) {
+  .cms { padding: 14px 0 calc(32px + env(safe-area-inset-bottom, 0px)); }
+  .cms > .wrap { padding-inline: 12px; }
+  .cms-card {
+    padding: 16px 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(10, 14, 25, .045);
+  }
+  .cms-head { align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+  .cms-head h1 { font-size: 1.25rem; line-height: 1.45; }
+  .cms-head > .cms-actions { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .cms-head > .cms-actions > * { min-width: 0; }
+  .cms-head > .cms-actions > a,
+  .cms-head > .cms-actions > button { min-height: 44px; display: inline-flex; justify-content: center; align-items: center; text-align: center; }
+  .cms-head > .cms-actions > .cms-filter { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; }
+  .cms-filter select { width: 100%; min-height: 44px; }
+  .cms-btn { min-height: 44px; padding: 9px 12px; border-radius: 8px; }
+  .cms-actions { gap: 8px; }
+  .cms-field input, .cms-field textarea, .cms-field select { min-height: 46px; font-size: 16px; }
+  .cms-field textarea { min-height: 112px; }
+  .cms-table { display: block; border-collapse: separate; }
+  .cms-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .cms-table tbody { display: grid; gap: 10px; }
+  .cms-table tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; padding: 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: 0 1px 3px rgba(10, 14, 25, .04); }
+  .cms-table td { min-width: 0; padding: 0; border: 0; }
+  .cms-table td[data-label="العنوان"] { grid-column: 1 / -1; font-size: 1rem; font-weight: 700; line-height: 1.55; }
+  .cms-table td[data-label="العنوان"] a { display: inline-block; padding-block: 2px; }
+  .cms-table td[data-label="الحالة"] { align-self: center; }
+  .cms-table td[data-label="آخر تعديل"] { grid-column: 1 / -1; display: block; color: var(--text-mute); font-size: .78rem; }
+  .cms-table td[data-label="آخر تعديل"]::before { content: "آخر تعديل · "; color: var(--text-mute); font-weight: 600; }
+  .cms-table td[data-label="إجراءات"] { grid-column: 1 / -1; padding-top: 9px; border-top: 1px solid var(--line); }
+  .cms-table td[data-label="إجراءات"] .cms-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cms-table td[data-label="إجراءات"] .cms-btn { display: inline-flex; justify-content: center; align-items: center; text-align: center; white-space: normal; line-height: 1.35; }
+  .rte-toolbar { position: sticky; top: 0; z-index: 2; gap: 5px; }
+  .rte-btn { min-width: 40px; height: 40px; }
+  .rte .rte-content { min-height: 240px; max-height: 58vh; padding: 14px; font-size: 16px; }
+  .cms-media-card { min-height: 44px; }
+  .cms-history { margin-top: 24px; }
+}
+
+@media (max-width: 380px) {
+  .cms > .wrap { padding-inline: 9px; }
+  .cms-card { padding: 14px 11px; }
+  .cms-head h1 { font-size: 1.12rem; }
+  .cms-table tr { padding: 11px; }
+  .cms-table td[data-label="إجراءات"] .cms-actions { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cms * { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

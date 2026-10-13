@@ -166,7 +166,7 @@ export default function CmsDashboardPage() {
               const quick = QUICK[a.status];
               return (
               <tr key={a.id}>
-                <td>
+                <td data-label="العنوان">
                   <Link href={`/cms/articles/${a.id}`}>{a.title}</Link>
                   {a.status === "Scheduled" && a.scheduledPublishAtUtc && (
                     <small className="cms-hint" style={{ display: "block" }}>
@@ -174,13 +174,13 @@ export default function CmsDashboardPage() {
                     </small>
                   )}
                 </td>
-                <td>
+                <td data-label="الحالة">
                   <span className={`cms-badge ${STATUS_META[a.status]?.badge ?? "draft"}`}>
                     {STATUS_META[a.status]?.label ?? a.status}
                   </span>
                 </td>
-                <td>{formatArabicDate(a.lastModifiedAtUtc ?? a.createdAtUtc)}</td>
-                <td>
+                <td data-label="آخر تعديل">{formatArabicDate(a.lastModifiedAtUtc ?? a.createdAtUtc)}</td>
+                <td data-label="إجراءات">
                   <div className="cms-actions">
                     <Link className="cms-btn" href={`/cms/articles/${a.id}`}>
                       تحرير
