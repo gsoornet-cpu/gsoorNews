@@ -56,6 +56,20 @@ function EmptyDesk({ label }: { label: string }) {
   return <div className="home-empty-desk"><span aria-hidden="true">✦</span><p>لا توجد مواد منشورة في «{label}» حتى الآن.</p><span>ستظهر التغطيات هنا بعد نشر خبر واختيار هذا القسم.</span></div>;
 }
 
+/** A clearly marked, non-sticky sponsored placement that preserves the supplied creative. */
+function HomeAdPlacement({ image, alt, size }: { image: string; alt: string; size: number }) {
+  return (
+    <aside className="home-ad-placement" aria-label="إعلان ممول">
+      <div className="wrap">
+        <div className="home-ad-placement__frame">
+          <span className="home-ad-placement__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>
+          <Image src={image} alt={alt} width={size} height={size} unoptimized loading="lazy" />
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 /** Demo's `.six-grid` of `.grid-card`s (cardGrid). */
 function DeskGrid({ stories, label, columns }: { stories: StorySummary[]; label: string; columns?: number }) {
   if (!stories.length) return <EmptyDesk label={label} />;
@@ -212,6 +226,7 @@ export default async function HomePage() {
     <main id="main">
       <JsonLd data={buildOrganizationJsonLd()} />
       {heroSlides.length > 0 && <HomeHeroSlider slides={heroSlides} />}
+      <HomeAdPlacement image="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" size={1600} />
 
       <section className="section tight on-surface">
         <div className="wrap">
@@ -219,24 +234,25 @@ export default async function HomePage() {
           <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} />
         </div>
       </section>
+      <HomeAdPlacement image="/assets/advertisements/cib-swype.png" alt="إعلان CIB Swype: وفّر دلوقتي وقسّط براحتك" size={1080} />
       <ServicesBand />
       <AtmaenFeature />
 
-      {/* قصص نجاح — poll + ad sidebar, 2-column grid of 4 stories (as in the demo) */}
+      {/* قصص نجاح — poll sidebar beside the story grid, as in the approved demo. */}
       <section className="section on-surface">
         <div className="wrap">
           <div className="split-2">
-            <aside className="sidebar-interactive-ad">
-              <HomePollCard />
-              <div className="ad-slot-banner"><span className="ad-label">مساحة إعلانية · Sponsored</span><div className="ad-placeholder"><span>مساحة إعلانية متجاوبة</span></div></div>
-            </aside>
             <div>
               <Head label={deskLabels.success} slug="success" asHeading />
               <DeskGrid stories={desks.success.slice(0, 4)} label={deskLabels.success} columns={2} />
             </div>
+            <aside className="home-success-aside">
+              <HomePollCard />
+            </aside>
           </div>
         </div>
       </section>
+      <HomeAdPlacement image="/assets/advertisements/banque-misr-certificate.png" alt="إعلان بنك مصر: شهادة القمة بعائد سنوي ثابت يُصرف شهريًا" size={1600} />
 
       <section className="section tight on-surface">
         <div className="wrap">
