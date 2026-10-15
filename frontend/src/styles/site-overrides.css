@@ -597,7 +597,7 @@
   color: var(--text-mute);
   font-size: 11px;
 }
-.editorial-news-rows { margin-top: 8px; }
+.editorial-news-rows { margin-top: 2px; }
 @media (min-width: 901px) {
   /* Give the lead stories in both editorial desks more breathing room while
      keeping their headline aligned with the reduced image width. */
