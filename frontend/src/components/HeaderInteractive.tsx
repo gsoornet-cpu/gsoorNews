@@ -144,11 +144,6 @@ export function HeaderInteractive({ tickerHeadlines }: { tickerHeadlines: string
             <span className="logo-slogan">صوت المصريين في الخارج</span>
           </Link>
 
-          <a className="header-sponsored" href="https://www.te.eg/" target="_blank" rel="sponsored noopener noreferrer" aria-label="إعلان ممول من WE — افتح موقع WE">
-            <span>إعلان ممول</span>
-            <Image src="/assets/advertisements/we-ramadan-offer.jpeg" alt="عروض WE لرمضان" width={320} height={168} unoptimized />
-          </a>
-
           <div className="header-actions">
             <button type="button" className="icon-btn" aria-label="بحث" onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
               🔍

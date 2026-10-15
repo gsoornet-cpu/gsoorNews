@@ -433,37 +433,6 @@
 .home-nbe-desktop-ad img { display: block; width: 100%; height: auto; border-radius: 7px; }
 .home-nbe-desktop-ad:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
 
-/* The wide WE creative is centered between the brand and search on desktop. */
-.header-sponsored {
-  position: relative;
-  display: block;
-  flex: 0 1 380px;
-  width: min(32vw, 380px);
-  max-width: 380px;
-  min-width: 280px;
-  margin-inline: auto;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: #eef1f5;
-  line-height: 0;
-}
-.header-sponsored img { display: block; width: 100%; height: auto; aspect-ratio: 1424 / 745; object-fit: contain; }
-.header-sponsored > span {
-  position: absolute;
-  z-index: 1;
-  inset-block-start: 6px;
-  inset-inline-start: 6px;
-  padding: 3px 6px;
-  border-radius: 4px;
-  background: rgba(11, 14, 20, .72);
-  color: #fff;
-  font-size: 10px;
-  line-height: 1.4;
-}
-@media (min-width: 1101px) { .header-inner { min-height: 188px; } }
-@media (max-width: 1100px) { .header-sponsored { display: none; } }
-
 /* Mobile: use a single-image video carousel with predictable touch and button controls. */
 .hero-mobile-arrow,
 .hero-mobile-count { display: none; }
