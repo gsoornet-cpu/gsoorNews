@@ -575,6 +575,11 @@
 .editorial-top-card > img,
 .editorial-top-card > .editorial-top-card__image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .editorial-top-card__image > span { height: 100%; aspect-ratio: auto; }
+@media (min-width: 901px) {
+  /* Give the lead stories in both editorial desks more breathing room while
+     keeping their headline aligned with the reduced image width. */
+  .editorial-top-card { width: 70%; margin-inline: auto; }
+}
 
 /* Separate the Atmaen callout from adjacent editorial sections at every size. */
 .atmaen-feature-section { padding-block: clamp(30px, 4vw, 52px); }
