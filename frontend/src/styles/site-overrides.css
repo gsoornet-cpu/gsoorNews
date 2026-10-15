@@ -445,6 +445,21 @@
 
 .home-ad-placement--mobile-only { display: none; }
 
+/* Frame the opportunities and latest-news columns like the paired editorial
+   columns above, so the two homepage areas read as distinct sections. */
+.opportunities-section .split-2 > div:first-child,
+.opportunities-section .split-2 > aside {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f7faff;
+}
+.opportunities-section .split-2 > aside {
+  background: #fffafa;
+  border-color: #f0dfe0;
+}
+
 /* Distinct news rhythms on mobile: a lead story followed by compact rows,
    alternating with a compact list layout. Desktop markup remains unchanged. */
 @media (max-width: 860px) {
