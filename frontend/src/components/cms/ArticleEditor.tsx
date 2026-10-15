@@ -185,6 +185,16 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       else setNotice("تم حفظ التعديلات.");
     });
 
+  async function ensureArticleExists(): Promise<CmsArticle> {
+    if (article) return article;
+    const created = await cms.create(input());
+    fill(created);
+    setDraftHydrated(false);
+    try { sessionStorage.removeItem(draftKey); } catch { /* Best-effort cleanup. */ }
+    router.replace(`/cms/articles/${created.id}`);
+    return created;
+  }
+
   async function openCoverPicker() {
     setCoverPickerOpen(true);
     setCoverLoading(true);
@@ -250,8 +260,8 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
 
   const submit = () =>
     run(async () => {
-      if (!article) return;
-      fill(await cms.submit(article.id));
+      const target = await ensureArticleExists();
+      fill(await cms.submit(target.id));
       setNotice("أُرسل المقال للمراجعة التحريرية. لا يمكن تعديله من كاتبه حتى تتم مراجعته.");
     });
 
@@ -273,8 +283,8 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
 
   const publish = (reason?: string) =>
     run(async () => {
-      if (!article) return;
-      fill(await cms.publish(article.id, reason));
+      const target = await ensureArticleExists();
+      fill(await cms.publish(target.id, reason));
       setNotice("تم نشر المقال ويظهر الآن على الموقع.");
     });
 
@@ -331,7 +341,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const canEditContent = !article || (article.status !== "Archived" && article.status !== "Retracted" && article.status !== "Scheduled");
   const missing = !title.trim() || !body.trim() || body.length > BODY_HTML_MAX;
   const canSave = canEditContent && !missing && (!isPublished || editReason.trim().length >= 5);
-  const hints: WorkflowAction[] = article ? workflowHints(roles, article.status) : [];
+  const hints: WorkflowAction[] = roles?.length ? workflowHints(roles, article?.status ?? "Draft") : [];
   const meta = article ? STATUS_META[article.status] : null;
 
   return (

@@ -18,7 +18,7 @@ export function HomePollCard() {
   return (
     <div className="interactive-poll-card">
       <div className="poll-header">
-        <span className="poll-badge">⚡ استطلاع اليوم</span>
+        <span className="poll-badge">استطلاع</span>
         <h3 className="poll-question">هل تؤيد زيادة الاعتماد على المعاملات الرقمية بالكامل للمغتربين؟</h3>
       </div>
       <form className="poll-options" onSubmit={submit}>

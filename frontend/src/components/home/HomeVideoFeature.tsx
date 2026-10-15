@@ -19,19 +19,21 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
   const [duration, setDuration] = useState("");
   const [playing, setPlaying] = useState(false);
   const video = videos[index];
+  const videoId = video?.id;
+  const videoUrl = video?.videoUrl;
 
   useEffect(() => {
-    if (!video) return;
+    if (!videoUrl) return;
     setDuration("");
     const probe = document.createElement("video");
     probe.preload = "metadata";
     probe.onloadedmetadata = () => setDuration(formatDuration(probe.duration));
-    probe.src = video.videoUrl;
+    probe.src = videoUrl;
     return () => {
       probe.removeAttribute("src");
       probe.load();
     };
-  }, [video?.id, video?.videoUrl]);
+  }, [videoId, videoUrl]);
 
   if (!video) return null;
 

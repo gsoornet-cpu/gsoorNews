@@ -385,6 +385,232 @@
 .video-card-player { position: relative; display: block; overflow: hidden; border-radius: var(--radius); background: var(--ink); }
 .video-card-player video { display: block; width: 100%; height: 155px; object-fit: cover; }
 .video-card-player .playbtn { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%,-50%); color: #fff; }
+
+/* Advertiser destinations: preserve the supplied creative and make the whole
+   placement an explicit, keyboard-accessible sponsor link. */
+.home-ad-placement { display: block; }
+.home-ad-placement__frame { width: min(100%, 560px); }
+.home-ad-placement__frame > a,
+.atmaen-ad-slot > a { display: block; border-radius: 8px; }
+.home-ad-placement__frame img { aspect-ratio: 1; object-fit: contain; }
+.home-ad-placement__frame > a:focus-visible,
+.atmaen-ad-slot > a:focus-visible,
+.home-success-desktop-ad:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+.home-ad-placement--mobile-after-success { display: none; }
+.home-success-desktop-ad {
+  display: block;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgba(16, 30, 54, .07);
+  text-decoration: none;
+}
+.home-success-desktop-ad .ad-label { display: block; margin-bottom: 8px; color: var(--text-mute); font-size: 11px; font-weight: 700; }
+.home-success-desktop-ad img { display: block; width: 100%; height: auto; border-radius: 7px; }
+
+/* The wide WE creative is centered between the brand and search on desktop. */
+.header-sponsored {
+  position: relative;
+  display: block;
+  flex: 1 1 320px;
+  width: min(30vw, 300px);
+  max-width: 300px;
+  min-width: 220px;
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #eef1f5;
+  line-height: 0;
+}
+.header-sponsored img { display: block; width: 100%; height: auto; aspect-ratio: 1424 / 745; object-fit: contain; }
+.header-sponsored > span {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 6px;
+  inset-inline-start: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: rgba(11, 14, 20, .72);
+  color: #fff;
+  font-size: 10px;
+  line-height: 1.4;
+}
+@media (max-width: 1100px) { .header-sponsored { display: none; } }
+
+/* Mobile: use a single-image video carousel with predictable touch and button controls. */
+.hero-mobile-arrow,
+.hero-mobile-count { display: none; }
+.hero-main { isolation: isolate; }
+.hero-main > img,
+.hero-main > .home-hero-fallback { animation: heroSlideReveal .36s ease both; }
+.hero-below { animation: heroCopyReveal .28s ease both; }
+@keyframes heroSlideReveal { from { opacity: .68; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes heroCopyReveal { from { opacity: .55; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Distinct news rhythms on mobile: a lead story followed by compact rows,
+   alternating with a compact list layout. Desktop markup remains unchanged. */
+@media (max-width: 860px) {
+  .home-ad-placement--mobile-after-success { display: block; }
+  .home-success-desktop-ad { display: none; }
+  .home-ad-placement__frame { width: min(100%, 520px); }
+  .editorial-top-grid { grid-template-columns: 1fr; }
+  .editorial-top-card { display: block; }
+  .editorial-top-card > img,
+  .editorial-top-card > .editorial-top-card__image { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+  .editorial-top-card__image > span { height: 100%; aspect-ratio: auto; }
+  .editorial-top-card h3 { margin: 10px 0 12px; font-size: 16px; line-height: 1.55; }
+}
+
+@media (max-width: 768px) {
+  .home-ad-placement__frame { width: min(100%, 430px); }
+  .hero-side { display: none !important; }
+  #heroSliderSection .wrap { display: flex; flex-direction: column; }
+  #heroSliderSection .hero-slider { display: contents; }
+  #heroSliderSection .hero-main { order: 1; width: 100%; height: auto; aspect-ratio: 16 / 9; overflow: hidden; touch-action: pan-y; }
+  #heroSliderSection .hero-below { order: 2; position: static; margin: 12px 0 0; padding: 0; }
+  #heroSliderSection .hero-nav { order: 3; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0 0; }
+  #heroSliderSection .hero-nav:not(.has-multiple) { display: none; }
+  #heroSliderSection .hero-nav > .btn { min-height: 42px; padding: 8px 12px; white-space: nowrap; }
+  #heroSliderSection .hero-dots { display: none; }
+  #heroSliderSection .hero-mobile-count { display: inline-flex; align-items: center; justify-content: center; min-width: 64px; color: var(--text-mute); font-size: 13px; font-weight: 700; direction: ltr; }
+  .hero-mobile-arrow {
+    position: absolute;
+    z-index: 5;
+    top: 50%;
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    transform: translateY(-50%);
+    border: 1px solid rgba(255,255,255,.72);
+    border-radius: 50%;
+    background: rgba(11,14,20,.68);
+    color: #fff;
+    font-family: inherit;
+    font-size: 27px;
+    line-height: 1;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+  }
+  .hero-mobile-arrow--prev { inset-inline-start: 10px; }
+  .hero-mobile-arrow--next { inset-inline-end: 10px; }
+  .hero-mobile-arrow:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .hero-below__content { align-items: flex-start; }
+  .home-news-grid--lead .grid-card:first-child { padding: 9px 9px 13px; }
+  .home-news-grid--lead .grid-card:not(:first-child),
+  .home-news-grid--compact .grid-card {
+    display: grid;
+    grid-template-columns: minmax(86px, 27%) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    align-items: start;
+    gap: 4px 12px;
+    padding: 10px;
+  }
+  .home-news-grid--lead .grid-card:not(:first-child) .thumb,
+  .home-news-grid--compact .grid-card .thumb {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    margin: 0;
+  }
+  .home-news-grid--lead .grid-card:not(:first-child) h3,
+  .home-news-grid--compact .grid-card h3 {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-line-clamp: 3;
+  }
+  .home-news-grid--lead .grid-card:not(:first-child) .foot,
+  .home-news-grid--compact .grid-card .foot { grid-column: 2; grid-row: 2; margin-top: 4px; font-size: 11px; }
+  .home-news-grid--lead .recirc-feature .thumb { aspect-ratio: 16 / 9; }
+  .home-news-grid--compact .recirc-feature { display: grid; grid-template-columns: minmax(86px, 27%) minmax(0, 1fr); gap: 4px 12px; align-items: start; }
+  .home-news-grid--compact .recirc-feature .thumb { grid-column: 1; grid-row: 1 / span 2; aspect-ratio: 4 / 3; margin: 0; }
+  .home-news-grid--compact .recirc-feature h4 { grid-column: 2; grid-row: 1; align-self: end; margin: 0; font-size: 14px; line-height: 1.5; }
+  .home-news-grid--compact .recirc-feature .foot { grid-column: 2; grid-row: 2; margin-top: 4px; }
+
+  /* Keep the mobile search overlay above the sticky navigation and cover it fully. */
+  .search-overlay { z-index: 1300; align-items: flex-start; padding: 0; }
+  .search-panel { z-index: 1301; top: 0; left: 0; right: 0; width: 100%; max-width: none; height: 100dvh; max-height: none; border-radius: 0; transform: translateY(12px); padding: calc(14px + env(safe-area-inset-top, 0px)) 16px calc(14px + env(safe-area-inset-bottom, 0px)); }
+  .search-panel.is-active { transform: translateY(0); }
+
+  /* Newsletter controls stay inside the blue card on narrow screens. */
+  .cta-banner { align-items: stretch; gap: 14px; padding: 22px 18px; }
+  .cta-banner > div { min-width: 0; flex: 1 1 100%; width: 100%; }
+  .cta-banner h2 { font-size: clamp(18px, 5vw, 21px); line-height: 1.45; }
+  .cta-banner p { margin-bottom: 0; line-height: 1.75; }
+  .cta-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; flex: 1 1 100%; width: 100%; min-width: 0; gap: 8px; }
+  .cta-form input { min-width: 0; width: 100%; }
+  .cta-form button { min-width: 82px; padding-inline: 12px; white-space: nowrap; }
+
+  /* Strong but calm separation for the atmaen promotion. */
+  .atmaen-feature-section { padding-block: 28px; }
+  .atmaen-feature-card { padding: 20px 16px; border: 1px solid rgba(245,158,11,.3); border-radius: 18px; background: radial-gradient(ellipse at 10% 0%, rgba(245,158,11,.1), transparent 45%), linear-gradient(145deg, #fff, #f6f8fb); box-shadow: 0 8px 30px rgba(15,35,70,.09); animation: atmaenPulse 5.5s ease-in-out infinite; }
+  .atmaen-feature-card .split-2 { gap: 20px; }
+  .atmaen-feature-title { font-size: clamp(18px, 4.9vw, 22px); }
+
+  /* Services: clearer section label and centered arrows below the horizontal rail. */
+  .services-header-wrap { align-items: flex-start; margin-bottom: 15px; }
+  .eyebrow-tag { font-size: 15px; padding: 6px 13px; letter-spacing: 0; }
+  .section-head-title h2 { font-size: 18px; line-height: 1.5; }
+  .svc-controls { justify-content: center; gap: 14px; margin: 10px auto 0; }
+  .svc-arrow-btn { width: 44px; height: 44px; }
+
+  /* Compact footer lists in two readable columns. */
+  .foot-v2-grid { grid-template-columns: 1fr; gap: 22px; }
+  .foot-v2-col h5 { margin: 0 0 10px; }
+  .foot-v2-col .foot-v2-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 18px; }
+  .foot-v2-link-grid li { min-width: 0; margin: 0; }
+  .foot-v2-link-grid a { padding-block: 5px; font-size: 12px; line-height: 1.55; }
+  .foot-v2-top { padding: 30px 0 22px; }
+}
+
+/* Editorial feature columns: one clear lead image followed by the remaining
+   headlines as rows, matching the approved treatment for both desks. */
+.editorial-top-grid { grid-template-columns: minmax(0, 1fr); }
+.editorial-top-card > img,
+.editorial-top-card > .editorial-top-card__image { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.editorial-top-card__image > span { height: 100%; aspect-ratio: auto; }
+
+/* Separate the Atmaen callout from adjacent editorial sections at every size. */
+.atmaen-feature-section { padding-block: clamp(30px, 4vw, 52px); }
+.atmaen-feature-card {
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid rgba(245,158,11,.28);
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 8% 0%, rgba(245,158,11,.09), transparent 42%), linear-gradient(145deg, #fff, #f6f8fb);
+  box-shadow: 0 10px 34px rgba(15,35,70,.09);
+}
+
+/* Poll has a concise orange section marker like the other homepage desks. */
+.poll-badge { color: #fff; background: #d97716; border-radius: 5px; padding: 5px 10px; font-size: 13px; font-weight: 800; }
+
+/* The footer now has four real content groups after combining the two site-link columns. */
+.foot-v2-grid { grid-template-columns: 1.5fr 1.25fr 1.1fr .8fr; }
+@media (min-width: 861px) and (max-width: 1024px) { .foot-v2-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .foot-v2-grid { grid-template-columns: 1fr; } }
+.svc-controls { justify-content: center; gap: 14px; margin: 12px auto 0; }
+.services-header-wrap .eyebrow-tag { margin: 0 0 8px; color: #f59e0b; font-size: 17px; line-height: 1.4; }
+@media (max-width: 768px) { .services-header-wrap .eyebrow-tag { font-size: 18px; } }
+
+@media (max-width: 860px) {
+  .home-success-aside { max-width: none; }
+}
+
+@keyframes atmaenPulse {
+  0%, 100% { box-shadow: 0 8px 30px rgba(15,35,70,.09); }
+  50% { box-shadow: 0 12px 36px rgba(15,35,70,.13), 0 0 0 4px rgba(245,158,11,.045); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-main > img, .hero-main > .home-hero-fallback, .hero-below, .atmaen-feature-card { animation: none !important; }
+}
 @media (max-width: 760px) {
   .editorial-top-grid { grid-template-columns: 1fr; }
   .editorial-columns { grid-template-columns: 1fr; }

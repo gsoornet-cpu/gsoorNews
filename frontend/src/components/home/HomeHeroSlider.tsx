@@ -32,6 +32,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
   const [active, setActive] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [durations, setDurations] = useState<Record<string, string>>({});
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const current = slides[active];
   const closeModal = useCallback(() => setModalOpen(false), []);
 
@@ -87,7 +88,14 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
       <div className="wrap">
         <div className="hero-slider">
           <div className="hero-side">{sideSlides.slice(0, 3).map(thumb)}</div>
-          <div className="hero-main">
+          <div className="hero-main" key={current.id}
+            onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
+            onTouchEnd={(event) => {
+              if (touchStartX === null) return;
+              const delta = (event.changedTouches[0]?.clientX ?? touchStartX) - touchStartX;
+              if (Math.abs(delta) > 45) select(active + (delta > 0 ? 1 : -1));
+              setTouchStartX(null);
+            }}>
             {current.imageUrl ? <Image src={current.imageUrl} alt={current.title} fill sizes="(max-width: 800px) 100vw, 60vw" unoptimized priority /> : <div className="home-hero-fallback" aria-hidden="true"><span>جسور</span></div>}
             {current.videoUrl ? (
               <>
@@ -98,25 +106,29 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
             ) : (
               <Link className="hero-main-link" href={current.href} aria-label={`اقرأ: ${current.title}`} />
             )}
+            {slides.length > 1 && <>
+              <button className="hero-mobile-arrow hero-mobile-arrow--prev" type="button" aria-label="الفيديو السابق" onClick={() => select(active - 1)}>›</button>
+              <button className="hero-mobile-arrow hero-mobile-arrow--next" type="button" aria-label="الفيديو التالي" onClick={() => select(active + 1)}>‹</button>
+            </>}
           </div>
           <div className="hero-side">{sideSlides.slice(3, 6).map(thumb)}</div>
         </div>
-        <Link className="hero-below" href={current.href}>
+        <Link className="hero-below" href={current.href} key={`headline-${current.id}`}>
           <span className="hero-below__content">
             {current.videoUrl && <span className="hero-below__play" aria-hidden="true">▶</span>}
             <span className="hero-below__copy">
               <span className="hero-below__eyebrow">{current.videoUrl ? "تغطية مرئية" : "أبرز الأخبار"}</span>
               <h2>{current.title}</h2>
-              {current.publishedAtUtc && <span className="foot">{formatArabicDate(current.publishedAtUtc)}</span>}
             </span>
           </span>
         </Link>
-        <div className="hero-nav">
-          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active - 1)}>← السابق</button>
+        <div className={`hero-nav${slides.length > 1 ? " has-multiple" : ""}`}>
+          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active - 1)}><span aria-hidden="true">→</span> السابق</button>
           <div className="hero-dots" aria-label="اختيار التغطية">
             {slides.map((slide, index) => <button key={slide.id} type="button" className={index === active ? "active" : ""} aria-label={`التغطية ${index + 1}`} aria-current={index === active ? "true" : undefined} onClick={() => select(index)}>{index + 1}</button>)}
           </div>
-          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active + 1)}>التالي →</button>
+          <span className="hero-mobile-count" aria-live="polite">{active + 1} / {slides.length}</span>
+          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active + 1)}>التالي <span aria-hidden="true">←</span></button>
         </div>
       </div>
       {modalOpen && current.videoUrl && (

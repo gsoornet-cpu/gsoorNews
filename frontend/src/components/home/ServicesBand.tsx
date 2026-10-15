@@ -28,25 +28,23 @@ const services: Service[] = [
  */
 export function ServicesBand() {
   const rowRef = useRef<HTMLDivElement>(null);
-  const scroll = (direction: 1 | -1) => rowRef.current?.scrollBy({ left: direction * 360, behavior: "smooth" });
+  const scroll = (direction: 1 | -1) => {
+    const row = rowRef.current;
+    if (!row) return;
+    const card = row.querySelector<HTMLElement>(".svc-card");
+    const rtl = getComputedStyle(row).direction === "rtl";
+    const distance = card ? card.offsetWidth + 16 : row.clientWidth * 0.8;
+    row.scrollBy({ left: direction * (rtl ? -1 : 1) * distance, behavior: "smooth" });
+  };
 
   return (
-    <section className="services-band" id="services">
+    <section className="services-band" id="services" aria-labelledby="services-heading">
       <div className="wrap">
         <div className="services-header-wrap">
           <div className="section-head-title">
-            <span className="eyebrow-tag">منظومة الخدمات</span>
-            <h2>كل ما يحتاجه المغترب في مكان واحد</h2>
+            <h2 className="eyebrow-tag" id="services-heading">منظومة الخدمات</h2>
           </div>
 
-          <div className="svc-controls">
-            <button className="svc-arrow-btn prev" type="button" aria-label="السابق" onClick={() => scroll(-1)}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
-            </button>
-            <button className="svc-arrow-btn next" type="button" aria-label="التالي" onClick={() => scroll(1)}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
-            </button>
-          </div>
         </div>
 
         <div className="svc-slider-container">
@@ -64,6 +62,14 @@ export function ServicesBand() {
               </a>
             ))}
           </div>
+        </div>
+        <div className="svc-controls" role="group" aria-label="التنقل بين الخدمات">
+          <button className="svc-arrow-btn prev" type="button" aria-label="الخدمة السابقة" onClick={() => scroll(-1)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+          <button className="svc-arrow-btn next" type="button" aria-label="الخدمة التالية" onClick={() => scroll(1)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
         </div>
       </div>
     </section>

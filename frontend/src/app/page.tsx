@@ -57,13 +57,15 @@ function EmptyDesk({ label }: { label: string }) {
 }
 
 /** A clearly marked, non-sticky sponsored placement that preserves the supplied creative. */
-function HomeAdPlacement({ image, alt, size }: { image: string; alt: string; size: number }) {
+function HomeAdPlacement({ image, alt, size, href, className = "" }: { image: string; alt: string; size: number; href: string; className?: string }) {
   return (
-    <aside className="home-ad-placement" aria-label="إعلان ممول">
+    <aside className={`home-ad-placement ${className}`.trim()} aria-label="إعلان ممول">
       <div className="wrap">
         <div className="home-ad-placement__frame">
           <span className="home-ad-placement__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>
-          <Image src={image} alt={alt} width={size} height={size} unoptimized loading="lazy" />
+          <a href={href} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${alt} — زيارة موقع المعلن`}>
+            <Image src={image} alt={alt} width={size} height={size} unoptimized loading="lazy" />
+          </a>
         </div>
       </div>
     </aside>
@@ -71,10 +73,10 @@ function HomeAdPlacement({ image, alt, size }: { image: string; alt: string; siz
 }
 
 /** Demo's `.six-grid` of `.grid-card`s (cardGrid). */
-function DeskGrid({ stories, label, columns }: { stories: StorySummary[]; label: string; columns?: number }) {
+function DeskGrid({ stories, label, columns, mobileVariant }: { stories: StorySummary[]; label: string; columns?: number; mobileVariant?: "lead" | "compact" }) {
   if (!stories.length) return <EmptyDesk label={label} />;
   return (
-    <div className="six-grid" style={columns ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` } : undefined}>
+    <div className={`six-grid${mobileVariant ? ` home-news-grid home-news-grid--${mobileVariant}` : ""}`} style={columns ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` } : undefined}>
       {stories.map((story) => <StoryGridCard key={story.id} story={story} />)}
     </div>
   );
@@ -91,7 +93,7 @@ function EditorialColumn({ slug, stories }: { slug: "red" | "official"; stories:
       </div>
       {stories.length ? <>
         <div className="editorial-top-grid">
-          {stories.slice(0, 2).map((story) => (
+          {stories.slice(0, 1).map((story) => (
             <Link key={story.id} href={articleHref(story)} className="editorial-top-card">
               {story.imageUrl ? <Image src={story.imageUrl} alt="" width={720} height={480} unoptimized /> : <div className="editorial-top-card__image"><span>جسور</span></div>}
               <h3>{story.title}</h3>
@@ -99,7 +101,7 @@ function EditorialColumn({ slug, stories }: { slug: "red" | "official"; stories:
           ))}
         </div>
         <div className="editorial-news-rows">
-          {stories.slice(2, 4).map((story) => (
+          {stories.slice(1, 4).map((story) => (
             <Link key={story.id} href={articleHref(story)} className="editorial-news-row">
               {story.imageUrl ? <Image src={story.imageUrl} alt="" width={224} height={156} unoptimized /> : <span className="editorial-news-row__ph" aria-hidden="true">جسور</span>}
               <span className="editorial-news-row__body">
@@ -172,25 +174,25 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
 
 function AtmaenFeature() {
   return (
-    <section className="section" id="atmaen"><div className="wrap"><div className="split-2" style={{ gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
-      <div><span className="eyebrow atmaen-feature-eyebrow">على منصة جسور فقط</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
-        <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/category?cat=mughtarib">اطمن على مغتربك</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر تحديثات الأزمة</Link></div>
-      </div>
-      <aside className="atmaen-ad-slot" aria-label="إعلان ممول">
-        <span className="atmaen-ad-slot__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>
-        <Image src="/assets/advertisements/we-ramadan-offer.jpeg" alt="إعلان WE عن عروض رمضان غير أي حد" width={1424} height={745} unoptimized loading="lazy" />
-      </aside>
-    </div></div></section>
+    <section className="section atmaen-feature-section" id="atmaen"><div className="wrap"><div className="atmaen-feature-card"><div className="split-2" style={{ gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
+        <div><span className="eyebrow atmaen-feature-eyebrow">على منصة جسور فقط</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
+          <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/category?cat=mughtarib">اطمن على مغتربك</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر تحديثات الأزمة</Link></div>
+        </div>
+        <aside className="atmaen-ad-slot" aria-label="إعلان ممول">
+          <span className="atmaen-ad-slot__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>
+          <a href="https://www.te.eg/" target="_blank" rel="sponsored noopener noreferrer" aria-label="إعلان WE — زيارة موقع WE"><Image src="/assets/advertisements/we-ramadan-offer.jpeg" alt="إعلان WE عن عروض رمضان غير أي حد" width={1424} height={745} unoptimized loading="lazy" /></a>
+        </aside>
+      </div></div></div></section>
   );
 }
 
 function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> }) {
-  const sections = ["arts", "sports", "various"];
+  const sections = [{ slug: "arts", variant: "lead" }, { slug: "sports", variant: "compact" }, { slug: "various", variant: "lead" }] as const;
   return (
-    <section className="section tight recirc-section"><div className="wrap"><div className="recirc-cols">{sections.map((slug) => {
+    <section className="section tight recirc-section"><div className="wrap"><div className="recirc-cols">{sections.map(({ slug, variant }) => {
       const label = deskLabels[slug];
       const [lead, ...rest] = desks[slug] ?? [];
-      return <div className="recirc-col" key={slug}><Link href={`/category?cat=${slug}`} className="eyebrow">{label}</Link>
+      return <div className={`recirc-col home-news-grid home-news-grid--${variant}`} key={slug}><Link href={`/category?cat=${slug}`} className="eyebrow">{label}</Link>
         {lead ? <><Link className="recirc-feature" href={articleHref(lead)}><div className="thumb">{lead.imageUrl ? <Image src={lead.imageUrl} alt="" width={720} height={440} unoptimized /> : <span>جسور</span>}</div><h4>{lead.title}</h4><div className="foot">{placeOf(lead)} · {formatArabicDate(lead.publishedAtUtc)}</div></Link>
           <div className="articles-list">{rest.slice(0, 3).map((story) => <Link className="row-card" href={articleHref(story)} key={story.id}><div className="thumb">{story.imageUrl && <Image src={story.imageUrl} alt="" width={200} height={140} unoptimized />}</div><div><h4>{story.title}</h4><div className="foot">{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</div></div></Link>)}</div></>
         : <EmptyDesk label={label} />}
@@ -228,15 +230,15 @@ export default async function HomePage() {
     <main id="main">
       <JsonLd data={buildOrganizationJsonLd()} />
       {heroSlides.length > 0 && <HomeHeroSlider slides={heroSlides} />}
-      <HomeAdPlacement image="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" size={1600} />
+      <HomeAdPlacement image="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" size={1600} href="https://www.nbe.com.eg/NBE/E/#/AR/Home" />
 
       <section className="section tight on-surface">
         <div className="wrap">
           <Head label={deskLabels.mughtarib} slug="mughtarib" />
-          <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} />
+          <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} mobileVariant="lead" />
         </div>
       </section>
-      <HomeAdPlacement image="/assets/advertisements/cib-swype.png" alt="إعلان CIB Swype: وفّر دلوقتي وقسّط براحتك" size={1080} />
+      <HomeAdPlacement image="/assets/advertisements/cib-swype.png" alt="إعلان CIB Swype: وفّر دلوقتي وقسّط براحتك" size={1080} href="https://www.cibeg.com/ar" />
       <ServicesBand />
       <AtmaenFeature />
 
@@ -246,10 +248,10 @@ export default async function HomePage() {
           <div className="split-2">
             <aside className="sidebar-interactive-ad home-success-aside">
               <HomePollCard />
-              <div className="ad-slot-banner home-success-desktop-ad">
-                <span className="ad-label">مساحة إعلانية · Sponsored</span>
-                <div className="ad-placeholder"><span>مساحة إعلانية متجاوبة</span></div>
-              </div>
+              <a className="home-success-desktop-ad" href="https://www.banquemisr.com/?sc_lang=ar-EG" target="_blank" rel="sponsored noopener noreferrer" aria-label="إعلان بنك مصر — زيارة موقع بنك مصر">
+                <span className="ad-label">مساحة إعلانية · إعلان ممول</span>
+                <Image src="/assets/advertisements/banque-misr-certificate.png" alt="إعلان بنك مصر: شهادة القمة بعائد سنوي ثابت يُصرف شهريًا" width={1600} height={1600} unoptimized loading="lazy" />
+              </a>
             </aside>
             <div className="home-success-stories">
               <Head label={deskLabels.success} slug="success" asHeading />
@@ -258,12 +260,12 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-      <HomeAdPlacement image="/assets/advertisements/banque-misr-certificate.png" alt="إعلان بنك مصر: شهادة القمة بعائد سنوي ثابت يُصرف شهريًا" size={1600} />
+      <HomeAdPlacement image="/assets/advertisements/banque-misr-certificate.png" alt="إعلان بنك مصر: شهادة القمة بعائد سنوي ثابت يُصرف شهريًا" size={1600} href="https://www.banquemisr.com/?sc_lang=ar-EG" className="home-ad-placement--mobile-after-success" />
 
       <section className="section tight on-surface">
         <div className="wrap">
           <Head label={deskLabels.egypt} slug="egypt" />
-          <DeskGrid stories={desks.egypt.slice(0, 6)} label={deskLabels.egypt} />
+          <DeskGrid stories={desks.egypt.slice(0, 6)} label={deskLabels.egypt} mobileVariant="compact" />
         </div>
       </section>
 

@@ -58,17 +58,8 @@ export function SiteFooter() {
 
           <div className="foot-v2-col">
             <h5>أقسام الموقع</h5>
-            <ul>
-              {SITE_LINKS.map((link) => (
-                <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="foot-v2-col">
-            <h5>&nbsp;</h5>
-            <ul>
-              {MORE_LINKS.map((link) => (
+            <ul className="foot-v2-link-grid">
+              {[...SITE_LINKS, ...MORE_LINKS].map((link) => (
                 <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
               ))}
             </ul>
@@ -76,7 +67,7 @@ export function SiteFooter() {
 
           <div className="foot-v2-col">
             <h5>الخدمات</h5>
-            <ul>
+            <ul className="foot-v2-link-grid foot-v2-link-grid--services">
               {SERVICE_LINKS.map((link) => (
                 <li key={link.href}><Link href={link.href}>{link.label}</Link></li>
               ))}
