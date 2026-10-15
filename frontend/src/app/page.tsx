@@ -95,8 +95,11 @@ function EditorialColumn({ slug, stories }: { slug: "red" | "official"; stories:
         <div className="editorial-top-grid">
           {stories.slice(0, 1).map((story) => (
             <Link key={story.id} href={articleHref(story)} className="editorial-top-card">
-              {story.imageUrl ? <Image src={story.imageUrl} alt="" width={720} height={480} unoptimized /> : <div className="editorial-top-card__image"><span>جسور</span></div>}
+              <div className="editorial-top-card__image">
+                {story.imageUrl ? <Image src={story.imageUrl} alt="" fill sizes="(max-width: 900px) 100vw, 35vw" unoptimized /> : <span>جسور</span>}
+              </div>
               <h3>{story.title}</h3>
+              <small className="editorial-top-card__meta">{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</small>
             </Link>
           ))}
         </div>
