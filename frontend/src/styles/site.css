@@ -1350,18 +1350,21 @@ footer .logo-img,
    no subheadline, no text over the video itself. */
 
 .hero-below {
-  position: relative;
-  right: 350px;
-  top: -80px;
-  padding: 4px 2px 0;
+  position: static;
+  width: min(100%, 900px);
+  margin: 14px auto 0;
+  padding: 14px 18px;
   cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgba(16, 30, 54, .06);
 }
 
 .hero-below h2 {
-  max-width: 500px;
-  margin-top: 5px;
-
-  font-size: 16px;
+  max-width: 760px;
+  margin-top: 3px;
+  font-size: 18px;
   line-height: 1.5;
   color: var(--text);
 
@@ -1373,7 +1376,7 @@ footer .logo-img,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: -15px;
+  margin-top: 14px;
 }
 .hero-dots {
   display: flex;

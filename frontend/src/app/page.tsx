@@ -164,7 +164,10 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
               {events.length === 0 && <EmptyDesk label={deskLabels.events} />}
               <Link href="/category?cat=events" className="cta">شاهد كل الفعاليات ←</Link>
             </div>
-            <div className="ad-slot slim"><span className="lbl">مساحة إعلانية · Sponsored</span><div>ضع إعلانك هنا</div></div>
+            <a className="ad-slot slim home-nbe-desktop-ad" href="https://www.nbe.com.eg/NBE/E/#/AR/Home" target="_blank" rel="sponsored noopener noreferrer" aria-label="إعلان البنك الأهلي المصري — زيارة موقع البنك الأهلي">
+              <span className="lbl">مساحة إعلانية · إعلان ممول</span>
+              <Image src="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" width={1600} height={1600} unoptimized loading="lazy" />
+            </a>
           </aside>
         </div>
       </div>
@@ -230,7 +233,7 @@ export default async function HomePage() {
     <main id="main">
       <JsonLd data={buildOrganizationJsonLd()} />
       {heroSlides.length > 0 && <HomeHeroSlider slides={heroSlides} />}
-      <HomeAdPlacement image="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" size={1600} href="https://www.nbe.com.eg/NBE/E/#/AR/Home" />
+      <HomeAdPlacement image="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" size={1600} href="https://www.nbe.com.eg/NBE/E/#/AR/Home" className="home-ad-placement--mobile-only home-ad-placement--mobile-after-videos" />
 
       <section className="section tight on-surface">
         <div className="wrap">
@@ -238,7 +241,7 @@ export default async function HomePage() {
           <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} mobileVariant="lead" />
         </div>
       </section>
-      <HomeAdPlacement image="/assets/advertisements/cib-swype.png" alt="إعلان CIB Swype: وفّر دلوقتي وقسّط براحتك" size={1080} href="https://www.cibeg.com/ar" />
+      <HomeAdPlacement image="/assets/advertisements/cib-swype.png" alt="إعلان CIB Swype: وفّر دلوقتي وقسّط براحتك" size={1080} href="https://www.cibeg.com/ar" className="home-ad-placement--mobile-only" />
       <ServicesBand />
       <AtmaenFeature />
 
