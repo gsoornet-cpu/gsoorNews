@@ -579,6 +579,12 @@
   /* Give the lead stories in both editorial desks more breathing room while
      keeping their headline aligned with the reduced image width. */
   .editorial-top-card { width: 70%; margin-inline: auto; }
+  .editorial-top-card > img,
+  .editorial-top-card > .editorial-top-card__image {
+    height: clamp(260px, 24vw, 360px);
+    aspect-ratio: auto;
+    object-fit: cover;
+  }
 }
 
 /* Separate the Atmaen callout from adjacent editorial sections at every size. */
