@@ -250,8 +250,12 @@ export const cms = {
     await fetch("/cms-api/session", { method: "DELETE", credentials: "same-origin" });
   },
 
-  list: (status?: ArticleStatus, page = 1) =>
-    call<CmsPaged<CmsArticleSummary>>(`?page=${page}&pageSize=20${status ? `&status=${status}` : ""}`),
+  list: (status?: ArticleStatus, page = 1, searchTerm = "") => {
+    const query = new URLSearchParams({ page: String(page), pageSize: "20" });
+    if (status) query.set("status", status);
+    if (searchTerm.trim()) query.set("searchTerm", searchTerm.trim());
+    return call<CmsPaged<CmsArticleSummary>>(`?${query.toString()}`);
+  },
 
   get: (id: string) => call<CmsArticle>(`/${id}`),
 

@@ -38,7 +38,8 @@ public class EditorialArticlesController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> List(
-        [FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? status, CancellationToken cancellationToken)
+        [FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? status,
+        [FromQuery] string? searchTerm, CancellationToken cancellationToken)
     {
         if (_currentUser.UserId is not { } userId)
         {
@@ -57,7 +58,8 @@ public class EditorialArticlesController : ControllerBase
         }
 
         var result = await _mediator.Send(
-            new ListEditorialArticlesQuery(page == 0 ? 1 : page, pageSize == 0 ? 20 : pageSize, parsedStatus, userId, _currentUser.Roles),
+            new ListEditorialArticlesQuery(page == 0 ? 1 : page, pageSize == 0 ? 20 : pageSize,
+                parsedStatus, searchTerm, userId, _currentUser.Roles),
             cancellationToken);
 
         return Ok(result);

@@ -42,6 +42,14 @@
 .cms-revision { border: 1px solid #e3d7bd; background: #fffaf0; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
 .cms-filter { display: flex; gap: 8px; align-items: center; }
 .cms-filter select { width: auto; }
+.cms-news-toolbar { display: flex; align-items: center; gap: 14px; margin: 0 0 18px; }
+.cms-news-search { display: flex; align-items: center; gap: 10px; width: min(100%, 520px); min-height: 46px; padding: 0 13px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--text-mute); transition: border-color .18s ease, box-shadow .18s ease; }
+.cms-news-search:focus-within { border-color: var(--blue-2); box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); }
+.cms-news-search > span { flex: 0 0 auto; font-size: 23px; line-height: 1; }
+.cms-news-search input { width: 100%; min-width: 0; padding: 9px 0; border: 0; outline: 0; background: transparent; color: var(--text); font: inherit; }
+.cms-news-search input::placeholder { color: #8992a1; }
+.cms-news-results { margin-inline-start: auto; white-space: nowrap; }
+.cms-news-empty { margin: 0; padding: 24px 16px; border: 1px dashed var(--line); border-radius: 9px; background: #fafbfc; text-align: center; color: var(--text-mute); }
 @media (max-width: 640px) { .cms-table th:nth-child(3), .cms-table td:nth-child(3) { display: none; } }
 
 /* Slice 20 — article history, revisions and corrections (decision D4) */
@@ -127,6 +135,9 @@
   .cms-head > .cms-actions > button { min-height: 44px; display: inline-flex; justify-content: center; align-items: center; text-align: center; }
   .cms-head > .cms-actions > .cms-filter { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; }
   .cms-filter select { width: 100%; min-height: 44px; }
+  .cms-news-toolbar { align-items: stretch; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .cms-news-search { width: 100%; min-height: 48px; }
+  .cms-news-results { margin-inline-start: 0; }
   .cms-btn { min-height: 44px; padding: 9px 12px; border-radius: 8px; }
   .cms-actions { gap: 8px; }
   .cms-field input, .cms-field textarea, .cms-field select { min-height: 46px; font-size: 16px; }

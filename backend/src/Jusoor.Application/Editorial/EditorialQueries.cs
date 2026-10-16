@@ -41,7 +41,8 @@ public class GetEditorialArticleQueryHandler : IRequestHandler<GetEditorialArtic
 }
 
 public sealed record ListEditorialArticlesQuery(
-    int Page, int PageSize, EditorialArticleStatus? Status, string ActorUserId, IReadOnlyList<string> ActorRoles)
+    int Page, int PageSize, EditorialArticleStatus? Status, string? SearchTerm,
+    string ActorUserId, IReadOnlyList<string> ActorRoles)
     : IRequest<PagedResult<EditorialArticleSummaryDto>>;
 
 public class ListEditorialArticlesQueryValidator : AbstractValidator<ListEditorialArticlesQuery>
@@ -50,6 +51,7 @@ public class ListEditorialArticlesQueryValidator : AbstractValidator<ListEditori
     {
         RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
         RuleFor(x => x.PageSize).InclusiveBetween(1, 50);
+        RuleFor(x => x.SearchTerm).MaximumLength(120);
         RuleFor(x => x.ActorUserId).NotEmpty();
     }
 }
@@ -80,6 +82,12 @@ public class ListEditorialArticlesQueryHandler : IRequestHandler<ListEditorialAr
         {
             var status = request.Status.Value;
             query = query.Where(a => a.Status == status);
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            var search = request.SearchTerm.Trim();
+            query = query.Where(a => a.Title.Contains(search) || (a.Summary != null && a.Summary.Contains(search)));
         }
 
         var totalCount = await query.CountAsync(cancellationToken);

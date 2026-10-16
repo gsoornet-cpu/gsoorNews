@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -23,25 +23,34 @@ export default function CmsDashboardPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [status, setStatus] = useState<ArticleStatus | "">("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const requestSequence = useRef(0);
 
   const load = useCallback(
-    async (filter: ArticleStatus | "", requestedPage: number) => {
+    async (filter: ArticleStatus | "", requestedPage: number, query = "") => {
+      const requestId = ++requestSequence.current;
+      setLoading(true);
       try {
-        const result = await cms.list(filter || undefined, requestedPage);
+        const result = await cms.list(filter || undefined, requestedPage, query);
+        if (requestId !== requestSequence.current) return;
         setItems(result.items);
         setPage(result.page);
         setTotalCount(result.totalCount);
         setTotalPages(result.totalPages);
         setError(null);
       } catch (e) {
+        if (requestId !== requestSequence.current) return;
         if (e instanceof CmsError && e.status === 401) {
           router.replace("/cms/login");
           return;
         }
         setItems([]);
         setError(e instanceof CmsError ? e.message : "تعذّر تحميل المقالات.");
+      } finally {
+        if (requestId === requestSequence.current) setLoading(false);
       }
     },
     [router],
@@ -57,11 +66,15 @@ export default function CmsDashboardPage() {
       setSession(current);
       if (current.roles?.length && current.roles.every((role) => role === "SeoEditor")) {
         setItems([]);
-        return;
       }
-      await load("", 1);
     })();
-  }, [router, load]);
+  }, [router]);
+
+  useEffect(() => {
+    if (!session || session.roles?.length && session.roles.every((role) => role === "SeoEditor")) return;
+    const timer = window.setTimeout(() => void load(status, page, searchTerm.trim()), searchTerm.trim() ? 280 : 0);
+    return () => window.clearTimeout(timer);
+  }, [session, status, page, searchTerm, load]);
 
   // One quick action per row: the next forward step of the workflow.
   // Requesting a revision needs a reason, so it lives in the article editor.
@@ -91,7 +104,7 @@ export default function CmsDashboardPage() {
         default:
           await cms.unpublish(article.id);
       }
-      await load(status, page);
+      await load(status, page, searchTerm.trim());
     } catch (e) {
       setError(e instanceof CmsError ? e.message : "تعذّر تنفيذ الإجراء.");
     } finally {
@@ -126,7 +139,7 @@ export default function CmsDashboardPage() {
               onChange={(e) => {
                 const value = e.target.value as ArticleStatus | "";
                 setStatus(value);
-                void load(value, 1);
+                setPage(1);
               }}
             >
               <option value="">الكل</option>
@@ -148,6 +161,14 @@ export default function CmsDashboardPage() {
 
       {session.email && <p className="cms-hint">مسجّل الدخول: {session.email}</p>}
 
+      {!(session.roles?.length && session.roles.every((role) => role === "SeoEditor")) && <div className="cms-news-toolbar">
+        <label className="cms-news-search">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" value={searchTerm} maxLength={120} onChange={(event) => { setSearchTerm(event.target.value); setPage(1); }} placeholder="ابحث في عنوان الخبر أو ملخصه" aria-label="البحث في الأخبار" />
+        </label>
+        <span className="cms-hint cms-news-results" aria-live="polite">{loading ? "جارٍ البحث…" : searchTerm.trim() ? `${totalCount} نتيجة بحث` : `${totalCount} مقالًا`}</span>
+      </div>}
+
       {error && (
         <div className="cms-msg error" role="alert">
           {error}
@@ -157,10 +178,10 @@ export default function CmsDashboardPage() {
       {items === null ? (
         <p>جارٍ تحميل المقالات…</p>
       ) : items.length === 0 ? (
-        <p>لا توجد مقالات بعد. ابدأ بإنشاء مقال جديد.</p>
+        <p className="cms-news-empty">{searchTerm.trim() ? "لا توجد أخبار تطابق كلمات البحث. جرّب كلمات أخرى." : status ? "لا توجد أخبار بهذه الحالة." : "لا توجد مقالات بعد. ابدأ بإنشاء مقال جديد."}</p>
       ) : (
         <>
-        <p className="cms-hint">{totalCount} مقالًا · الصفحة {page} من {totalPages}</p>
+        <p className="cms-hint">{searchTerm.trim() ? `${totalCount} نتيجة بحث · الصفحة ${page} من ${totalPages}` : `${totalCount} مقالًا · الصفحة ${page} من ${totalPages}`}</p>
         <table className="cms-table">
           <thead>
             <tr>
@@ -212,9 +233,9 @@ export default function CmsDashboardPage() {
           </tbody>
         </table>
         <div className="cms-actions" style={{ justifyContent: "center", marginTop: 18 }}>
-          <button className="cms-btn" type="button" disabled={page <= 1} onClick={() => void load(status, page - 1)}>السابق</button>
+          <button className="cms-btn" type="button" disabled={loading || page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))}>السابق</button>
           <span className="cms-hint">{page} / {totalPages}</span>
-          <button className="cms-btn" type="button" disabled={page >= totalPages} onClick={() => void load(status, page + 1)}>التالي</button>
+          <button className="cms-btn" type="button" disabled={loading || page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))}>التالي</button>
         </div>
         </>
       )}
