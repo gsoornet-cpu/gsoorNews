@@ -345,8 +345,8 @@
 .hero-main-link { position: absolute; inset: 0; z-index: 1; }
 .hero-main > img.hero-pan-in,
 .hero-main > img.hero-pan-out { pointer-events: none; will-change: transform, clip-path, opacity; }
-.hero-main > img.hero-pan-in { z-index: 3; animation-duration: 560ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
-.hero-main > img.hero-pan-out { z-index: 2; animation-duration: 560ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
+.hero-main > img.hero-pan-in { z-index: 2; animation-duration: 560ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
+.hero-main > img.hero-pan-out { z-index: 3; animation-duration: 560ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
 .hero-main > img.hero-pan-in--from-right { animation-name: heroPanInFromRight; }
 .hero-main > img.hero-pan-in--from-left { animation-name: heroPanInFromLeft; }
 .hero-main > img.hero-pan-out--to-left { animation-name: heroPanOutToLeft; }
@@ -359,8 +359,14 @@
   from { clip-path: inset(0 100% 0 0); transform: translate3d(-18%,0,0) scale(1.025); }
   to { clip-path: inset(0 0 0 0); transform: translate3d(0,0,0) scale(1); }
 }
-@keyframes heroPanOutToLeft { from { transform: translate3d(0,0,0) scale(1); opacity: 1; } to { transform: translate3d(-12%,0,0) scale(1.015); opacity: .72; } }
-@keyframes heroPanOutToRight { from { transform: translate3d(0,0,0) scale(1); opacity: 1; } to { transform: translate3d(12%,0,0) scale(1.015); opacity: .72; } }
+@keyframes heroPanOutToLeft {
+  from { clip-path: inset(0 0 0 0); transform: translate3d(0,0,0) scale(1); }
+  to { clip-path: inset(0 100% 0 0); transform: translate3d(-18%,0,0) scale(1.025); }
+}
+@keyframes heroPanOutToRight {
+  from { clip-path: inset(0 0 0 0); transform: translate3d(0,0,0) scale(1); }
+  to { clip-path: inset(0 0 0 100%); transform: translate3d(18%,0,0) scale(1.025); }
+}
 .home-hero-fallback,
 .home-thumb-fallback {
   display: grid;
