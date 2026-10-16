@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatArabicDate } from "@/lib/format";
@@ -33,15 +33,39 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [durations, setDurations] = useState<Record<string, string>>({});
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [transition, setTransition] = useState<{ from: HomeHeroSlide; direction: -1 | 1; id: number } | null>(null);
+  const transitionTimer = useRef<number | null>(null);
+  const transitionId = useRef(0);
+  const autoAdvance = useRef<() => void>(() => {});
   const current = slides[active];
   const closeModal = useCallback(() => setModalOpen(false), []);
+
+  function select(index: number, requestedDirection?: -1 | 1) {
+    if (slides.length < 2 || !current) return;
+    const nextIndex = (index + slides.length) % slides.length;
+    if (nextIndex === active) return;
+    const forwardIndex = (active + 1) % slides.length;
+    const backwardIndex = (active - 1 + slides.length) % slides.length;
+    const direction = requestedDirection ?? (nextIndex === forwardIndex ? 1 : nextIndex === backwardIndex ? -1 : nextIndex > active ? 1 : -1);
+    transitionId.current += 1;
+    setTransition({ from: current, direction, id: transitionId.current });
+    setActive(nextIndex);
+    if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+    transitionTimer.current = window.setTimeout(() => setTransition(null), 560);
+  }
+
+  autoAdvance.current = () => select(active + 1, 1);
 
   // Auto-advance, paused while the player is open.
   useEffect(() => {
     if (slides.length < 2 || modalOpen) return;
-    const timer = window.setInterval(() => setActive((index) => (index + 1) % slides.length), 8000);
+    const timer = window.setInterval(() => autoAdvance.current(), 8000);
     return () => window.clearInterval(timer);
   }, [slides.length, modalOpen]);
+
+  useEffect(() => () => {
+    if (transitionTimer.current !== null) window.clearTimeout(transitionTimer.current);
+  }, []);
 
   // The platform does not store video length, so read it from each video's metadata
   // (metadata only — no video data is downloaded) and show it as the demo's duration badge.
@@ -71,12 +95,11 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
   }, [slides]);
 
   if (!current) return null;
-  const select = (index: number) => setActive((index + slides.length) % slides.length);
   const sideSlides = [...slides.slice(active + 1), ...slides.slice(0, active)];
   const currentDuration = durations[current.id];
 
   const thumb = (slide: HomeHeroSlide) => (
-    <button className={`hero-thumb${slide.id === current.id ? " active" : ""}`} key={slide.id} type="button" onClick={() => select(slides.indexOf(slide))} aria-label={`عرض: ${slide.title}`}>
+    <button className={`hero-thumb${slide.id === current.id ? " active" : ""}`} key={slide.id} type="button" onClick={() => select(slides.indexOf(slide), sideSlides.indexOf(slide) < 3 ? 1 : -1)} aria-label={`عرض: ${slide.title}`}>
       {slide.imageUrl ? <Image src={slide.imageUrl} alt="" width={480} height={270} unoptimized /> : <span className="home-thumb-fallback">جسور</span>}
       {slide.videoUrl && <span className="play" aria-hidden="true">▶</span>}
       {slide.videoUrl && durations[slide.id] && <span className="duration-badge">{durations[slide.id]}</span>}
@@ -88,41 +111,47 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
       <div className="wrap">
         <div className="hero-slider">
           <div className="hero-side">{sideSlides.slice(0, 3).map(thumb)}</div>
-          <div className="hero-main"
-            onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
-            onTouchEnd={(event) => {
-              if (touchStartX === null) return;
-              const delta = (event.changedTouches[0]?.clientX ?? touchStartX) - touchStartX;
-              if (Math.abs(delta) > 45) select(active + (delta > 0 ? 1 : -1));
-              setTouchStartX(null);
-            }}>
-            {current.imageUrl ? <Image key={current.id} src={current.imageUrl} alt={current.title} fill sizes="(max-width: 800px) 100vw, 60vw" unoptimized priority /> : <div className="home-hero-fallback" aria-hidden="true"><span>جسور</span></div>}
-            {current.videoUrl ? (
-              <>
-                {currentDuration && <span className="duration-badge duration-badge-lg">{currentDuration}</span>}
-                <span className="playbtn" aria-hidden="true">▶</span>
-                <button className="hero-main-link hero-main-button" type="button" aria-label={`تشغيل الفيديو: ${current.title}`} onClick={() => setModalOpen(true)} />
-              </>
-            ) : (
-              <Link className="hero-main-link" href={current.href} aria-label={`اقرأ: ${current.title}`} />
-            )}
-            {slides.length > 1 && <>
-              <button className="hero-mobile-arrow hero-mobile-arrow--prev" type="button" aria-label="الفيديو السابق" onClick={() => select(active - 1)}>›</button>
-              <button className="hero-mobile-arrow hero-mobile-arrow--next" type="button" aria-label="الفيديو التالي" onClick={() => select(active + 1)}>‹</button>
-            </>}
+          <div className="hero-main-column">
+            <div className="hero-main"
+              onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
+              onTouchEnd={(event) => {
+                if (touchStartX === null) return;
+                const delta = (event.changedTouches[0]?.clientX ?? touchStartX) - touchStartX;
+                if (Math.abs(delta) > 45) select(active + (delta > 0 ? -1 : 1), delta > 0 ? -1 : 1);
+                setTouchStartX(null);
+              }}>
+              {current.imageUrl ? <Image key={current.id} className={transition ? `hero-pan-in hero-pan-in--from-${transition.direction === 1 ? "right" : "left"}` : undefined} src={current.imageUrl} alt={current.title} fill sizes="(max-width: 800px) 100vw, 60vw" unoptimized priority /> : <div className="home-hero-fallback" aria-hidden="true"><span>جسور</span></div>}
+              {transition?.from.imageUrl && <Image key={`out-${transition.id}`} className={`hero-pan-out hero-pan-out--to-${transition.direction === 1 ? "left" : "right"}`} src={transition.from.imageUrl} alt="" fill sizes="(max-width: 800px) 100vw, 60vw" unoptimized aria-hidden="true" />}
+              {current.videoUrl ? (
+                <>
+                  {currentDuration && <span className="duration-badge duration-badge-lg">{currentDuration}</span>}
+                  <span className="playbtn" aria-hidden="true">▶</span>
+                  <button className="hero-main-link hero-main-button" type="button" aria-label={`تشغيل الفيديو: ${current.title}`} onClick={() => setModalOpen(true)} />
+                </>
+              ) : (
+                <Link className="hero-main-link" href={current.href} aria-label={`اقرأ: ${current.title}`} />
+              )}
+              {slides.length > 1 && <>
+                <button className="hero-mobile-arrow hero-mobile-arrow--prev" type="button" aria-label="الفيديو السابق" onClick={() => select(active - 1, -1)}>›</button>
+                <button className="hero-mobile-arrow hero-mobile-arrow--next" type="button" aria-label="الفيديو التالي" onClick={() => select(active + 1, 1)}>‹</button>
+              </>}
+            </div>
+            <div className="hero-headline-stage" aria-live="polite">
+              <Link className={`hero-below${transition ? ` hero-pan-copy-in hero-pan-copy-in--from-${transition.direction === 1 ? "right" : "left"}` : ""}`} href={current.href} key={`headline-${current.id}`}>
+                <h2>{current.title}</h2>
+              </Link>
+              {transition && <div className={`hero-below hero-pan-copy-out hero-pan-copy-out--to-${transition.direction === 1 ? "left" : "right"}`} aria-hidden="true"><h2>{transition.from.title}</h2></div>}
+            </div>
           </div>
           <div className="hero-side">{sideSlides.slice(3, 6).map(thumb)}</div>
         </div>
-        <Link className="hero-below" href={current.href} key={`headline-${current.id}`}>
-          <h2>{current.title}</h2>
-        </Link>
         <div className={`hero-nav${slides.length > 1 ? " has-multiple" : ""}`}>
-          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active - 1)}><span aria-hidden="true">→</span> السابق</button>
+          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active - 1, -1)}><span aria-hidden="true">→</span> السابق</button>
           <div className="hero-dots" aria-label="اختيار التغطية">
             {slides.map((slide, index) => <button key={slide.id} type="button" className={index === active ? "active" : ""} aria-label={`التغطية ${index + 1}`} aria-current={index === active ? "true" : undefined} onClick={() => select(index)}>{index + 1}</button>)}
           </div>
           <span className="hero-mobile-count" aria-live="polite">{active + 1} / {slides.length}</span>
-          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active + 1)}>التالي <span aria-hidden="true">←</span></button>
+          <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active + 1, 1)}>التالي <span aria-hidden="true">←</span></button>
         </div>
       </div>
       {modalOpen && current.videoUrl && (

@@ -26,7 +26,12 @@ const SURFACE_LABEL: Record<Surface, string> = { web: "الويب", mobile: "ا�
 export default function CmsAdvertisementsPage() {
   const router = useRouter();
   const [assets, setAssets] = useState<CmsMediaAsset[]>([]);
+  const [assetPage, setAssetPage] = useState(1);
+  const [assetTotal, setAssetTotal] = useState(0);
+  const [assetSearch, setAssetSearch] = useState("");
   const [items, setItems] = useState<CmsAdPlacement[]>([]);
+  const [activeSurface, setActiveSurface] = useState<Surface>("web");
+  const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [dirty, setDirty] = useState(false);
@@ -44,6 +49,8 @@ export default function CmsAdvertisementsPage() {
       const [placements, media] = await Promise.all([cmsAds.list(), cmsMedia.list(1, 100, "Image")]);
       setItems(placements);
       setAssets(media.items);
+      setAssetPage(media.page);
+      setAssetTotal(media.totalCount);
       setDirty(false);
       setError(null);
     } catch (e) {
@@ -71,6 +78,7 @@ export default function CmsAdvertisementsPage() {
     };
     setItems((current) => [...current.filter((item) => !(item.slotKey === slot.key && item.surface === surface)), next]);
     setDirty(true);
+    setSelectedAssetId(null);
     setNotice(null);
   }
 
@@ -95,6 +103,7 @@ export default function CmsAdvertisementsPage() {
         credit: "إعلان ممول", caption: "", focalPointX: null, focalPointY: null,
       });
       setAssets((current) => [asset, ...current.filter((item) => item.id !== asset.id)]);
+      setAssetTotal((current) => current + 1);
       setNotice("تم رفع الإعلان إلى مكتبة الصور. اسحبه إلى مساحة الظهور المطلوبة.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "تعذّر رفع الإعلان.");
@@ -106,7 +115,7 @@ export default function CmsAdvertisementsPage() {
   async function save() {
     setBusy(true); setError(null); setNotice(null);
     try {
-      if (items.some((item) => !item.targetUrl.trim() || !/^https?:\/\//i.test(item.targetUrl.trim()))) {
+      if (items.some((item) => item.surface === activeSurface && (!item.targetUrl.trim() || !/^https?:\/\//i.test(item.targetUrl.trim())))) {
         setError("أضف رابطًا يبدأ بـ https:// أو http:// لكل إعلان قبل الحفظ.");
         return;
       }
@@ -118,7 +127,7 @@ export default function CmsAdvertisementsPage() {
         altText: item.altText.trim(),
         displayOrder: index,
       })));
-      setNotice("تم حفظ الإعلانات وتوزيعها على الويب والموبايل.");
+      setNotice(`تم حفظ إعدادات إعلانات ${SURFACE_LABEL[activeSurface]}.`);
       setDirty(false);
       await load();
     } catch (e) {
@@ -126,6 +135,31 @@ export default function CmsAdvertisementsPage() {
     } finally {
       setBusy(false);
     }
+  }
+
+  async function loadMoreAssets() {
+    setBusy(true); setError(null);
+    try {
+      const nextPage = assetPage + 1;
+      const result = await cmsMedia.list(nextPage, 100, "Image");
+      setAssets((current) => [...current, ...result.items.filter((asset) => !current.some((existing) => existing.id === asset.id))]);
+      setAssetPage(result.page);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "تعذّر تحميل صور إضافية.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function switchSurface(surface: Surface) {
+    if (surface === activeSurface) return;
+    if (dirty) {
+      setNotice(`احفظ تغييرات ${SURFACE_LABEL[activeSurface]} أولًا، ثم انتقل إلى ${SURFACE_LABEL[surface]}.`);
+      return;
+    }
+    setActiveSurface(surface);
+    setSelectedAssetId(null);
+    setNotice(null);
   }
 
   function drop(event: React.DragEvent<HTMLDivElement>, slot: SlotDefinition, surface: Surface) {
@@ -147,7 +181,9 @@ export default function CmsAdvertisementsPage() {
         <label>رابط المعلن<input dir="ltr" type="url" inputMode="url" placeholder="https://example.com" value={placement.targetUrl} disabled={busy} onChange={(event) => update(slot.key, surface, "targetUrl", event.target.value)} /></label>
         <label>وصف الصورة<input value={placement.altText} maxLength={500} disabled={busy} onChange={(event) => update(slot.key, surface, "altText", event.target.value)} /></label>
         <button className="cms-btn danger" type="button" disabled={busy} onClick={() => remove(slot.key, surface)}>إزالة من هذه المساحة</button>
+        {selectedAssetId && <button className="cms-btn" type="button" disabled={busy} onClick={() => assign(slot, surface, selectedAssetId)}>استبدال بالصورة المحددة</button>}
       </> : <div className="ad-drop-slot__empty">اسحب صورة إعلان إلى هنا</div>}
+      {!placement && selectedAssetId && <button className="cms-btn primary" type="button" disabled={busy} onClick={() => assign(slot, surface, selectedAssetId)}>استخدم الصورة المحددة هنا</button>}
     </div>;
   }
 
@@ -155,27 +191,40 @@ export default function CmsAdvertisementsPage() {
     <div className="cms-head"><div><h1>إدارة الإعلانات</h1><p className="cms-hint">ارفع المواد الإعلانية، ثم اسحب كل صورة إلى المساحة المناسبة لكل واجهة. أضف رابط المعلن قبل الحفظ.</p></div><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div>
     {error && <div className="cms-msg error" role="alert">{error}</div>}
     {notice && <div className="cms-msg success" role="status">{notice}</div>}
-    <section className="cms-ad-library">
-      <div><h2>مكتبة صور الإعلانات</h2><p className="cms-hint">يمكنك استخدام صورة إعلان في أكثر من مساحة. الصور المرفوعة تحفظ في مكتبة الوسائط.</p></div>
-      <label className="cms-btn primary">{busy ? "جارٍ الرفع أو الحفظ…" : "رفع صورة إعلان"}<input hidden type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={(event) => { void upload(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label>
-      <div className="cms-ad-assets">
-        {assets.map((asset) => <div className="cms-ad-asset" key={asset.id} draggable onDragStart={(event) => event.dataTransfer.setData("text/plain", asset.id)} title="اسحب إلى مساحة الإعلان">
-          <Image src={asset.publicUrl} alt={asset.altText} width={180} height={110} unoptimized />
-          <small>{asset.altText || asset.fileName}</small>
-          <span>اسحب للتوزيع</span>
-        </div>)}
-        {loaded && assets.length === 0 && <p className="cms-hint">لا توجد صور في مكتبة الوسائط بعد. ارفع صورة إعلان للبدء.</p>}
+    {!loaded ? <p>جارٍ تحميل المساحات…</p> : <section className="cms-ad-workspace" aria-label="إدارة مواضع الإعلانات">
+      <div className="cms-ad-stage" dir="rtl">
+        <div className="cms-ad-stage__toolbar">
+          <div><h2>معاينة المساحات</h2><p>{dirty ? "هناك تغييرات غير محفوظة" : "كل واجهة تُحفظ بشكل مستقل"}</p></div>
+          <div className="cms-ad-surface-tabs" role="tablist" aria-label="اختيار الواجهة">
+            {(["web", "mobile"] as const).map((surface) => <button key={surface} type="button" role="tab" aria-selected={activeSurface === surface} className={activeSurface === surface ? "active" : ""} onClick={() => switchSurface(surface)}>{SURFACE_LABEL[surface]}</button>)}
+          </div>
+          <button className="cms-btn primary cms-ad-stage__save" type="button" disabled={busy || !dirty} onClick={() => void save()}>{busy ? "جارٍ الحفظ…" : `حفظ ${SURFACE_LABEL[activeSurface]}`}</button>
+        </div>
+        <div className={`cms-ad-preview cms-ad-preview--${activeSurface}`}>
+          <header><span>معاينة {SURFACE_LABEL[activeSurface]}</span><small>{activeSurface === "mobile" ? "المواضع المخصصة للموبايل والمواضع المشتركة" : "المواضع المخصصة للويب والمواضع المشتركة"}</small></header>
+          {SLOTS.filter((slot) => slot.surfaces.includes(activeSurface)).map((slot) => renderSlot(slot, activeSurface))}
+        </div>
       </div>
-    </section>
 
-    {!loaded ? <p>جارٍ تحميل المساحات…</p> : <section className="cms-ad-previews" aria-label="معاينة مواضع الإعلانات">
-      <div className="cms-ad-preview cms-ad-preview--web"><header><span>معاينة الويب</span><small>المواضع المخصصة للويب فقط والمواضع المشتركة</small></header>
-        {SLOTS.filter((slot) => slot.surfaces.includes("web")).map((slot) => renderSlot(slot, "web"))}
-      </div>
-      <div className="cms-ad-preview cms-ad-preview--mobile"><header><span>معاينة الموبايل</span><small>واجهة مبسطة بلا أخبار؛ المساحات الإعلانية فقط</small></header>
-        {SLOTS.filter((slot) => slot.surfaces.includes("mobile")).map((slot) => renderSlot(slot, "mobile"))}
-      </div>
+      <aside className="cms-ad-library-pane" dir="rtl">
+        <div className="cms-ad-library-head"><div><h2>مكتبة صور الإعلانات</h2><p>اختر صورة ثم ضعها في مساحة، أو اسحبها مباشرة.</p></div>
+          <label className="cms-btn primary">{busy ? "جارٍ التحميل…" : "رفع صورة"}<input hidden type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={(event) => { void upload(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label>
+          <input className="cms-ad-search" type="search" value={assetSearch} onChange={(event) => setAssetSearch(event.target.value)} placeholder="ابحث في الصور…" aria-label="البحث في صور الإعلانات" />
+          <span className="cms-ad-library-count">{assets.length} من {assetTotal} صورة</span>
+        </div>
+        <div className="cms-ad-assets-scroll">
+          <div className="cms-ad-assets">
+            {assets.filter((asset) => `${asset.altText} ${asset.fileName}`.toLocaleLowerCase().includes(assetSearch.trim().toLocaleLowerCase())).map((asset) => <button className={`cms-ad-asset${selectedAssetId === asset.id ? " selected" : ""}`} key={asset.id} type="button" draggable onClick={() => setSelectedAssetId((current) => current === asset.id ? null : asset.id)} onDragStart={(event) => event.dataTransfer.setData("text/plain", asset.id)} title="اختر الصورة أو اسحبها إلى مساحة الإعلان" aria-pressed={selectedAssetId === asset.id}>
+              <Image src={asset.publicUrl} alt={asset.altText} width={180} height={110} unoptimized />
+              <small>{asset.altText || asset.fileName}</small>
+              <span>{selectedAssetId === asset.id ? "محددة · اضغط مساحة للإضافة" : "اسحب أو اختر"}</span>
+            </button>)}
+            {assets.length === 0 && <p className="cms-hint">لا توجد صور في مكتبة الوسائط بعد. ارفع صورة إعلان للبدء.</p>}
+            {assets.length > 0 && assets.filter((asset) => `${asset.altText} ${asset.fileName}`.toLocaleLowerCase().includes(assetSearch.trim().toLocaleLowerCase())).length === 0 && <p className="cms-hint">لا توجد صور تطابق البحث.</p>}
+          </div>
+          {assets.length < assetTotal && <button className="cms-btn cms-ad-load-more" type="button" disabled={busy} onClick={() => void loadMoreAssets()}>{busy ? "جارٍ التحميل…" : `تحميل صور إضافية (${assetTotal - assets.length})`}</button>}
+        </div>
+      </aside>
     </section>}
-    <div className="cms-actions cms-ad-save"><button className="cms-btn primary" type="button" disabled={busy || !dirty} onClick={() => void save()}>{busy ? "جارٍ الحفظ…" : "حفظ توزيع الإعلانات"}</button>{dirty && <span className="cms-hint">هناك تغييرات غير محفوظة.</span>}</div>
   </main>;
 }
