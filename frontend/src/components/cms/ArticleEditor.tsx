@@ -19,6 +19,10 @@ const videoMediaIds = (html: string) => Array.from(
   html.matchAll(/<video\b[^>]*\bdata-media-id="([0-9a-f-]{36})"/gi),
   (match) => match[1],
 );
+const embeddedVideoUrls = (html: string) => Array.from(
+  html.matchAll(/<iframe\b[^>]*\bsrc="([^"]+)"/gi),
+  (match) => match[1].replaceAll("&amp;", "&"),
+);
 
 export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const router = useRouter();
@@ -44,6 +48,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const [body, setBody] = useState("");
   const [presentationDesks, setPresentationDesks] = useState<string[]>([]);
   const [featuredVideoMediaAssetId, setFeaturedVideoMediaAssetId] = useState("");
+  const [featuredVideoEmbedUrl, setFeaturedVideoEmbedUrl] = useState("");
   const [coverImageUrl, setCoverImageUrl] = useState("");
   const [coverPickerOpen, setCoverPickerOpen] = useState(false);
   const [coverAssets, setCoverAssets] = useState<CmsMediaAsset[]>([]);
@@ -72,6 +77,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     setBody(a.body);
     setPresentationDesks(a.presentationDesks ?? []);
     setFeaturedVideoMediaAssetId(a.featuredVideoMediaAssetId ?? "");
+    setFeaturedVideoEmbedUrl(a.featuredVideoEmbedUrl ?? "");
     setCoverImageUrl(a.socialImageUrl ?? "");
     setEditReason("");
   }
@@ -94,6 +100,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
         if (typeof draft.body === "string") setBody(draft.body);
         if (Array.isArray(draft.presentationDesks) && draft.presentationDesks.every((item) => typeof item === "string")) setPresentationDesks(draft.presentationDesks as string[]);
         if (typeof draft.featuredVideoMediaAssetId === "string") setFeaturedVideoMediaAssetId(draft.featuredVideoMediaAssetId);
+        if (typeof draft.featuredVideoEmbedUrl === "string") setFeaturedVideoEmbedUrl(draft.featuredVideoEmbedUrl);
         if (typeof draft.coverImageUrl === "string") setCoverImageUrl(draft.coverImageUrl);
       };
       const session = await cms.session();
@@ -124,13 +131,13 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   useEffect(() => {
     if (!draftHydrated) return;
     try {
-      const draft = { title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl };
-      if (title || authorName || authorImageUrl || summary || body || coverImageUrl || presentationDesks.length || featuredVideoMediaAssetId) sessionStorage.setItem(draftKey, JSON.stringify(draft));
+      const draft = { title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, featuredVideoEmbedUrl, coverImageUrl };
+      if (title || authorName || authorImageUrl || summary || body || coverImageUrl || presentationDesks.length || featuredVideoMediaAssetId || featuredVideoEmbedUrl) sessionStorage.setItem(draftKey, JSON.stringify(draft));
       else sessionStorage.removeItem(draftKey);
     } catch {
       // Storage can be disabled or full; editing and server-side saves still work.
     }
-  }, [draftHydrated, draftKey, title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl]);
+  }, [draftHydrated, draftKey, title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, featuredVideoEmbedUrl, coverImageUrl]);
 
   async function run(action: () => Promise<void>) {
     setBusy(true);
@@ -164,14 +171,26 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     editReason: article?.status === "Published" ? editReason.trim() || null : null,
     presentationDesks,
     featuredVideoMediaAssetId: featuredVideoMediaAssetId || null,
+    featuredVideoEmbedUrl: featuredVideoEmbedUrl || null,
     // Saved together with the article so the cover can never be lost to a separate (SEO) call.
     coverImageUrl: coverImageUrl.trim(),
   });
 
   function updateBody(nextBody: string) {
     const ids = videoMediaIds(nextBody);
+    const embeds = embeddedVideoUrls(nextBody);
     setBody(nextBody);
-    setFeaturedVideoMediaAssetId((current) => current && ids.includes(current) ? current : ids[0] ?? "");
+    if (featuredVideoMediaAssetId && ids.includes(featuredVideoMediaAssetId)) {
+      setFeaturedVideoEmbedUrl("");
+    } else if (featuredVideoEmbedUrl && embeds.includes(featuredVideoEmbedUrl)) {
+      setFeaturedVideoMediaAssetId("");
+    } else if (ids.length) {
+      setFeaturedVideoMediaAssetId(ids[0]);
+      setFeaturedVideoEmbedUrl("");
+    } else {
+      setFeaturedVideoMediaAssetId("");
+      setFeaturedVideoEmbedUrl(embeds[0] ?? "");
+    }
   }
 
   async function uploadAuthorPhoto(file?: File) {
@@ -496,12 +515,23 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
 
       <div className="cms-field">
         <label htmlFor="featured-video">عرض فيديو من هذا الخبر في قسم الفيديوهات</label>
-        <select id="featured-video" value={featuredVideoMediaAssetId} disabled={!canEditContent || isPublished || busy || videoMediaIds(body).length === 0}
-          onChange={(event) => setFeaturedVideoMediaAssetId(event.target.value)}>
+        <select id="featured-video" value={featuredVideoMediaAssetId ? `asset:${featuredVideoMediaAssetId}` : featuredVideoEmbedUrl ? `embed:${featuredVideoEmbedUrl}` : ""}
+          disabled={!canEditContent || isPublished || busy || (videoMediaIds(body).length === 0 && embeddedVideoUrls(body).length === 0)}
+          onChange={(event) => {
+            const value = event.target.value;
+            if (value.startsWith("embed:")) {
+              setFeaturedVideoEmbedUrl(value.slice("embed:".length));
+              setFeaturedVideoMediaAssetId("");
+            } else {
+              setFeaturedVideoMediaAssetId(value.startsWith("asset:") ? value.slice("asset:".length) : "");
+              setFeaturedVideoEmbedUrl("");
+            }
+          }}>
           <option value="">عدم إدراجه في قسم الفيديوهات</option>
-          {videoMediaIds(body).map((id, index) => <option key={id} value={id}>الفيديو المضمّن {index + 1}</option>)}
+          {videoMediaIds(body).map((id, index) => <option key={id} value={`asset:${id}`}>ملف فيديو مرفوع {index + 1}</option>)}
+          {embeddedVideoUrls(body).map((url, index) => <option key={url} value={`embed:${url}`}>فيديو من مصدر خارجي {index + 1}</option>)}
         </select>
-        <span className="cms-hint">أدرج ملف فيديو جاهزًا من مكتبة الوسائط داخل الخبر أولًا، ثم اختره هنا. الاختيار ينشر معاينة مستقلة في /videos بعد اعتماد الخبر ونشره.</span>
+        <span className="cms-hint">يمكنك اختيار ملف مرفوع أو فيديو مضمّن داخل الخبر. يظهر في قسم الفيديوهات بعد اعتماد الخبر ونشره.</span>
       </div>
 
       {isPublished && (

@@ -41,6 +41,7 @@ public class EditorialArticleConfiguration : IEntityTypeConfiguration<EditorialA
         builder.HasOne(a => a.FeaturedVideoMediaAsset).WithMany().HasForeignKey(a => a.FeaturedVideoMediaAssetId)
             .OnDelete(DeleteBehavior.SetNull);
         builder.HasIndex(a => a.FeaturedVideoMediaAssetId);
+        builder.Property(a => a.FeaturedVideoEmbedUrl).HasMaxLength(2048);
         builder.HasOne(a => a.PrimaryCategory).WithMany().HasForeignKey(a => a.PrimaryCategoryId).OnDelete(DeleteBehavior.SetNull);
         builder.HasIndex(a => a.PrimaryCategoryId);
         builder.Property(a => a.Summary).HasMaxLength(EditorialArticle.SummaryMaxLength);

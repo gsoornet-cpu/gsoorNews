@@ -75,6 +75,7 @@ export interface PublishedVideo {
   publishedAtUtc: string;
   slug: string;
   thumbnailUrl: string | null;
+  isEmbedded: boolean;
 }
 
 /** The API's 410 response deliberately contains only these five fields. */

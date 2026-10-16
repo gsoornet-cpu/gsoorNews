@@ -40,6 +40,7 @@ internal static class EditorialSupport
         SecondaryTags = a.SecondaryTags.ToArray(),
         PresentationDesks = a.PresentationDesks.ToArray(),
         FeaturedVideoMediaAssetId = a.FeaturedVideoMediaAssetId,
+        FeaturedVideoEmbedUrl = a.FeaturedVideoEmbedUrl,
         TwitterTitle = a.TwitterTitle, TwitterDescription = a.TwitterDescription, TwitterImageUrl = a.TwitterImageUrl
     };
 
@@ -54,14 +55,29 @@ internal static class EditorialSupport
         => sanitizedBody.Length <= EditorialArticle.BodyMaxLength && ArticleBodyContent.HasText(sanitizedBody);
 
     public static async Task<bool> IsFeaturedVideoValidAsync(
-        IApplicationDbContext context, string body, Guid? mediaAssetId, CancellationToken cancellationToken)
+        IApplicationDbContext context, string body, Guid? mediaAssetId, string? embedUrl, CancellationToken cancellationToken)
     {
-        if (mediaAssetId is null) return true;
-        var id = mediaAssetId.Value;
-        var pattern = $"<video\\b(?=[^>]*\\bdata-media-id=\"{Regex.Escape(id.ToString())}\")[^>]*>";
-        if (!Regex.IsMatch(body, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) return false;
-        return await context.EditorialMediaAssets.AnyAsync(asset => asset.Id == id
-            && asset.Kind == EditorialMediaKind.Video && asset.Status == EditorialMediaStatus.Ready, cancellationToken);
+        if (mediaAssetId.HasValue && !string.IsNullOrWhiteSpace(embedUrl)) return false;
+        if (mediaAssetId is { } id)
+        {
+            var pattern = $"<video\\b(?=[^>]*\\bdata-media-id=\"{Regex.Escape(id.ToString())}\")[^>]*>";
+            if (!Regex.IsMatch(body, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) return false;
+            return await context.EditorialMediaAssets.AnyAsync(asset => asset.Id == id
+                && asset.Kind == EditorialMediaKind.Video && asset.Status == EditorialMediaStatus.Ready, cancellationToken);
+        }
+
+        if (string.IsNullOrWhiteSpace(embedUrl)) return true;
+        if (embedUrl.Length > 2048 || !Uri.TryCreate(embedUrl, UriKind.Absolute, out var selectedUri)
+            || selectedUri.Scheme != Uri.UriSchemeHttps || !string.IsNullOrEmpty(selectedUri.UserInfo)) return false;
+
+        // The body has already passed the server's iframe provider allowlist. Require the
+        // selected URL to match one of those sanitized embeds so callers cannot attach an
+        // unrelated or arbitrary URL to the public video hub.
+        var iframeSources = Regex.Matches(body, "<iframe\\b[^>]*\\bsrc\\s*=\\s*['\\\"]([^'\\\"]+)['\\\"][^>]*>",
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)
+            .Select(match => System.Net.WebUtility.HtmlDecode(match.Groups[1].Value));
+        return iframeSources.Any(source => Uri.TryCreate(source, UriKind.Absolute, out var sourceUri)
+            && Uri.Compare(sourceUri, selectedUri, UriComponents.AbsoluteUri, UriFormat.SafeUnescaped, StringComparison.Ordinal) == 0);
     }
 
     public static EditorialCorrectionDto ToDto(EditorialCorrection c) => new(

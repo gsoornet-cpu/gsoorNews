@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Jusoor.Application.Editorial;
 
-/// <summary>One published video an editor may place in the homepage hero.</summary>
+/// <summary>One published uploaded or embedded video an editor may place in the homepage hero.</summary>
 public sealed record HomeVideoCandidateDto(
-    Guid ArticleId, string Title, DateTimeOffset PublishedAtUtc, string? ThumbnailUrl, int? HomeVideoOrder);
+    Guid ArticleId, string Title, DateTimeOffset PublishedAtUtc, string? ThumbnailUrl, int? HomeVideoOrder, bool IsEmbedded);
 
-/// <summary>All published articles with a ready featured video; selected ones first, in the editor's order.</summary>
+/// <summary>All published articles with a ready uploaded or approved embedded featured video; selected ones first, in editor order.</summary>
 public sealed record GetHomeVideoCandidatesQuery : IRequest<IReadOnlyList<HomeVideoCandidateDto>>;
 
 public sealed class GetHomeVideoCandidatesQueryHandler
@@ -22,21 +22,21 @@ public sealed class GetHomeVideoCandidatesQueryHandler
     public async Task<IReadOnlyList<HomeVideoCandidateDto>> Handle(
         GetHomeVideoCandidatesQuery request, CancellationToken cancellationToken)
     {
-        var rows = await (from article in _context.EditorialArticles.AsNoTracking()
-                          join asset in _context.EditorialMediaAssets.AsNoTracking()
-                              on article.FeaturedVideoMediaAssetId equals (Guid?)asset.Id
-                          where article.Status == EditorialArticleStatus.Published
-                                && article.PublishedAtUtc != null
-                                && asset.Kind == EditorialMediaKind.Video
-                                && asset.Status == EditorialMediaStatus.Ready
-                          select new { article.Id, article.Title, article.PublishedAtUtc, article.SocialImageUrl, article.HomeVideoOrder })
+        var rows = await _context.EditorialArticles.AsNoTracking()
+            .Where(article => article.Status == EditorialArticleStatus.Published
+                && article.PublishedAtUtc != null
+                && (article.FeaturedVideoEmbedUrl != null || _context.EditorialMediaAssets.Any(asset =>
+                    asset.Id == article.FeaturedVideoMediaAssetId
+                    && asset.Kind == EditorialMediaKind.Video && asset.Status == EditorialMediaStatus.Ready)))
+            .Select(article => new { article.Id, article.Title, article.PublishedAtUtc, article.SocialImageUrl,
+                article.HomeVideoOrder, IsEmbedded = article.FeaturedVideoEmbedUrl != null })
             .ToListAsync(cancellationToken);
 
         return rows
             .OrderBy(r => r.HomeVideoOrder is null ? 1 : 0)
             .ThenBy(r => r.HomeVideoOrder)
             .ThenByDescending(r => r.PublishedAtUtc)
-            .Select(r => new HomeVideoCandidateDto(r.Id, r.Title, r.PublishedAtUtc!.Value, r.SocialImageUrl, r.HomeVideoOrder))
+            .Select(r => new HomeVideoCandidateDto(r.Id, r.Title, r.PublishedAtUtc!.Value, r.SocialImageUrl, r.HomeVideoOrder, r.IsEmbedded))
             .ToArray();
     }
 }
@@ -70,15 +70,15 @@ public sealed class SetHomeVideosCommandHandler : IRequestHandler<SetHomeVideosC
     {
         var wanted = request.ArticleIds.ToList();
 
-        // Every selected id must be a published article with a ready video — the same rule the public query applies.
-        var eligible = await (from article in _context.EditorialArticles.AsNoTracking()
-                              join asset in _context.EditorialMediaAssets.AsNoTracking()
-                                  on article.FeaturedVideoMediaAssetId equals (Guid?)asset.Id
-                              where wanted.Contains(article.Id)
-                                    && article.Status == EditorialArticleStatus.Published
-                                    && asset.Kind == EditorialMediaKind.Video
-                                    && asset.Status == EditorialMediaStatus.Ready
-                              select article.Id).ToListAsync(cancellationToken);
+        // Every selected id must be a published article with a ready upload or an approved embed — the public query uses the same rule.
+        var eligible = await _context.EditorialArticles.AsNoTracking()
+            .Where(article => wanted.Contains(article.Id)
+                && article.Status == EditorialArticleStatus.Published
+                && (article.FeaturedVideoEmbedUrl != null || _context.EditorialMediaAssets.Any(asset =>
+                    asset.Id == article.FeaturedVideoMediaAssetId
+                    && asset.Kind == EditorialMediaKind.Video && asset.Status == EditorialMediaStatus.Ready)))
+            .Select(article => article.Id)
+            .ToListAsync(cancellationToken);
         if (eligible.Count != wanted.Count) return SetHomeVideosOutcome.InvalidSelection;
 
         var touched = await _context.EditorialArticles

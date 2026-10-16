@@ -32,7 +32,7 @@ public class EditorialArticlesController : ControllerBase
     /// <param name="Body">HTML from the CMS editor. It is sanitized server-side (decision D2) — only the allow-listed tags/attributes survive.</param>
     public record SaveArticleRequest(string Title, string? Summary, string Body, Guid? CountryId, Guid? CityId,
         string? EditReason = null, string[]? PresentationDesks = null, Guid? FeaturedVideoMediaAssetId = null,
-        string? CoverImageUrl = null, string? AuthorName = null, string? AuthorImageUrl = null);
+        string? FeaturedVideoEmbedUrl = null, string? CoverImageUrl = null, string? AuthorName = null, string? AuthorImageUrl = null);
     public record SchedulePublicationRequest(DateTimeOffset ScheduledPublishAtUtc, string? Reason = null);
 
     [HttpGet]
@@ -93,7 +93,8 @@ public class EditorialArticlesController : ControllerBase
         var result = await _mediator.Send(
             new CreateEditorialArticleCommand(
                 request.Title, request.Summary, request.Body, request.CountryId, request.CityId, userId, _currentUser.Roles,
-                request.PresentationDesks, request.FeaturedVideoMediaAssetId, request.CoverImageUrl, request.AuthorName, request.AuthorImageUrl),
+                request.PresentationDesks, request.FeaturedVideoMediaAssetId, request.FeaturedVideoEmbedUrl,
+                request.CoverImageUrl, request.AuthorName, request.AuthorImageUrl),
             cancellationToken);
 
         return result.Outcome == EditorialOutcome.Success
@@ -117,7 +118,8 @@ public class EditorialArticlesController : ControllerBase
         var result = await _mediator.Send(
             new UpdateEditorialArticleCommand(
                 id, request.Title, request.Summary, request.Body, request.CountryId, request.CityId, userId, _currentUser.Roles,
-                request.EditReason, request.PresentationDesks, request.FeaturedVideoMediaAssetId, request.CoverImageUrl, request.AuthorName, request.AuthorImageUrl),
+                request.EditReason, request.PresentationDesks, request.FeaturedVideoMediaAssetId, request.FeaturedVideoEmbedUrl,
+                request.CoverImageUrl, request.AuthorName, request.AuthorImageUrl),
             cancellationToken);
 
         return ToActionResult(result);

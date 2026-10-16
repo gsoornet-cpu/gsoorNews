@@ -216,7 +216,7 @@ export default async function HomePage() {
   // Only videos explicitly selected on their articles are returned by the videos API.
   const heroSlides = videos.map((video) => ({
     id: video.id, title: video.title, excerpt: video.excerpt, href: `/article/${video.id}/${encodeURIComponent(video.slug)}`,
-    imageUrl: video.thumbnailUrl, videoUrl: video.videoUrl, publishedAtUtc: video.publishedAtUtc,
+    imageUrl: video.thumbnailUrl, videoUrl: video.videoUrl, isEmbedded: video.isEmbedded, publishedAtUtc: video.publishedAtUtc,
   }));
 
   const latest = feed.slice(0, 6);

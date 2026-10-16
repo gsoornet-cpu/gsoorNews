@@ -14,6 +14,7 @@ export interface HomeHeroSlide {
   imageUrl?: string | null;
   /** Present ONLY for real published videos. Slides without it are plain news and get no play UI. */
   videoUrl?: string;
+  isEmbedded?: boolean;
   publishedAtUtc?: string | null;
 }
 
@@ -73,7 +74,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
     const probes: HTMLVideoElement[] = [];
     let cancelled = false;
     slides.forEach((slide) => {
-      if (!slide.videoUrl) return;
+      if (!slide.videoUrl || slide.isEmbedded) return;
       const probe = document.createElement("video");
       probe.preload = "metadata";
       probe.muted = true;
@@ -159,6 +160,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
           item={{
             title: current.title,
             videoUrl: current.videoUrl,
+            isEmbedded: current.isEmbedded,
             posterUrl: current.imageUrl,
             href: current.href,
             meta: [current.publishedAtUtc ? formatArabicDate(current.publishedAtUtc) : "", currentDuration ?? ""].filter(Boolean).join(" · "),

@@ -82,7 +82,7 @@ export default function HomeVideosPage() {
         : <span aria-hidden="true" style={{ width: 96, height: 54, borderRadius: 6, background: "#101c30", color: "#fff", display: "grid", placeItems: "center", flex: "none", fontWeight: 800 }}>جسور</span>}
       <span style={{ flex: 1, minWidth: 0 }}>
         <span style={{ display: "block", fontWeight: 700 }}>{video.title}</span>
-        <small className="cms-hint">{formatArabicDate(video.publishedAtUtc)}{!video.thumbnailUrl && " · بدون صورة غلاف (ستظهر «جسور» مكانها)"}</small>
+        <small className="cms-hint">{formatArabicDate(video.publishedAtUtc)} · {video.isEmbedded ? "فيديو مضمّن" : "ملف مرفوع"}{!video.thumbnailUrl && " · بدون صورة غلاف (ستظهر «جسور» مكانها)"}</small>
       </span>
       <span className="cms-actions" style={{ flex: "none" }}>{children}</span>
     </li>
@@ -91,7 +91,7 @@ export default function HomeVideosPage() {
   return (
     <main className="cms-card" dir="rtl">
       <div className="cms-head"><h1>فيديوهات الصفحة الرئيسية</h1><Link className="cms-btn" href="/cms">لوحة الأخبار</Link></div>
-      <p className="cms-hint">اختر الفيديوهات التي تظهر في أول الصفحة الرئيسية ورتّبها. لا يُضاف شيء تلقائيًا، ولو لم تختر أي فيديو يختفي هذا القسم من الموقع. تظهر هنا فقط الأخبار المنشورة التي لها فيديو جاهز.</p>
+      <p className="cms-hint">اختر الفيديوهات التي تظهر في أول الصفحة الرئيسية ورتّبها. لا يُضاف شيء تلقائيًا، ولو لم تختر أي فيديو يختفي هذا القسم من الموقع. تظهر هنا الأخبار المنشورة التي اختير لها ملف فيديو مرفوع أو فيديو مضمّن.</p>
       {error && <div className="cms-msg error" role="alert">{error}</div>}
       {notice && <div className="cms-msg success" role="status">{notice}</div>}
       {!loaded ? <p>جارٍ التحميل…</p> : <>

@@ -48,6 +48,7 @@ public sealed record EditorialArticleDto(
     public string[] SecondaryTags { get; init; } = Array.Empty<string>();
     public string[] PresentationDesks { get; init; } = Array.Empty<string>();
     public Guid? FeaturedVideoMediaAssetId { get; init; }
+    public string? FeaturedVideoEmbedUrl { get; init; }
     public string? TwitterTitle { get; init; }
     public string? TwitterDescription { get; init; }
     public string? TwitterImageUrl { get; init; }
@@ -86,7 +87,7 @@ public sealed record PublicNewsSummaryDto(
     public string? AuthorImageUrl { get; init; }
 }
 
-/// <summary>Published article with a CMS-selected, verified video media asset for the public video hub.</summary>
+/// <summary>Published article with a CMS-selected, verified uploaded or embedded video for the public video hub.</summary>
 public sealed record PublicVideoSummaryDto(
     Guid Id, string Title, string? Excerpt, string VideoUrl, string? Caption, string Credit,
     DateTimeOffset PublishedAtUtc, string Slug)
@@ -94,6 +95,7 @@ public sealed record PublicVideoSummaryDto(
     public string? ThumbnailUrl { get; init; }
     public string? AuthorName { get; init; }
     public string? AuthorImageUrl { get; init; }
+    public bool IsEmbedded { get; init; }
 }
 
 /// <summary>

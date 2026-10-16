@@ -386,6 +386,10 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("FeaturedVideoMediaAssetId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("FeaturedVideoEmbedUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
                     b.Property<int?>("HomeVideoOrder")
                         .HasColumnType("integer");
 

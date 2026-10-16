@@ -36,6 +36,7 @@ export interface CmsArticle extends CmsArticleSummary {
   slug?: string;
   presentationDesks: string[];
   featuredVideoMediaAssetId: string | null;
+  featuredVideoEmbedUrl?: string | null;
   socialImageUrl?: string | null;
 }
 
@@ -169,7 +170,7 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
   return (await response.json()) as T;
 }
 
-export interface CmsHomeVideo { articleId: string; title: string; publishedAtUtc: string; thumbnailUrl: string | null; homeVideoOrder: number | null; }
+export interface CmsHomeVideo { articleId: string; title: string; publishedAtUtc: string; thumbnailUrl: string | null; homeVideoOrder: number | null; isEmbedded: boolean; }
 
 export interface CmsAdPlacement {
   slotKey: string;
@@ -328,6 +329,7 @@ export interface ArticleInput {
   editReason?: string | null;
   presentationDesks: string[];
   featuredVideoMediaAssetId: string | null;
+  featuredVideoEmbedUrl?: string | null;
   /** Cover image URL. "" removes it; omitted leaves it unchanged. Saved with the article itself (no SEO role needed). */
   coverImageUrl?: string | null;
 }

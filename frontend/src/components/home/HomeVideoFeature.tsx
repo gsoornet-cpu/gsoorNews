@@ -21,9 +21,10 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
   const video = videos[index];
   const videoId = video?.id;
   const videoUrl = video?.videoUrl;
+  const isEmbedded = video?.isEmbedded;
 
   useEffect(() => {
-    if (!videoUrl) return;
+    if (!videoUrl || isEmbedded) return;
     setDuration("");
     const probe = document.createElement("video");
     probe.preload = "metadata";
@@ -33,7 +34,7 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
       probe.removeAttribute("src");
       probe.load();
     };
-  }, [videoId, videoUrl]);
+  }, [videoId, videoUrl, isEmbedded]);
 
   if (!video) return null;
 
@@ -41,6 +42,7 @@ export function HomeVideoFeature({ videos }: { videos: PublishedVideo[] }) {
   const modalItem: VideoModalItem = {
     title: video.title,
     videoUrl: video.videoUrl,
+    isEmbedded: video.isEmbedded,
     posterUrl: video.thumbnailUrl,
     href,
     meta: [formatArabicDate(video.publishedAtUtc), video.credit].filter(Boolean).join(" · "),

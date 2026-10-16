@@ -315,6 +315,7 @@
 /* Slice 26 — functional native players for CMS-selected videos. */
 .video-featured { cursor: default; }
 .video-featured-media video { display: block; width: 100%; height: 100%; object-fit: contain; background: #080a0e; }
+.video-featured-media iframe { display: block; width: 100%; height: 100%; min-height: 220px; border: 0; background: #080a0e; }
 .video-featured-body { pointer-events: none; }
 .video-featured-meta, .video-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; color: var(--text-mute); font-size: .86rem; margin-top: 10px; }
 .video-featured-meta a, .video-card-body h3 a { color: inherit; text-decoration: none; }
@@ -322,6 +323,8 @@
 .video-card { cursor: default; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
 .video-card .video-card-player { height: auto; margin: 0; background: #080a0e; }
 .video-card-player video { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: contain; }
+.video-card-player iframe { display: block; width: 100%; aspect-ratio: 16 / 10; border: 0; background: #080a0e; }
+.video-modal-player iframe { display: block; width: 100%; height: 100%; min-height: 240px; border: 0; background: #080a0e; }
 .video-card-body { padding: 12px; }
 .video-card-body h3 { margin: 0; }
 .video-card-body p { color: var(--text-mute); font-size: .9rem; margin: 8px 0 0; }

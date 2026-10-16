@@ -51,8 +51,10 @@ public class EditorialArticle : AuditableEntity
     public List<string> SecondaryTags { get; private set; } = new();
     /// <summary>Final Demo presentation desks; intentionally separate from topical categories and SEO tags.</summary>
     public List<string> PresentationDesks { get; private set; } = new();
-    /// <summary>The embedded video selected for the public video hub; null means article-only placement.</summary>
+    /// <summary>The uploaded video selected for the public video hub; mutually exclusive with an approved embed.</summary>
     public Guid? FeaturedVideoMediaAssetId { get; private set; }
+    /// <summary>Provider-approved iframe URL selected for the public video hub; mutually exclusive with a media asset.</summary>
+    public string? FeaturedVideoEmbedUrl { get; private set; }
 
     /// <summary>
     /// Editor-curated position (1-based) in the homepage video hero. Null = not on the homepage.
@@ -215,7 +217,22 @@ public class EditorialArticle : AuditableEntity
     public void SetFeaturedVideoMediaAsset(Guid? mediaAssetId)
     {
         FeaturedVideoMediaAssetId = mediaAssetId;
-        if (mediaAssetId is null) HomeVideoOrder = null; // no video -> cannot stay in the video hero
+        if (mediaAssetId.HasValue) FeaturedVideoEmbedUrl = null;
+        if (mediaAssetId is null && FeaturedVideoEmbedUrl is null) HomeVideoOrder = null; // no video -> cannot stay in the video hero
+    }
+
+    public void SetFeaturedVideoEmbedUrl(string? embedUrl)
+    {
+        FeaturedVideoEmbedUrl = string.IsNullOrWhiteSpace(embedUrl) ? null : embedUrl.Trim();
+        if (FeaturedVideoEmbedUrl is not null)
+        {
+            FeaturedVideoMediaAssetId = null;
+            HomeVideoOrder = null;
+        }
+        else if (FeaturedVideoMediaAssetId is null)
+        {
+            HomeVideoOrder = null;
+        }
     }
 
     public void SetHomeVideoOrder(int? order)

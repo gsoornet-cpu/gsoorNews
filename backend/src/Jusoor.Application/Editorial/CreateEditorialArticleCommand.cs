@@ -18,6 +18,7 @@ public sealed record CreateEditorialArticleCommand(
     IReadOnlyList<string> ActorRoles,
     string[]? PresentationDesks = null,
     Guid? FeaturedVideoMediaAssetId = null,
+    string? FeaturedVideoEmbedUrl = null,
     string? CoverImageUrl = null,
     string? AuthorName = null,
     string? AuthorImageUrl = null) : IRequest<EditorialArticleResult>;
@@ -31,6 +32,7 @@ public class CreateEditorialArticleCommandValidator : AbstractValidator<CreateEd
         RuleFor(x => x.Summary).MaximumLength(EditorialArticle.SummaryMaxLength);
         RuleFor(x => x.Body).NotEmpty().MaximumLength(EditorialArticle.BodyMaxLength);
         RuleFor(x => x.CoverImageUrl).MaximumLength(2048);
+        RuleFor(x => x.FeaturedVideoEmbedUrl).MaximumLength(2048);
         RuleFor(x => x.AuthorName).MaximumLength(120);
         RuleFor(x => x.AuthorImageUrl).MaximumLength(2048).Must(IsHttpUrl).When(x => !string.IsNullOrWhiteSpace(x.AuthorImageUrl));
         RuleFor(x => x.CountryId).NotNull().When(x => x.CityId.HasValue)
@@ -82,7 +84,7 @@ public class CreateEditorialArticleCommandHandler : IRequestHandler<CreateEditor
         }
 
         if (!await EditorialSupport.IsFeaturedVideoValidAsync(
-            _context, body, request.FeaturedVideoMediaAssetId, cancellationToken))
+            _context, body, request.FeaturedVideoMediaAssetId, request.FeaturedVideoEmbedUrl, cancellationToken))
         {
             return new EditorialArticleResult(EditorialOutcome.InvalidFeaturedVideo, null);
         }
@@ -98,6 +100,7 @@ public class CreateEditorialArticleCommandHandler : IRequestHandler<CreateEditor
         article.SetAuthorName(request.AuthorName);
         article.SetAuthorImageUrl(request.AuthorImageUrl);
         article.SetFeaturedVideoMediaAsset(request.FeaturedVideoMediaAssetId);
+        article.SetFeaturedVideoEmbedUrl(request.FeaturedVideoEmbedUrl);
         try { article.SetCoverImage(request.CoverImageUrl); }
         catch (ArgumentException) { return new EditorialArticleResult(EditorialOutcome.InvalidBody, null); }
 

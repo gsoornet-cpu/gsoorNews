@@ -37,7 +37,9 @@ export default async function VideosPage({ searchParams }: { searchParams: Promi
         <div className="wrap">
           <div className="section-head"><span className="eyebrow">جسور فيديو</span><h1>فيديوهات جسور</h1></div>
           <article className="video-featured">
-            <div className="video-featured-media"><video src={featured.videoUrl} controls playsInline preload="metadata" aria-label={featured.title} /></div>
+            <div className="video-featured-media">{featured.isEmbedded
+              ? <iframe src={featured.videoUrl} title={featured.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+              : <video src={featured.videoUrl} controls playsInline preload="metadata" aria-label={featured.title} />}</div>
             <div className="video-featured-body"><span className="eyebrow">الأحدث</span><h2>{featured.title}</h2>{featured.excerpt && <p>{featured.excerpt}</p>}</div>
           </article>
           <div className="video-featured-meta">
@@ -50,7 +52,9 @@ export default async function VideosPage({ searchParams }: { searchParams: Promi
             <div className="section-head video-list-head"><span className="eyebrow">منشور حديثاً</span><h2>كل الفيديوهات</h2></div>
             <div className="video-grid">
               {videos.map((video) => <article className="video-card" key={video.id}>
-                <div className="thumb video-card-player"><video src={video.videoUrl} controls playsInline preload="metadata" aria-label={video.title} /></div>
+                <div className="thumb video-card-player">{video.isEmbedded
+                  ? <iframe src={video.videoUrl} title={video.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+                  : <video src={video.videoUrl} controls playsInline preload="metadata" aria-label={video.title} />}</div>
                 <div className="video-card-body"><h3><Link href={`/article/${video.id}/${encodeURIComponent(video.slug)}`}>{video.title}</Link></h3>
                   {video.excerpt && <p>{video.excerpt}</p>}
                   <div className="video-card-meta"><time dateTime={video.publishedAtUtc}>{formatArabicDate(video.publishedAtUtc)}</time>{video.credit && <span>{video.credit}</span>}</div>

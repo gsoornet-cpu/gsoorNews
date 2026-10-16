@@ -198,7 +198,7 @@ public sealed class GetPublishedVideosQueryValidator : AbstractValidator<GetPubl
     }
 }
 
-/// <summary>Only published articles with an explicitly selected, ready video asset enter the public hub.</summary>
+/// <summary>Only published articles with an explicitly selected, ready video asset or validated embed enter the public hub.</summary>
 public sealed class GetPublishedVideosQueryHandler
     : IRequestHandler<GetPublishedVideosQuery, PagedResult<PublicVideoSummaryDto>>
 {
@@ -214,36 +214,53 @@ public sealed class GetPublishedVideosQueryHandler
     public async Task<PagedResult<PublicVideoSummaryDto>> Handle(
         GetPublishedVideosQuery request, CancellationToken cancellationToken)
     {
-        var query = from article in _context.EditorialArticles.AsNoTracking()
-                    join asset in _context.EditorialMediaAssets.AsNoTracking()
-                        on article.FeaturedVideoMediaAssetId equals (Guid?)asset.Id
-                    where article.Status == EditorialArticleStatus.Published
-                          && article.PublishedAtUtc != null
-                          && asset.Kind == EditorialMediaKind.Video
-                          && asset.Status == EditorialMediaStatus.Ready
-                    select new { Article = article, Asset = asset };
+        var query = _context.EditorialArticles.AsNoTracking()
+            .Where(article => article.Status == EditorialArticleStatus.Published
+                && article.PublishedAtUtc != null
+                && (article.FeaturedVideoEmbedUrl != null || _context.EditorialMediaAssets.Any(asset =>
+                    asset.Id == article.FeaturedVideoMediaAssetId
+                    && asset.Kind == EditorialMediaKind.Video && asset.Status == EditorialMediaStatus.Ready)));
 
         // Homepage hero: ONLY editor-selected videos, in the editor's order. The video hub
         // (/videos) keeps listing every published video, newest first.
         var ordered = request.HomeOnly
-            ? query.Where(r => r.Article.HomeVideoOrder != null)
-                .OrderBy(r => r.Article.HomeVideoOrder).ThenByDescending(r => r.Article.PublishedAtUtc)
-            : query.OrderBy(r => r.Article.HomeVideoOrder == null ? 1 : 0)
-                .ThenBy(r => r.Article.HomeVideoOrder)
-                .ThenByDescending(r => r.Article.PublishedAtUtc).ThenByDescending(r => r.Article.Id);
+            ? query.Where(article => article.HomeVideoOrder != null)
+                .OrderBy(article => article.HomeVideoOrder).ThenByDescending(article => article.PublishedAtUtc)
+            : query.OrderBy(article => article.HomeVideoOrder == null ? 1 : 0)
+                .ThenBy(article => article.HomeVideoOrder)
+                .ThenByDescending(article => article.PublishedAtUtc).ThenByDescending(article => article.Id);
 
         var totalCount = await ordered.CountAsync(cancellationToken);
-        var rows = await ordered.Skip((request.Page - 1) * request.PageSize)
+        var articles = await ordered.Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize).ToListAsync(cancellationToken);
-        var items = rows.Select(row => new PublicVideoSummaryDto(
-            row.Article.Id,
-            row.Article.Title,
-            row.Article.Summary ?? ArticleBodyContent.Excerpt(row.Article.Body, row.Article.BodyFormat, 220),
-            _storage.GetPublicUrl(row.Asset.ObjectPath),
-            row.Asset.Caption,
-            row.Asset.Credit,
-            row.Article.PublishedAtUtc!.Value,
-            row.Article.Slug) { ThumbnailUrl = row.Article.SocialImageUrl, AuthorName = row.Article.AuthorName, AuthorImageUrl = row.Article.AuthorImageUrl }).ToArray();
+        var mediaIds = articles.Where(article => article.FeaturedVideoMediaAssetId.HasValue)
+            .Select(article => article.FeaturedVideoMediaAssetId!.Value).Distinct().ToArray();
+        var media = await _context.EditorialMediaAssets.AsNoTracking()
+            .Where(asset => mediaIds.Contains(asset.Id) && asset.Kind == EditorialMediaKind.Video
+                && asset.Status == EditorialMediaStatus.Ready)
+            .ToDictionaryAsync(asset => asset.Id, cancellationToken);
+        var items = articles.Select(article =>
+        {
+            var isEmbedded = !string.IsNullOrWhiteSpace(article.FeaturedVideoEmbedUrl);
+            var asset = article.FeaturedVideoMediaAssetId is { } assetId && media.TryGetValue(assetId, out var found) ? found : null;
+            var videoUrl = isEmbedded ? article.FeaturedVideoEmbedUrl : asset is null ? null : _storage.GetPublicUrl(asset.ObjectPath);
+            if (videoUrl is null) return null;
+            return new PublicVideoSummaryDto(
+                article.Id,
+                article.Title,
+                article.Summary ?? ArticleBodyContent.Excerpt(article.Body, article.BodyFormat, 220),
+                videoUrl,
+                isEmbedded ? null : asset?.Caption,
+                isEmbedded ? string.Empty : asset?.Credit ?? string.Empty,
+                article.PublishedAtUtc!.Value,
+                article.Slug)
+            {
+                ThumbnailUrl = article.SocialImageUrl,
+                AuthorName = article.AuthorName,
+                AuthorImageUrl = article.AuthorImageUrl,
+                IsEmbedded = isEmbedded,
+            };
+        }).Where(item => item is not null).Select(item => item!).ToArray();
         return new PagedResult<PublicVideoSummaryDto>(items, request.Page, request.PageSize, totalCount);
     }
 }

@@ -7,6 +7,7 @@ import Link from "next/link";
 export interface VideoModalItem {
   title: string;
   videoUrl: string;
+  isEmbedded?: boolean;
   posterUrl?: string | null;
   /** The article this video belongs to ("اقرأ التقرير كاملاً"). */
   href: string;
@@ -40,7 +41,7 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
       if (event.key === "Escape") onCloseRef.current();
     };
     window.addEventListener("keydown", onKey);
-    video?.play().catch(() => undefined); // autoplay can be blocked; the native controls still work
+    if (!item.isEmbedded) video?.play().catch(() => undefined); // autoplay can be blocked; the native controls still work
 
     return () => {
       cancelAnimationFrame(frame);
@@ -72,7 +73,15 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
 
         <div className="video-modal-player">
           <div className={`video-modal-loading${loading ? " show" : ""}`}><span className="spinner" /></div>
-          <video
+          {item.isEmbedded ? <iframe
+            src={item.videoUrl}
+            title={item.title}
+            loading="eager"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+            onLoad={() => setLoading(false)}
+          /> : <video
             ref={videoRef}
             src={item.videoUrl}
             poster={item.posterUrl ?? undefined}
@@ -84,7 +93,7 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
             onCanPlay={() => setLoading(false)}
             onPlaying={() => setLoading(false)}
             onError={() => setLoading(false)}
-          />
+          />}
         </div>
 
         <div className="video-modal-foot">

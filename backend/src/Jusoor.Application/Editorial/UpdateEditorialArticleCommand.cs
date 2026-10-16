@@ -21,6 +21,7 @@ public sealed record UpdateEditorialArticleCommand(
     string? EditReason = null,
     string[]? PresentationDesks = null,
     Guid? FeaturedVideoMediaAssetId = null,
+    string? FeaturedVideoEmbedUrl = null,
     string? CoverImageUrl = null,
     string? AuthorName = null,
     string? AuthorImageUrl = null) : IRequest<EditorialArticleResult>;
@@ -35,6 +36,7 @@ public class UpdateEditorialArticleCommandValidator : AbstractValidator<UpdateEd
         RuleFor(x => x.Summary).MaximumLength(EditorialArticle.SummaryMaxLength);
         RuleFor(x => x.Body).NotEmpty().MaximumLength(EditorialArticle.BodyMaxLength);
         RuleFor(x => x.CoverImageUrl).MaximumLength(2048);
+        RuleFor(x => x.FeaturedVideoEmbedUrl).MaximumLength(2048);
         RuleFor(x => x.AuthorName).MaximumLength(120);
         RuleFor(x => x.AuthorImageUrl).MaximumLength(2048).Must(IsHttpUrl).When(x => !string.IsNullOrWhiteSpace(x.AuthorImageUrl));
         RuleFor(x => x.CountryId).NotNull().When(x => x.CityId.HasValue)
@@ -105,7 +107,7 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
         }
 
         if (!await EditorialSupport.IsFeaturedVideoValidAsync(
-            _context, body, request.FeaturedVideoMediaAssetId, cancellationToken))
+            _context, body, request.FeaturedVideoMediaAssetId, request.FeaturedVideoEmbedUrl, cancellationToken))
         {
             return new EditorialArticleResult(EditorialOutcome.InvalidFeaturedVideo, null);
         }
@@ -124,6 +126,7 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
         var desksChanged = !article.PresentationDesks.SequenceEqual(
             Jusoor.Domain.Editorial.EditorialDesk.Catalog.Keys.Where(requestedDesks.Contains));
         var featuredVideoChanged = article.FeaturedVideoMediaAssetId != request.FeaturedVideoMediaAssetId;
+        featuredVideoChanged |= article.FeaturedVideoEmbedUrl != (string.IsNullOrWhiteSpace(request.FeaturedVideoEmbedUrl) ? null : request.FeaturedVideoEmbedUrl.Trim());
         if (article.Status == EditorialArticleStatus.Published && (desksChanged || featuredVideoChanged))
         {
             return new EditorialArticleResult(EditorialOutcome.Conflict, EditorialSupport.ToDto(article));
@@ -174,6 +177,7 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
         article.SetAuthorImageUrl(request.AuthorImageUrl);
         article.SetPresentationDesks(requestedDesks);
         article.SetFeaturedVideoMediaAsset(request.FeaturedVideoMediaAssetId);
+        article.SetFeaturedVideoEmbedUrl(request.FeaturedVideoEmbedUrl);
         if (coverChanged) article.SetCoverImage(newCover);
 
         if (requiresReapproval)
