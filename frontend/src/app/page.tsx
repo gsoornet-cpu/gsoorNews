@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { getPublishedNews, getPublishedVideos } from "@/lib/news-api";
+import { getPublishedNews, getPublishedVideos, getPublicAdPlacements, type PublicAdPlacement } from "@/lib/news-api";
 import type { StorySummary } from "@/lib/stories-api";
 import { JsonLd } from "@/components/JsonLd";
 import { buildOrganizationJsonLd } from "@/lib/seo";
@@ -9,6 +9,7 @@ import { absoluteUrl } from "@/lib/site";
 import { StoryGridCard } from "@/components/StoryGridCard";
 import { HomeHeroSlider } from "@/components/home/HomeHeroSlider";
 import { HomePollCard, NewsletterForm } from "@/components/home/HomePollCard";
+import { ConfiguredAd } from "@/components/home/ConfiguredAd";
 import { ServicesBand } from "@/components/home/ServicesBand";
 import { formatArabicDate } from "@/lib/format";
 
@@ -56,20 +57,9 @@ function EmptyDesk({ label }: { label: string }) {
   return <div className="home-empty-desk"><span aria-hidden="true">✦</span><p>لا توجد مواد منشورة في «{label}» حتى الآن.</p><span>ستظهر التغطيات هنا بعد نشر خبر واختيار هذا القسم.</span></div>;
 }
 
-/** A clearly marked, non-sticky sponsored placement that preserves the supplied creative. */
-function HomeAdPlacement({ image, alt, size, href, className = "" }: { image: string; alt: string; size: number; href: string; className?: string }) {
-  return (
-    <aside className={`home-ad-placement ${className}`.trim()} aria-label="إعلان ممول">
-      <div className="wrap">
-        <div className="home-ad-placement__frame">
-          <span className="home-ad-placement__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>
-          <a href={href} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${alt} — زيارة موقع المعلن`}>
-            <Image src={image} alt={alt} width={size} height={size} unoptimized loading="lazy" />
-          </a>
-        </div>
-      </div>
-    </aside>
-  );
+function HomeAdPlacement({ placement, className = "", ratio = "1 / 1" }: { placement?: PublicAdPlacement; className?: string; ratio?: string }) {
+  if (!placement) return null;
+  return <div className={`home-ad-placement ${className}`.trim()}><div className="wrap"><ConfiguredAd placement={placement} ratio={ratio} /></div></div>;
 }
 
 /** Demo's `.six-grid` of `.grid-card`s (cardGrid). */
@@ -152,7 +142,7 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
                   <div className="foot"><span>{placeOf(feature)}</span><span>·</span><span>{formatArabicDate(feature.publishedAtUtc)}</span></div>
                 </div>
               </Link>
-              {rest.length > 0 && <div className="lamma-grid">{rest.slice(0, 4).map((story) => <LammaCard key={story.id} story={story} />)}</div>}
+              {rest.length > 0 && <div className="lamma-grid">{rest.slice(0, 2).map((story) => <LammaCard key={story.id} story={story} />)}</div>}
             </> : <EmptyDesk label={deskLabels.lamma} />}
           </div>
           <aside>
@@ -167,10 +157,6 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
               {events.length === 0 && <EmptyDesk label={deskLabels.events} />}
               <Link href="/category?cat=events" className="cta">شاهد كل الفعاليات ←</Link>
             </div>
-            <a className="ad-slot slim home-nbe-desktop-ad" href="https://www.nbe.com.eg/NBE/E/#/AR/Home" target="_blank" rel="sponsored noopener noreferrer" aria-label="إعلان البنك الأهلي المصري — زيارة موقع البنك الأهلي">
-              <span className="lbl">مساحة إعلانية · إعلان ممول</span>
-              <Image src="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" width={1600} height={1600} unoptimized loading="lazy" />
-            </a>
           </aside>
         </div>
       </div>
@@ -178,16 +164,14 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
   );
 }
 
-function AtmaenFeature() {
+function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileAd?: PublicAdPlacement }) {
   return (
-    <section className="section atmaen-feature-section" id="atmaen"><div className="wrap"><div className="atmaen-feature-card"><div className="split-2" style={{ gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
+    <section className="section atmaen-feature-section" id="atmaen"><div className="wrap"><div className="atmaen-feature-card"><div className="split-2 atmaen-feature-layout">
         <div><span className="eyebrow atmaen-feature-eyebrow">على منصة جسور فقط</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
           <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/category?cat=mughtarib">اطمن على مغتربك</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر تحديثات الأزمة</Link></div>
         </div>
-        <aside className="atmaen-ad-slot" aria-label="إعلان ممول">
-          <span className="atmaen-ad-slot__label">مساحة إعلانية <span aria-hidden="true">·</span> إعلان ممول</span>
-          <a href="https://www.te.eg/" target="_blank" rel="sponsored noopener noreferrer" aria-label="إعلان WE — زيارة موقع WE"><Image src="/assets/advertisements/we-ramadan-offer.jpeg" alt="إعلان WE عن عروض رمضان غير أي حد" width={1424} height={745} unoptimized loading="lazy" /></a>
-        </aside>
+        <ConfiguredAd placement={webAd} className="atmaen-ad-slot atmaen-ad-slot--web" ratio="1424 / 745" />
+        <ConfiguredAd placement={mobileAd} className="atmaen-ad-slot atmaen-ad-slot--mobile" ratio="1424 / 745" />
       </div></div></div></section>
   );
 }
@@ -209,13 +193,21 @@ function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> })
 
 export default async function HomePage() {
   const deskSlugs = Object.keys(deskLabels);
-  const [newsResult, videoResult, ...deskResults] = await Promise.allSettled([
-    getPublishedNews(1, 50),
-    getPublishedVideos(1, 12), // Include every published article whose video was selected in the article editor.
-    ...deskSlugs.map((slug) => getPublishedNews(1, 10, slug)),
+  const [[newsResult, videoResult, webAdsResult, mobileAdsResult], deskResults] = await Promise.all([
+    Promise.allSettled([
+      getPublishedNews(1, 50),
+      getPublishedVideos(1, 7, true), // Only the editor-curated seven videos belong in the hero.
+      getPublicAdPlacements("web"),
+      getPublicAdPlacements("mobile"),
+    ] as const),
+    Promise.allSettled(deskSlugs.map((slug) => getPublishedNews(1, 10, slug))),
   ]);
   const feed = newsResult.status === "fulfilled" ? newsResult.value.items : [];
   const videos = videoResult.status === "fulfilled" ? videoResult.value.items : [];
+  const webAds = webAdsResult.status === "fulfilled" ? webAdsResult.value : [];
+  const mobileAds = mobileAdsResult.status === "fulfilled" ? mobileAdsResult.value : [];
+  const ad = (surface: "web" | "mobile", slotKey: string) =>
+    (surface === "web" ? webAds : mobileAds).find((placement) => placement.slotKey === slotKey);
   const desks: Record<string, StorySummary[]> = Object.fromEntries(deskSlugs.map((slug, index) => {
     const result = deskResults[index];
     return [slug, result?.status === "fulfilled" ? result.value.items : []];
@@ -236,7 +228,7 @@ export default async function HomePage() {
     <main id="main">
       <JsonLd data={buildOrganizationJsonLd()} />
       {heroSlides.length > 0 && <HomeHeroSlider slides={heroSlides} />}
-      <HomeAdPlacement image="/assets/advertisements/nbe-project-finance.png" alt="إعلان البنك الأهلي المصري: موّل مشروعك وكبّر حلمك" size={1600} href="https://www.nbe.com.eg/NBE/E/#/AR/Home" className="home-ad-placement--mobile-only home-ad-placement--mobile-after-videos" />
+      <HomeAdPlacement placement={ad("mobile", "hero-after-videos")} className="home-ad-placement--mobile-only home-ad-placement--mobile-after-videos" />
 
       <section className="section tight on-surface">
         <div className="wrap">
@@ -244,20 +236,18 @@ export default async function HomePage() {
           <DeskGrid stories={desks.mughtarib.slice(0, 6)} label={deskLabels.mughtarib} mobileVariant="lead" />
         </div>
       </section>
-      <HomeAdPlacement image="/assets/advertisements/cib-swype.png" alt="إعلان CIB Swype: وفّر دلوقتي وقسّط براحتك" size={1080} href="https://www.cibeg.com/ar" className="home-ad-placement--mobile-only" />
-      <ServicesBand />
-      <AtmaenFeature />
+      <HomeAdPlacement placement={ad("mobile", "after-mughtarib")} className="home-ad-placement--mobile-only" />
+      <ServicesBand ad={ad("web", "services-inline")} />
+      <AtmaenFeature webAd={ad("web", "atmaen-ad")} mobileAd={ad("mobile", "atmaen-ad")} />
 
       {/* الويب يحتفظ بمساحة الإعلان الجانبية؛ إعلانات الموبايل تظهر بعد السكشن. */}
       <section className="section on-surface">
         <div className="wrap">
           <div className="split-2">
             <aside className="sidebar-interactive-ad home-success-aside">
+              <ConfiguredAd placement={ad("web", "success-ad")} className="home-success-desktop-ad" />
+              <ConfiguredAd placement={ad("mobile", "success-ad")} className="home-success-mobile-ad" />
               <HomePollCard />
-              <a className="home-success-desktop-ad" href="https://www.banquemisr.com/?sc_lang=ar-EG" target="_blank" rel="sponsored noopener noreferrer" aria-label="إعلان بنك مصر — زيارة موقع بنك مصر">
-                <span className="ad-label">مساحة إعلانية · إعلان ممول</span>
-                <Image src="/assets/advertisements/banque-misr-certificate.png" alt="إعلان بنك مصر: شهادة القمة بعائد سنوي ثابت يُصرف شهريًا" width={1600} height={1600} unoptimized loading="lazy" />
-              </a>
             </aside>
             <div className="home-success-stories">
               <Head label={deskLabels.success} slug="success" asHeading />
@@ -266,8 +256,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-      <HomeAdPlacement image="/assets/advertisements/banque-misr-certificate.png" alt="إعلان بنك مصر: شهادة القمة بعائد سنوي ثابت يُصرف شهريًا" size={1600} href="https://www.banquemisr.com/?sc_lang=ar-EG" className="home-ad-placement--mobile-after-success" />
-
       <section className="section tight on-surface">
         <div className="wrap">
           <Head label={deskLabels.egypt} slug="egypt" />
@@ -275,6 +263,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <HomeAdPlacement placement={ad("web", "editorial-top")} className="home-wide-ad home-wide-ad--web-only" ratio="3 / 1" />
       <section className="section editorial-columns-section" aria-label="خط أحمر ومع مسؤول">
         <div className="wrap">
           <div className="editorial-columns">
@@ -292,6 +281,12 @@ export default async function HomePage() {
               {desks.articles.slice(0, 8).map((story, index) => (
                 <article className={`opinion-tile${index === 0 ? " featured" : ""}`} key={story.id}>
                   <div className="opinion-tile-title"><Link href={articleHref(story)}>{story.title}</Link></div>
+                  {story.authorName && <div className="opinion-byline" aria-label={`بقلم ${story.authorName}`}>
+                    {story.authorImageUrl
+                      ? <Image className="opinion-avatar" src={story.authorImageUrl} alt={story.authorName} width={70} height={70} unoptimized />
+                      : <span className="opinion-avatar opinion-avatar--initials" aria-hidden="true">{story.authorName.trim().slice(0, 1)}</span>}
+                    <span>{story.authorName}</span>
+                  </div>}
                 </article>
               ))}
             </div>
@@ -309,13 +304,14 @@ export default async function HomePage() {
             <aside>
               <div className="section-head"><h2><span className="eyebrow">أحدث الأخبار</span></h2></div>
               <div className="rank-list">
-                {latest.map((story, index) => (
+                {latest.slice(0, 6).map((story, index) => (
                   <Link className={`item home-rank-item${index < 3 ? " top" : ""}`} href={articleHref(story)} key={story.id}>
                     <span className="rank">{String(index + 1).padStart(2, "0")}</span>
                     <div><h5>{story.title}</h5></div>
                   </Link>
                 ))}
               </div>
+              <ConfiguredAd placement={ad("web", "latest-news-square")} className="home-latest-ad home-wide-ad--web-only" ratio="1 / 1" />
             </aside>
           </div>
         </div>
@@ -328,6 +324,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <HomeAdPlacement placement={ad("web", "lamma-top")} className="home-wide-ad home-wide-ad--web-only" ratio="3 / 1" />
       <LammaSection lamma={desks.lamma} events={desks.events} />
 
       <section className="section on-surface" id="city-alerts" style={{ paddingTop: 0 }}>

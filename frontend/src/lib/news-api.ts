@@ -8,6 +8,7 @@ interface NewsSummaryDto {
   id: string;
   title: string;
   authorName: string | null;
+  authorImageUrl: string | null;
   excerpt: string | null;
   publishedAtUtc: string;
   countryNameAr: string | null;
@@ -31,6 +32,7 @@ export interface NewsDetail {
   id: string;
   title: string;
   authorName: string | null;
+  authorImageUrl: string | null;
   summary: string | null;
   body: string;
   publishedAtUtc: string;
@@ -108,6 +110,20 @@ export async function getPublishedVideos(page = 1, pageSize = 18, homeOnly = fal
   const query = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
   if (homeOnly) query.set("home", "true");
   return apiFetch<PagedResult<PublishedVideo>>(`/api/v1/news/videos?${query.toString()}`);
+}
+
+export interface PublicAdPlacement {
+  slotKey: string;
+  surface: "web" | "mobile";
+  mediaAssetId: string;
+  mediaUrl: string;
+  targetUrl: string;
+  altText: string;
+  displayOrder: number;
+}
+
+export async function getPublicAdPlacements(surface: "web" | "mobile"): Promise<PublicAdPlacement[]> {
+  return apiFetch<PublicAdPlacement[]>(`/api/v1/advertisements/placements?surface=${surface}`);
 }
 
 export async function getPublishedNewsById(id: string): Promise<PublicNewsDetail> {

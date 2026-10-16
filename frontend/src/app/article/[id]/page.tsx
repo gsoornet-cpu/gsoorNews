@@ -159,7 +159,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         <div className="article-toolbar">
           <div className="article-meta">
             <span className="author">
-              <span className="avatar" style={{ width: 26, height: 26, fontSize: 11 }}>ج</span>
+              {story.authorImageUrl
+                ? <Image className="avatar" src={story.authorImageUrl} alt={byline} width={26} height={26} unoptimized />
+                : <span className="avatar" style={{ width: 26, height: 26, fontSize: 11 }}>ج</span>}
               <span>{byline}</span>
             </span>
             {publishedLabel && (

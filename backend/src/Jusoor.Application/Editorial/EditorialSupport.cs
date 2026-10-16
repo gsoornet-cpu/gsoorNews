@@ -33,6 +33,7 @@ internal static class EditorialSupport
     {
         ScheduledPublishAtUtc = a.ScheduledPublishAtUtc,
         AuthorName = a.AuthorName,
+        AuthorImageUrl = a.AuthorImageUrl,
         Slug = a.Slug, SeoTitle = a.SeoTitle, SeoDescription = a.SeoDescription, CanonicalUrl = a.CanonicalUrl,
         SocialTitle = a.SocialTitle, SocialDescription = a.SocialDescription, SocialImageUrl = a.SocialImageUrl,
         NoIndex = a.NoIndex, NoFollow = a.NoFollow, PrimaryCategoryId = a.PrimaryCategoryId,

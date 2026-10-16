@@ -38,6 +38,8 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const [draftHydrated, setDraftHydrated] = useState(false);
   const [title, setTitle] = useState("");
   const [authorName, setAuthorName] = useState("");
+  const [authorImageUrl, setAuthorImageUrl] = useState("");
+  const [authorImageUploadBusy, setAuthorImageUploadBusy] = useState(false);
   const [summary, setSummary] = useState("");
   const [body, setBody] = useState("");
   const [presentationDesks, setPresentationDesks] = useState<string[]>([]);
@@ -65,6 +67,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     setArticle(a);
     setTitle(a.title);
     setAuthorName(a.authorName ?? "");
+    setAuthorImageUrl(a.authorImageUrl ?? "");
     setSummary(a.summary ?? "");
     setBody(a.body);
     setPresentationDesks(a.presentationDesks ?? []);
@@ -86,6 +89,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
         if (!draft) return;
         if (typeof draft.title === "string") setTitle(draft.title);
         if (typeof draft.authorName === "string") setAuthorName(draft.authorName);
+        if (typeof draft.authorImageUrl === "string") setAuthorImageUrl(draft.authorImageUrl);
         if (typeof draft.summary === "string") setSummary(draft.summary);
         if (typeof draft.body === "string") setBody(draft.body);
         if (Array.isArray(draft.presentationDesks) && draft.presentationDesks.every((item) => typeof item === "string")) setPresentationDesks(draft.presentationDesks as string[]);
@@ -120,13 +124,13 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   useEffect(() => {
     if (!draftHydrated) return;
     try {
-      const draft = { title, authorName, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl };
-      if (title || authorName || summary || body || coverImageUrl || presentationDesks.length || featuredVideoMediaAssetId) sessionStorage.setItem(draftKey, JSON.stringify(draft));
+      const draft = { title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl };
+      if (title || authorName || authorImageUrl || summary || body || coverImageUrl || presentationDesks.length || featuredVideoMediaAssetId) sessionStorage.setItem(draftKey, JSON.stringify(draft));
       else sessionStorage.removeItem(draftKey);
     } catch {
       // Storage can be disabled or full; editing and server-side saves still work.
     }
-  }, [draftHydrated, draftKey, title, authorName, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl]);
+  }, [draftHydrated, draftKey, title, authorName, authorImageUrl, summary, body, presentationDesks, featuredVideoMediaAssetId, coverImageUrl]);
 
   async function run(action: () => Promise<void>) {
     setBusy(true);
@@ -150,6 +154,7 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
   const input = () => ({
     title: title.trim(),
     authorName: authorName.trim() || null,
+    authorImageUrl: authorImageUrl.trim() || null,
     summary: summary.trim() || null,
     body: body.trim(),
     // Country/city pickers arrive with the geography admin API; the API accepts null.
@@ -167,6 +172,26 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
     const ids = videoMediaIds(nextBody);
     setBody(nextBody);
     setFeaturedVideoMediaAssetId((current) => current && ids.includes(current) ? current : ids[0] ?? "");
+  }
+
+  async function uploadAuthorPhoto(file?: File) {
+    if (!file) return;
+    setAuthorImageUploadBusy(true);
+    setError(null);
+    try {
+      const asset = await cmsMedia.upload(file, {
+        altText: `صورة الكاتب ${authorName.trim() || "كاتب جسور"}`,
+        credit: authorName.trim() || "جسور",
+        caption: "",
+        focalPointX: null,
+        focalPointY: null,
+      });
+      setAuthorImageUrl(asset.publicUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "تعذّر رفع صورة الكاتب.");
+    } finally {
+      setAuthorImageUploadBusy(false);
+    }
   }
 
   const save = () =>
@@ -387,6 +412,17 @@ export function ArticleEditor({ articleId }: { articleId: string | null }) {
       <div className="cms-field">
         <label htmlFor="author-name">اسم الكاتب (اختياري)</label>
         <input id="author-name" value={authorName} maxLength={120} disabled={!canEditContent || busy} onChange={(event) => setAuthorName(event.target.value)} placeholder="اتركه فارغًا لعرض هيئة تحرير جسور" />
+      </div>
+
+      <div className="cms-field">
+        <label htmlFor="author-image">الصورة الشخصية للكاتب (اختياري)</label>
+        <input id="author-image" type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={!canEditContent || busy || authorImageUploadBusy} onChange={(event) => { void uploadAuthorPhoto(event.target.files?.[0]); event.currentTarget.value = ""; }} />
+        <span className="cms-hint">ارفع صورة مربعة أو صورة شخصية واضحة؛ ستُستخدم في بطاقة مقالات الرأي.</span>
+        {authorImageUploadBusy && <span className="cms-hint">جارٍ رفع الصورة…</span>}
+        {authorImageUrl && <div className="cms-actions">
+          <Image src={authorImageUrl} alt={`صورة ${authorName || "الكاتب"}`} width={72} height={72} unoptimized style={{ objectFit: "cover", borderRadius: "50%" }} />
+          <button className="cms-btn" type="button" disabled={!canEditContent || busy} onClick={() => setAuthorImageUrl("")}>إزالة الصورة</button>
+        </div>}
       </div>
 
       <div className="cms-field">

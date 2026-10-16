@@ -287,6 +287,58 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                     b.ToTable("DiasporaProfiles", (string)null);
                 });
 
+            modelBuilder.Entity("Jusoor.Domain.Entities.EditorialAdPlacement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AltText")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastModifiedAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LastModifiedByUserId")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("MediaAssetId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SlotKey")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<int>("Surface")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TargetUrl")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MediaAssetId");
+
+                    b.HasIndex("SlotKey", "Surface")
+                        .IsUnique();
+
+                    b.ToTable("EditorialAdPlacements", (string)null);
+                });
+
             modelBuilder.Entity("Jusoor.Domain.Entities.EditorialArticle", b =>
                 {
                     b.Property<Guid>("Id")
@@ -299,6 +351,14 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                     b.Property<string>("ArchivedByUserId")
                         .HasMaxLength(450)
                         .HasColumnType("character varying(450)");
+
+                    b.Property<string>("AuthorImageUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
+
+                    b.Property<string>("AuthorName")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -328,10 +388,6 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
 
                     b.Property<int?>("HomeVideoOrder")
                         .HasColumnType("integer");
-
-                    b.Property<string>("AuthorName")
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)");
 
                     b.Property<DateTimeOffset?>("LastModifiedAtUtc")
                         .HasColumnType("timestamp with time zone");
@@ -468,6 +524,10 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("ArticleId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AuthorName")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("text");
@@ -509,10 +569,6 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
-
-                    b.Property<string>("AuthorName")
-                        .HasMaxLength(120)
-                        .HasColumnType("character varying(120)");
 
                     b.HasKey("Id");
 
@@ -1359,6 +1415,17 @@ namespace Jusoor.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Jusoor.Domain.Entities.EditorialAdPlacement", b =>
+                {
+                    b.HasOne("Jusoor.Domain.Entities.EditorialMediaAsset", "MediaAsset")
+                        .WithMany()
+                        .HasForeignKey("MediaAssetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("MediaAsset");
                 });
 
             modelBuilder.Entity("Jusoor.Domain.Entities.EditorialArticle", b =>

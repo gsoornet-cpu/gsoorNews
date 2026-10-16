@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
+import Image from "next/image";
+import type { PublicAdPlacement } from "@/lib/news-api";
 
 interface Service {
   icon: string;
@@ -26,7 +28,7 @@ const services: Service[] = [
  * Component because the arrow buttons scroll the row (event handlers cannot
  * be rendered from the Server Component home page).
  */
-export function ServicesBand() {
+export function ServicesBand({ ad }: { ad?: PublicAdPlacement }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const scroll = (direction: 1 | -1) => {
     const row = rowRef.current;
@@ -49,8 +51,8 @@ export function ServicesBand() {
 
         <div className="svc-slider-container">
           <div className="svc-row" id="svcRow" ref={rowRef}>
-            {services.map((service) => (
-              <a className={`svc-card${service.featured ? " featured" : ""}`} href={service.href} key={service.title}>
+            {services.map((service, index) => <Fragment key={service.title}>
+              <a className={`svc-card${service.featured ? " featured" : ""}`} href={service.href}>
                 <div className="icon-box">
                   <span className="emoji-icon">{service.icon}</span>
                   {service.featured && <div className="glow-effect" />}
@@ -60,7 +62,11 @@ export function ServicesBand() {
                   <span className="svc-desc">{service.description}</span>
                 </div>
               </a>
-            ))}
+              {ad && index === 3 && <a className="svc-card svc-ad-card" href={ad.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${ad.altText} — زيارة موقع المعلن`}>
+                <span>مساحة إعلانية · إعلان ممول</span>
+                <Image src={ad.mediaUrl} alt={ad.altText} width={420} height={315} unoptimized />
+              </a>}
+            </Fragment>)}
           </div>
         </div>
         <div className="svc-controls" role="group" aria-label="التنقل بين الخدمات">

@@ -34,6 +34,7 @@ public sealed record EditorialArticleDto(
 {
     public DateTimeOffset? ScheduledPublishAtUtc { get; init; }
     public string? AuthorName { get; init; }
+    public string? AuthorImageUrl { get; init; }
     public string Slug { get; init; } = "";
     public string? SeoTitle { get; init; }
     public string? SeoDescription { get; init; }
@@ -82,6 +83,7 @@ public sealed record PublicNewsSummaryDto(
     /// <summary>Public editorial cover image, sourced from the article's social image setting.</summary>
     public string? ImageUrl { get; init; }
     public string? AuthorName { get; init; }
+    public string? AuthorImageUrl { get; init; }
 }
 
 /// <summary>Published article with a CMS-selected, verified video media asset for the public video hub.</summary>
@@ -91,6 +93,7 @@ public sealed record PublicVideoSummaryDto(
 {
     public string? ThumbnailUrl { get; init; }
     public string? AuthorName { get; init; }
+    public string? AuthorImageUrl { get; init; }
 }
 
 /// <summary>
@@ -116,6 +119,7 @@ public sealed record PublicNewsDetailDto(
 {
     public string Slug { get; init; } = "";
     public string? AuthorName { get; init; }
+    public string? AuthorImageUrl { get; init; }
     public string? SeoTitle { get; init; }
     public string? SeoDescription { get; init; }
     public string? CanonicalUrl { get; init; }

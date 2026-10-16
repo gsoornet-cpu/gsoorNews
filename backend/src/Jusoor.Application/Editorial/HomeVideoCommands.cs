@@ -51,7 +51,7 @@ public enum SetHomeVideosOutcome { Success, InvalidSelection }
 
 public sealed class SetHomeVideosCommandValidator : AbstractValidator<SetHomeVideosCommand>
 {
-    public const int MaxVideos = 12;
+    public const int MaxVideos = 7;
 
     public SetHomeVideosCommandValidator()
     {

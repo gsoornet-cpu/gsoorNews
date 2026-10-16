@@ -19,15 +19,21 @@ export default function CmsDashboardPage() {
   const router = useRouter();
   const [session, setSession] = useState<CmsSession | null>(null);
   const [items, setItems] = useState<CmsArticleSummary[] | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [status, setStatus] = useState<ArticleStatus | "">("");
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(
-    async (filter: ArticleStatus | "") => {
+    async (filter: ArticleStatus | "", requestedPage: number) => {
       try {
-        const result = await cms.list(filter || undefined);
+        const result = await cms.list(filter || undefined, requestedPage);
         setItems(result.items);
+        setPage(result.page);
+        setTotalCount(result.totalCount);
+        setTotalPages(result.totalPages);
         setError(null);
       } catch (e) {
         if (e instanceof CmsError && e.status === 401) {
@@ -53,7 +59,7 @@ export default function CmsDashboardPage() {
         setItems([]);
         return;
       }
-      await load("");
+      await load("", 1);
     })();
   }, [router, load]);
 
@@ -85,7 +91,7 @@ export default function CmsDashboardPage() {
         default:
           await cms.unpublish(article.id);
       }
-      await load(status);
+      await load(status, page);
     } catch (e) {
       setError(e instanceof CmsError ? e.message : "تعذّر تنفيذ الإجراء.");
     } finally {
@@ -109,6 +115,7 @@ export default function CmsDashboardPage() {
         <div className="cms-actions">
           {session.roles?.includes("SeoEditor") && <Link className="cms-btn" href="/cms/seo">تحرير SEO</Link>}
           {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link className="cms-btn" href="/cms/home-videos">فيديوهات الرئيسية</Link>}
+          {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link className="cms-btn" href="/cms/advertisements">إدارة الإعلانات</Link>}
           <div className="cms-filter">
             <label htmlFor="status" className="cms-hint">
               الحالة
@@ -119,7 +126,7 @@ export default function CmsDashboardPage() {
               onChange={(e) => {
                 const value = e.target.value as ArticleStatus | "";
                 setStatus(value);
-                void load(value);
+                void load(value, 1);
               }}
             >
               <option value="">الكل</option>
@@ -152,6 +159,8 @@ export default function CmsDashboardPage() {
       ) : items.length === 0 ? (
         <p>لا توجد مقالات بعد. ابدأ بإنشاء مقال جديد.</p>
       ) : (
+        <>
+        <p className="cms-hint">{totalCount} مقالًا · الصفحة {page} من {totalPages}</p>
         <table className="cms-table">
           <thead>
             <tr>
@@ -202,6 +211,12 @@ export default function CmsDashboardPage() {
             })}
           </tbody>
         </table>
+        <div className="cms-actions" style={{ justifyContent: "center", marginTop: 18 }}>
+          <button className="cms-btn" type="button" disabled={page <= 1} onClick={() => void load(status, page - 1)}>السابق</button>
+          <span className="cms-hint">{page} / {totalPages}</span>
+          <button className="cms-btn" type="button" disabled={page >= totalPages} onClick={() => void load(status, page + 1)}>التالي</button>
+        </div>
+        </>
       )}
     </div>
   );

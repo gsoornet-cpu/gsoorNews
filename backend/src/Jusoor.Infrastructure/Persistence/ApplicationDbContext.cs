@@ -50,6 +50,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<EditorialArticleRevision> EditorialArticleRevisions => Set<EditorialArticleRevision>();
     public DbSet<EditorialCorrection> EditorialCorrections => Set<EditorialCorrection>();
     public DbSet<EditorialMediaAsset> EditorialMediaAssets => Set<EditorialMediaAsset>();
+    public DbSet<EditorialAdPlacement> EditorialAdPlacements => Set<EditorialAdPlacement>();
 
     public void Detach<TEntity>(TEntity entity) where TEntity : class => Entry(entity).State = EntityState.Detached;
 

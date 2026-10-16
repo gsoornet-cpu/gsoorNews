@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { cms, cmsHomeVideos, CmsError, type CmsHomeVideo } from "@/lib/cms-client";
 import { formatArabicDate } from "@/lib/format";
 
-const MAX_VIDEOS = 12;
+const MAX_VIDEOS = 7;
 
 /**
  * Curates the homepage video hero: tick the published videos to show and put them in order.
@@ -28,8 +28,9 @@ export default function HomeVideosPage() {
       const session = await cms.session();
       if (!session.authenticated) { router.replace("/cms/login"); return; }
       const all = await cmsHomeVideos.list();
-      setSelected(all.filter((v) => v.homeVideoOrder !== null).sort((a, b) => (a.homeVideoOrder ?? 0) - (b.homeVideoOrder ?? 0)));
-      setAvailable(all.filter((v) => v.homeVideoOrder === null));
+      const ordered = all.filter((v) => v.homeVideoOrder !== null).sort((a, b) => (a.homeVideoOrder ?? 0) - (b.homeVideoOrder ?? 0));
+      setSelected(ordered.slice(0, MAX_VIDEOS));
+      setAvailable([...ordered.slice(MAX_VIDEOS), ...all.filter((v) => v.homeVideoOrder === null)]);
       setDirty(false);
       setError(null);
     } catch (e) {
@@ -108,7 +109,10 @@ export default function HomeVideosPage() {
         <h2 style={{ marginTop: 28 }}>فيديوهات منشورة متاحة للإضافة ({available.length})</h2>
         {available.length === 0 ? <p className="cms-hint">لا توجد فيديوهات أخرى. انشر خبرًا بفيديو (اختر «عرض فيديو من هذا الخبر في قسم الفيديوهات») ليظهر هنا.</p> : (
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-            {available.map((video) => row(video, <button type="button" className="cms-btn" disabled={busy} onClick={() => add(video)}>إضافة للصفحة الرئيسية</button>))}
+            {available.map((video) => row(video, <label className="cms-hint" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+              <input type="checkbox" checked={selected.some((item) => item.articleId === video.articleId)} disabled={busy || (!selected.some((item) => item.articleId === video.articleId) && selected.length >= MAX_VIDEOS)} onChange={(event) => event.target.checked ? add(video) : remove(video)} />
+              اختيار للرئيسية
+            </label>))}
           </ul>
         )}
 

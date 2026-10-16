@@ -88,7 +88,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
       <div className="wrap">
         <div className="hero-slider">
           <div className="hero-side">{sideSlides.slice(0, 3).map(thumb)}</div>
-          <div className="hero-main" key={current.id}
+          <div className="hero-main"
             onTouchStart={(event) => setTouchStartX(event.touches[0]?.clientX ?? null)}
             onTouchEnd={(event) => {
               if (touchStartX === null) return;
@@ -96,7 +96,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
               if (Math.abs(delta) > 45) select(active + (delta > 0 ? 1 : -1));
               setTouchStartX(null);
             }}>
-            {current.imageUrl ? <Image src={current.imageUrl} alt={current.title} fill sizes="(max-width: 800px) 100vw, 60vw" unoptimized priority /> : <div className="home-hero-fallback" aria-hidden="true"><span>جسور</span></div>}
+            {current.imageUrl ? <Image key={current.id} src={current.imageUrl} alt={current.title} fill sizes="(max-width: 800px) 100vw, 60vw" unoptimized priority /> : <div className="home-hero-fallback" aria-hidden="true"><span>جسور</span></div>}
             {current.videoUrl ? (
               <>
                 {currentDuration && <span className="duration-badge duration-badge-lg">{currentDuration}</span>}
@@ -114,13 +114,7 @@ export function HomeHeroSlider({ slides }: { slides: HomeHeroSlide[] }) {
           <div className="hero-side">{sideSlides.slice(3, 6).map(thumb)}</div>
         </div>
         <Link className="hero-below" href={current.href} key={`headline-${current.id}`}>
-          <span className="hero-below__content">
-            {current.videoUrl && <span className="hero-below__play" aria-hidden="true">▶</span>}
-            <span className="hero-below__copy">
-              <span className="hero-below__eyebrow">{current.videoUrl ? "تغطية مرئية" : "أبرز الأخبار"}</span>
-              <h2>{current.title}</h2>
-            </span>
-          </span>
+          <h2>{current.title}</h2>
         </Link>
         <div className={`hero-nav${slides.length > 1 ? " has-multiple" : ""}`}>
           <button className="btn btn-ghost btn-sm" type="button" onClick={() => select(active - 1)}><span aria-hidden="true">→</span> السابق</button>

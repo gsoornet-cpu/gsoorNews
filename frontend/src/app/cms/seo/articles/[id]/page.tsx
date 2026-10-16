@@ -69,17 +69,17 @@ export default function ArticleSeoEditorPage() {
   return <main className="wrap cms-card" dir="rtl">
     <header className="cms-head"><div><h1>تحسين ظهور المقال</h1><p>{item.title}</p></div><Link className="cms-btn" href={`/cms/articles/${id}`}>عودة للمقال</Link></header>
     {error && <div className="cms-msg error" role="alert">{error}</div>}{saved && <div className="cms-msg ok" role="status">تم حفظ إعدادات SEO.</div>}
-    {textField("seoTitle", "عنوان محركات البحث (50–60 حرفًا؛ اتركه فارغًا لاستخدام عنوان المقال)", 60)}
-    {textField("seoDescription", "الوصف (150–160 حرفًا؛ اتركه فارغًا لاستخدام الملخص)", 160)}
-    {textField("slug", "الرابط المختصر (عربي أو لاتيني، فريد)", 180)}
+    {textField("seoTitle", "عنوان محركات البحث (50–60 حرفًا؛ اتركه فارغًا لاستخدام عنوان المقال)", 60, "يظهر عنوانًا للنتيجة في محركات البحث؛ التزم بالطول حتى لا يرفضه النظام أو يُقتطع." )}
+    {textField("seoDescription", "الوصف (150–160 حرفًا؛ اتركه فارغًا لاستخدام الملخص)", 160, "ملخص النتيجة في البحث؛ اكتب وصفًا دقيقًا من الخبر. الطول خارج النطاق يمنع الحفظ." )}
+    {textField("slug", "الرابط المختصر (عربي أو لاتيني، فريد)", 180, "تغييره يغيّر رابط المقال؛ حدّث الروابط الخارجية إن كان الخبر منشورًا." )}
     <p className="cms-hint">الرابط الحالي: /article/{id}/{item.slug}</p>
-    {textField("twitterTitle", "عنوان Twitter (50–60 حرفًا؛ فارغ = عنوان المشاركة)", 60)}
-    {textField("twitterDescription", "وصف Twitter (150–160 حرفًا؛ فارغ = وصف المشاركة)", 160)}
-    {textField("twitterImageUrl", "صورة Twitter (رابط HTTP أو HTTPS؛ فارغ = صورة المشاركة)", 2048)}
+    {textField("twitterTitle", "عنوان Twitter (50–60 حرفًا؛ فارغ = عنوان المشاركة)", 60, "يخص معاينة المشاركة على X فقط، ولا يغيّر عنوان البحث." )}
+    {textField("twitterDescription", "وصف Twitter (150–160 حرفًا؛ فارغ = وصف المشاركة)", 160, "يخص نص معاينة المشاركة، ويمكن تركه فارغًا لاستخدام وصف المشاركة العام." )}
+    {textField("twitterImageUrl", "صورة Twitter (رابط HTTP أو HTTPS؛ فارغ = صورة المشاركة)", 2048, "تظهر عند مشاركة الخبر؛ استخدم صورة أفقية واضحة وبإذن النشر." )}
     <div className="cms-field"><label htmlFor="primary-category">التصنيف الرئيسي</label>
       <select id="primary-category" required value={item.primaryCategoryId ?? ""} onChange={e => change("primaryCategoryId", e.target.value)}>
         <option value="" disabled>اختر تصنيفًا رئيسيًا</option>{item.categories.map(category => <option key={category.id} value={category.id}>{category.nameAr}</option>)}
-      </select><span className="cms-hint">يدير رئيس التحرير قائمة التصنيفات.</span></div>
+      </select><span className="cms-hint">التصنيف يساعد على تجميع الخبر وفهم موضوعه؛ يدير رئيس التحرير قائمة التصنيفات.</span></div>
     <div className="cms-field"><label htmlFor="secondary-tags">وسوم ثانوية (حتى 12، افصل بينها بفواصل)</label>
       <input id="secondary-tags" value={item.secondaryTags.join("، ")} onChange={e => change("secondaryTags", e.target.value.split(/[،,]/).map(tag => tag.trim()).filter(Boolean))} />
       <span className="cms-hint">أقسام الديمو التحريرية مثل «أخبار المغتربين» ليست بديلًا عن التصنيف الموضوعي للمقال.</span></div>
@@ -89,12 +89,12 @@ export default function ArticleSeoEditorPage() {
       <button className="cms-btn" type="button" disabled={busy || !newCategoryName.trim() || !newCategorySlug.trim()} onClick={() => void addCategory()}>إضافة تصنيف</button>
       <ul>{item.categories.map(category => <li key={category.id}>{category.nameAr} ({category.slug}) <button type="button" className="cms-btn danger" disabled={busy} onClick={() => void deactivateCategory(category.id)}>إيقاف</button></li>)}</ul>
     </section>}
-    {textField("canonicalUrl", "الرابط الأساسي (اختياري؛ HTTP أو HTTPS)", 2048)}
-    {textField("socialTitle", "عنوان المشاركة (اختياري)", 300)}
-    {textField("socialDescription", "وصف المشاركة (اختياري)", 500)}
-    {textField("socialImageUrl", "صورة المشاركة (رابط HTTP أو HTTPS)", 2048)}
-    <label><input type="checkbox" checked={item.noIndex} onChange={e => change("noIndex", e.target.checked)} /> منع الفهرسة وإخراج المقال من خرائط الموقع</label>
-    <label><input type="checkbox" checked={item.noFollow} onChange={e => change("noFollow", e.target.checked)} /> منع تتبع الروابط</label>
+    {textField("canonicalUrl", "الرابط الأساسي (اختياري؛ HTTP أو HTTPS)", 2048, "اتركه فارغًا عادةً. استخدمه فقط عند وجود نسخة مكررة لتحديد النسخة المعتمدة." )}
+    {textField("socialTitle", "عنوان المشاركة (اختياري)", 300, "عنوان بطاقة المشاركة على الشبكات الاجتماعية؛ لا يؤثر في عنوان البحث." )}
+    {textField("socialDescription", "وصف المشاركة (اختياري)", 500, "وصف بطاقة المشاركة؛ اتركه فارغًا لاستخدام ملخص الخبر." )}
+    {textField("socialImageUrl", "صورة المشاركة (رابط HTTP أو HTTPS)", 2048, "تظهر في بطاقات المشاركة؛ صورة واضحة بنسبة أفقية تعطي معاينة أفضل." )}
+    <label><input type="checkbox" checked={item.noIndex} onChange={e => change("noIndex", e.target.checked)} /> منع الفهرسة وإخراج المقال من خرائط الموقع</label><p className="cms-hint">فعّله فقط للمحتوى الذي لا تريد ظهوره في نتائج البحث؛ قد يقلل الزيارات من البحث.</p>
+    <label><input type="checkbox" checked={item.noFollow} onChange={e => change("noFollow", e.target.checked)} /> منع تتبع الروابط</label><p className="cms-hint">إعداد متقدم؛ لا تفعّله للمقالات العادية. يمنع محركات البحث من متابعة روابط الصفحة.</p>
     <div className="cms-actions"><button className="cms-btn primary" disabled={busy || item.slug.trim().length === 0 || !item.primaryCategoryId} onClick={() => void save()}>حفظ SEO</button></div>
   </main>;
 }

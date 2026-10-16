@@ -19,6 +19,7 @@ export interface CmsArticleSummary {
   id: string;
   title: string;
   authorName?: string | null;
+  authorImageUrl?: string | null;
   summary: string | null;
   status: ArticleStatus;
   ownerUserId: string;
@@ -85,6 +86,7 @@ export interface HistoryRevision {
 export interface RevisionSnapshot extends HistoryRevision {
   summary: string | null;
   authorName: string | null;
+  authorImageUrl: string | null;
   body: string;
   countryId: string | null;
   cityId: string | null;
@@ -168,6 +170,31 @@ async function call<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export interface CmsHomeVideo { articleId: string; title: string; publishedAtUtc: string; thumbnailUrl: string | null; homeVideoOrder: number | null; }
+
+export interface CmsAdPlacement {
+  slotKey: string;
+  surface: "web" | "mobile";
+  mediaAssetId: string;
+  mediaUrl: string;
+  targetUrl: string;
+  altText: string;
+  displayOrder: number;
+}
+
+export const cmsAds = {
+  async list(): Promise<CmsAdPlacement[]> {
+    const response = await fetch("/cms-api/advertisements", { credentials: "same-origin", cache: "no-store" });
+    if (!response.ok) throw new CmsError(await readError(response), response.status);
+    return response.json() as Promise<CmsAdPlacement[]>;
+  },
+  async save(items: Array<Omit<CmsAdPlacement, "mediaUrl">>): Promise<void> {
+    const response = await fetch("/cms-api/advertisements", {
+      method: "PUT", credentials: "same-origin", cache: "no-store",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify({ items }),
+    });
+    if (!response.ok) throw new CmsError(await readError(response), response.status);
+  },
+};
 
 export const cmsHomeVideos = {
   async list(): Promise<CmsHomeVideo[]> {
@@ -288,6 +315,7 @@ async function categoryCall<T = unknown>(path: string, init: RequestInit): Promi
 export interface ArticleInput {
   title: string;
   authorName: string | null;
+  authorImageUrl?: string | null;
   summary: string | null;
   body: string;
   countryId: string | null;

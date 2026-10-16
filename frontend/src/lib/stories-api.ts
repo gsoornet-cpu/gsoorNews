@@ -18,6 +18,8 @@ export interface StorySummary {
   presentationDesks?: string[];
   slug?: string;
   imageUrl?: string | null;
+  authorName?: string | null;
+  authorImageUrl?: string | null;
 }
 
 export interface StorySource {

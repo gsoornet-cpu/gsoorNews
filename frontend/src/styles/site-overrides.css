@@ -409,6 +409,9 @@
 }
 .home-success-desktop-ad .ad-label { display: block; margin-bottom: 8px; color: var(--text-mute); font-size: 11px; font-weight: 700; }
 .home-success-desktop-ad img { display: block; width: 100%; height: auto; border-radius: 7px; }
+.home-success-mobile-ad { display: none; }
+.home-success-mobile-ad .ad-label { display: block; margin-bottom: 8px; color: var(--text-mute); font-size: 11px; font-weight: 700; }
+.home-success-mobile-ad img { display: block; width: 100%; height: auto; border-radius: 7px; }
 .home-nbe-desktop-ad {
   display: block;
   min-height: 0;
@@ -445,6 +448,81 @@
 
 .home-ad-placement--mobile-only { display: none; }
 
+/* Opinion cards use the final-demo author byline treatment. Until an author
+   portrait field exists, show a clean initials avatar instead of a blank tile. */
+.opinion-avatar--initials {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #385f9c, #172b4d);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+}
+.opinion-tile.featured .opinion-avatar--initials { background: rgba(255,255,255,.18); }
+.home-latest-ad {
+  display: block;
+  margin-top: 18px;
+  padding: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(16,30,54,.07);
+  text-decoration: none;
+}
+.home-latest-ad .ad-label { display: block; margin-bottom: 8px; color: var(--text-mute); font-size: 11px; font-weight: 700; }
+.home-latest-ad img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; border-radius: 7px; }
+.home-latest-ad:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+
+.cms-ad-manager { max-width: 1440px; }
+.cms-ad-library { margin: 22px 0; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: #f8fafc; }
+.cms-ad-library h2 { margin: 0 0 4px; font-size: 19px; }
+.cms-ad-library > .cms-btn { margin-block: 10px; }
+.cms-ad-assets { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+.cms-ad-asset { display: flex; min-width: 0; flex-direction: column; gap: 6px; padding: 9px; border: 1px solid var(--line); border-radius: 11px; background: #fff; cursor: grab; }
+.cms-ad-asset:active { cursor: grabbing; }
+.cms-ad-asset img { width: 100%; height: 92px; object-fit: contain; border-radius: 7px; background: #f1f3f6; }
+.cms-ad-asset small { overflow: hidden; color: var(--text); font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.cms-ad-asset span { color: var(--text-mute); font-size: 11px; }
+.cms-ad-previews { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, .8fr); align-items: start; gap: 20px; }
+.cms-ad-preview { display: grid; gap: 12px; min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #eef1f5; }
+.cms-ad-preview > header { display: grid; gap: 3px; margin-bottom: 2px; }
+.cms-ad-preview > header span { font-size: 18px; font-weight: 800; }
+.cms-ad-preview > header small { color: var(--text-mute); }
+.cms-ad-preview--mobile { width: 100%; max-width: 430px; justify-self: center; border-radius: 26px; background: #151a22; }
+.cms-ad-preview--mobile > header { color: #fff; }
+.ad-drop-slot { display: grid; gap: 10px; min-width: 0; padding: 13px; border: 1px dashed #9aa8ba; border-radius: 12px; background: #fff; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
+.ad-drop-slot:focus-within, .ad-drop-slot:hover { border-color: var(--blue); box-shadow: 0 5px 20px rgba(28,86,190,.09); }
+.ad-drop-slot__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ad-drop-slot__head span { flex: none; padding: 3px 8px; border-radius: 999px; color: #1857c7; background: #edf3ff; font-size: 11px; font-weight: 800; }
+.ad-drop-slot > small { color: var(--text-mute); line-height: 1.5; }
+.ad-drop-slot label { display: grid; gap: 5px; font-size: 12px; font-weight: 700; }
+.ad-drop-slot input { width: 100%; min-width: 0; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.ad-drop-slot__creative { position: relative; width: 100%; max-height: 220px; overflow: hidden; border-radius: 8px; background: #f1f3f6; }
+.ad-drop-slot__creative img { object-fit: contain; }
+.ad-drop-slot__empty { display: grid; min-height: 76px; place-items: center; border-radius: 8px; color: #667085; background: repeating-linear-gradient(135deg,#f8fafc 0 10px,#eef2f6 10px 20px); font-size: 13px; font-weight: 700; }
+.cms-ad-save { position: sticky; bottom: 0; z-index: 3; margin: 18px -16px -16px; padding: 14px 16px; border-top: 1px solid var(--line); background: rgba(255,255,255,.95); backdrop-filter: blur(8px); }
+.svc-ad-card { flex-direction: column; align-items: stretch; justify-content: center; overflow: hidden; padding: 8px; border: 1px solid rgba(245,158,11,.35); background: linear-gradient(145deg,#fffdf8,#fff); }
+.svc-ad-card img { display: block; width: 100%; height: auto; max-height: 104px; object-fit: contain; border-radius: 7px; }
+.svc-ad-card span { color: var(--text-mute); font-size: 10px; font-weight: 700; }
+.home-wide-ad { margin: 18px auto 26px; }
+.home-wide-ad__frame { display: block; max-width: 1120px; margin-inline: auto; padding: 8px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: 0 5px 18px rgba(16,30,54,.07); }
+.home-wide-ad__frame img { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 8px; }
+.home-wide-ad__label { display: block; margin: 0 4px 6px; color: var(--text-mute); font-size: 11px; font-weight: 700; }
+.configured-ad { min-width: 0; }
+.configured-ad > a { display: block; overflow: hidden; border-radius: 8px; }
+.configured-ad__image { position: relative; display: block; width: 100%; overflow: hidden; border-radius: 8px; background: #f2f4f7; }
+.configured-ad__image img { object-fit: contain; }
+.configured-ad:focus-within { outline: 3px solid var(--amber); outline-offset: 3px; }
+.atmaen-ad-slot--mobile { display: none; }
+@media (max-width: 900px) { .cms-ad-previews { grid-template-columns: 1fr; } .cms-ad-preview--web { order: 2; } .cms-ad-preview--mobile { order: 1; } }
+@media (max-width: 860px) {
+  .atmaen-ad-slot--web { display: none; }
+  .atmaen-ad-slot--mobile { display: block; }
+  .home-wide-ad--web-only, .home-latest-ad { display: none !important; }
+  .svc-ad-card { display: none !important; }
+}
+
 /* Frame the opportunities and latest-news columns like the paired editorial
    columns above, so the two homepage areas read as distinct sections. */
 .opportunities-section .split-2 > div:first-child,
@@ -465,6 +543,8 @@
 @media (max-width: 860px) {
   .home-ad-placement--mobile-after-success { display: block; }
   .home-success-desktop-ad { display: none; }
+  .home-latest-ad { display: none; }
+  .home-success-mobile-ad { display: block; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); text-decoration: none; }
   .home-ad-placement__frame { width: min(100%, 520px); }
   .editorial-top-grid { grid-template-columns: 1fr; }
   .editorial-top-card { display: block; }
@@ -474,9 +554,10 @@
   .editorial-top-card h3 { margin: 10px 0 12px; font-size: 16px; line-height: 1.55; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .home-ad-placement--mobile-only { display: block; }
   .home-nbe-desktop-ad { display: none; }
+  .home-latest-ad { display: none; }
   .home-ad-placement__frame { width: min(100%, 430px); }
   .hero-side { display: none !important; }
   #heroSliderSection .wrap { display: flex; flex-direction: column; }
@@ -628,6 +709,7 @@
   background: radial-gradient(ellipse at 8% 0%, rgba(245,158,11,.09), transparent 42%), linear-gradient(145deg, #fff, #f6f8fb);
   box-shadow: 0 10px 34px rgba(15,35,70,.09);
 }
+.atmaen-feature-layout { align-items: center; }
 
 /* Poll has a concise orange section marker like the other homepage desks. */
 .poll-badge { color: #fff; background: #d97716; border-radius: 5px; padding: 5px 10px; font-size: 13px; font-weight: 800; }

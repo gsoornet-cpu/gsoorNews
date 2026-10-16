@@ -170,7 +170,7 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
             return new PublicNewsSummaryDto(
                 a.Id, a.Title, excerpt, a.PublishedAtUtc!.Value,
                 country?.NameAr, country?.NameEn, city?.NameAr, city?.NameEn)
-                { Slug = a.Slug, PresentationDesks = a.PresentationDesks.ToArray(), ImageUrl = a.SocialImageUrl, AuthorName = a.AuthorName };
+                { Slug = a.Slug, PresentationDesks = a.PresentationDesks.ToArray(), ImageUrl = a.SocialImageUrl, AuthorName = a.AuthorName, AuthorImageUrl = a.AuthorImageUrl };
         }).ToList();
 
         return new PagedResult<PublicNewsSummaryDto>(items, request.Page, request.PageSize, totalCount);
@@ -235,7 +235,7 @@ public sealed class GetPublishedVideosQueryHandler
             row.Asset.Caption,
             row.Asset.Credit,
             row.Article.PublishedAtUtc!.Value,
-            row.Article.Slug) { ThumbnailUrl = row.Article.SocialImageUrl, AuthorName = row.Article.AuthorName }).ToArray();
+            row.Article.Slug) { ThumbnailUrl = row.Article.SocialImageUrl, AuthorName = row.Article.AuthorName, AuthorImageUrl = row.Article.AuthorImageUrl }).ToArray();
         return new PagedResult<PublicVideoSummaryDto>(items, request.Page, request.PageSize, totalCount);
     }
 }
@@ -307,6 +307,7 @@ public class GetPublishedNewsByIdQueryHandler : IRequestHandler<GetPublishedNews
         {
             Slug = article.Slug, SeoTitle = article.SeoTitle, SeoDescription = article.SeoDescription,
             AuthorName = article.AuthorName,
+            AuthorImageUrl = article.AuthorImageUrl,
             CanonicalUrl = article.CanonicalUrl, SocialTitle = article.SocialTitle,
             SocialDescription = article.SocialDescription, SocialImageUrl = article.SocialImageUrl,
             NoIndex = article.NoIndex, NoFollow = article.NoFollow,

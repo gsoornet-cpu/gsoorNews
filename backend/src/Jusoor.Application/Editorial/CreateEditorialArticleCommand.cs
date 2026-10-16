@@ -19,7 +19,8 @@ public sealed record CreateEditorialArticleCommand(
     string[]? PresentationDesks = null,
     Guid? FeaturedVideoMediaAssetId = null,
     string? CoverImageUrl = null,
-    string? AuthorName = null) : IRequest<EditorialArticleResult>;
+    string? AuthorName = null,
+    string? AuthorImageUrl = null) : IRequest<EditorialArticleResult>;
 
 public class CreateEditorialArticleCommandValidator : AbstractValidator<CreateEditorialArticleCommand>
 {
@@ -31,11 +32,14 @@ public class CreateEditorialArticleCommandValidator : AbstractValidator<CreateEd
         RuleFor(x => x.Body).NotEmpty().MaximumLength(EditorialArticle.BodyMaxLength);
         RuleFor(x => x.CoverImageUrl).MaximumLength(2048);
         RuleFor(x => x.AuthorName).MaximumLength(120);
+        RuleFor(x => x.AuthorImageUrl).MaximumLength(2048).Must(IsHttpUrl).When(x => !string.IsNullOrWhiteSpace(x.AuthorImageUrl));
         RuleFor(x => x.CountryId).NotNull().When(x => x.CityId.HasValue)
             .WithMessage("A city cannot be set without its country.");
         RuleFor(x => x.PresentationDesks).Must(desks => desks is null ||
             (desks.Length <= 13 && desks.All(EditorialDesk.IsValid) && desks.Distinct(StringComparer.Ordinal).Count() == desks.Length));
     }
+
+    private static bool IsHttpUrl(string? value) => Uri.TryCreate(value, UriKind.Absolute, out var uri) && (uri.Scheme is "http" or "https");
 }
 
 public class CreateEditorialArticleCommandHandler : IRequestHandler<CreateEditorialArticleCommand, EditorialArticleResult>
@@ -92,6 +96,7 @@ public class CreateEditorialArticleCommandHandler : IRequestHandler<CreateEditor
             request.Title, request.Summary, body, request.ActorUserId, request.CountryId, request.CityId);
         article.SetPresentationDesks(request.PresentationDesks);
         article.SetAuthorName(request.AuthorName);
+        article.SetAuthorImageUrl(request.AuthorImageUrl);
         article.SetFeaturedVideoMediaAsset(request.FeaturedVideoMediaAssetId);
         try { article.SetCoverImage(request.CoverImageUrl); }
         catch (ArgumentException) { return new EditorialArticleResult(EditorialOutcome.InvalidBody, null); }

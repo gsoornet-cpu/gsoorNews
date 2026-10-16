@@ -32,6 +32,7 @@ public interface IApplicationDbContext
     DbSet<EditorialArticleRevision> EditorialArticleRevisions { get; }
     DbSet<EditorialCorrection> EditorialCorrections { get; }
     DbSet<EditorialMediaAsset> EditorialMediaAssets { get; }
+    DbSet<EditorialAdPlacement> EditorialAdPlacements { get; }
 
     /// <summary>Detaches an entity from change tracking. Used by
     /// IngestSourceCommandHandler to recover from a per-item duplicate-key

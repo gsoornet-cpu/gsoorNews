@@ -22,7 +22,8 @@ public sealed record UpdateEditorialArticleCommand(
     string[]? PresentationDesks = null,
     Guid? FeaturedVideoMediaAssetId = null,
     string? CoverImageUrl = null,
-    string? AuthorName = null) : IRequest<EditorialArticleResult>;
+    string? AuthorName = null,
+    string? AuthorImageUrl = null) : IRequest<EditorialArticleResult>;
 
 public class UpdateEditorialArticleCommandValidator : AbstractValidator<UpdateEditorialArticleCommand>
 {
@@ -35,12 +36,15 @@ public class UpdateEditorialArticleCommandValidator : AbstractValidator<UpdateEd
         RuleFor(x => x.Body).NotEmpty().MaximumLength(EditorialArticle.BodyMaxLength);
         RuleFor(x => x.CoverImageUrl).MaximumLength(2048);
         RuleFor(x => x.AuthorName).MaximumLength(120);
+        RuleFor(x => x.AuthorImageUrl).MaximumLength(2048).Must(IsHttpUrl).When(x => !string.IsNullOrWhiteSpace(x.AuthorImageUrl));
         RuleFor(x => x.CountryId).NotNull().When(x => x.CityId.HasValue)
             .WithMessage("A city cannot be set without its country.");
         RuleFor(x => x.EditReason).MaximumLength(EditorialArticleRevision.ReasonMaxLength);
         RuleFor(x => x.PresentationDesks).Must(desks => desks is null ||
             (desks.Length <= 13 && desks.All(EditorialDesk.IsValid) && desks.Distinct(StringComparer.Ordinal).Count() == desks.Length));
     }
+
+    private static bool IsHttpUrl(string? value) => Uri.TryCreate(value, UriKind.Absolute, out var uri) && (uri.Scheme is "http" or "https");
 }
 
 public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditorialArticleCommand, EditorialArticleResult>
@@ -139,6 +143,7 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
 
         var contentChanged = article.Title != request.Title
             || article.AuthorName != (string.IsNullOrWhiteSpace(request.AuthorName) ? null : request.AuthorName.Trim())
+            || article.AuthorImageUrl != (string.IsNullOrWhiteSpace(request.AuthorImageUrl) ? null : request.AuthorImageUrl.Trim())
             || article.Summary != request.Summary
             || article.Body != body
             || article.CountryId != request.CountryId
@@ -166,6 +171,7 @@ public class UpdateEditorialArticleCommandHandler : IRequestHandler<UpdateEditor
         var previousStatus = article.Status;
         article.UpdateContent(request.Title, request.Summary, body, request.CountryId, request.CityId);
         article.SetAuthorName(request.AuthorName);
+        article.SetAuthorImageUrl(request.AuthorImageUrl);
         article.SetPresentationDesks(requestedDesks);
         article.SetFeaturedVideoMediaAsset(request.FeaturedVideoMediaAssetId);
         if (coverChanged) article.SetCoverImage(newCover);

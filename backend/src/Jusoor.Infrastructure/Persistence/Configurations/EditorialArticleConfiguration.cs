@@ -24,6 +24,7 @@ public class EditorialArticleConfiguration : IEntityTypeConfiguration<EditorialA
 
         builder.Property(a => a.Title).IsRequired().HasMaxLength(EditorialArticle.TitleMaxLength);
         builder.Property(a => a.AuthorName).HasMaxLength(120);
+        builder.Property(a => a.AuthorImageUrl).HasMaxLength(2048);
         builder.Property(a => a.Slug).IsRequired().HasMaxLength(180);
         builder.HasIndex(a => a.Slug).IsUnique();
         builder.Property(a => a.SeoTitle).HasMaxLength(60);
