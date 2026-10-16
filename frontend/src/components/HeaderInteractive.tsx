@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { TopbarClock } from "./TopbarClock";
+import { ConfiguredAd } from "./home/ConfiguredAd";
+import type { PublicAdPlacement } from "@/lib/news-api";
 
 const SOCIAL_LINKS = [
   { name: "facebook" as const, label: "فيسبوك", path: "M14 8h3V4h-3c-3.31 0-5 1.69-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.66.34-1 1-1z" },
@@ -43,7 +45,7 @@ const MORE_LINKS = [
  * titles) — this component never fetches data itself, matching the
  * project's "Server Components fetch, Client Components render" split.
  */
-export function HeaderInteractive({ tickerHeadlines }: { tickerHeadlines: string[] }) {
+export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlines: string[]; navbarAd?: PublicAdPlacement }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -143,6 +145,8 @@ export function HeaderInteractive({ tickerHeadlines }: { tickerHeadlines: string
             <Image className="logo-img" src="/assets/josour-logo.png" alt="جسور" width={110} height={32} priority />
             <span className="logo-slogan">صوت المصريين في الخارج</span>
           </Link>
+
+          <ConfiguredAd placement={navbarAd} className="header-ad-banner" ratio="3 / 1" label={false} />
 
           <div className="header-actions">
             <button type="button" className="icon-btn" aria-label="بحث" onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>

@@ -11,6 +11,7 @@ type Surface = "web" | "mobile";
 type SlotDefinition = { key: string; label: string; surfaces: Surface[]; ratio: string; note: string };
 
 const SLOTS: SlotDefinition[] = [
+  { key: "navbar-banner", label: "بانر الهيدر بين الشعار والبحث", surfaces: ["web"], ratio: "3 / 1", note: "مساحة عرضية في الهيدر، تظهر على الويب فقط بين شعار جسور وزر البحث" },
   { key: "hero-after-videos", label: "بعد فيديوهات المقدمة", surfaces: ["mobile"], ratio: "1 / 1", note: "إعلان مربع بعد الفيديوهات" },
   { key: "after-mughtarib", label: "بعد أخبار المغتربين", surfaces: ["mobile"], ratio: "1 / 1", note: "إعلان مربع" },
   { key: "success-ad", label: "قسم قصص النجاح", surfaces: ["web", "mobile"], ratio: "1 / 1", note: "بجوار القصص على الويب، وفوق الاستطلاع على الهاتف" },

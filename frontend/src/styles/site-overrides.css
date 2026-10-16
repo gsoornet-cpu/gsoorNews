@@ -344,17 +344,23 @@
 .home-empty-desk > span:last-child { font-size: 12px; }
 .hero-main-link { position: absolute; inset: 0; z-index: 1; }
 .hero-main > img.hero-pan-in,
-.hero-main > img.hero-pan-out { pointer-events: none; will-change: transform; }
-.hero-main > img.hero-pan-in { z-index: 2; animation-duration: 520ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
-.hero-main > img.hero-pan-out { z-index: 3; animation-duration: 520ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
+.hero-main > img.hero-pan-out { pointer-events: none; will-change: transform, clip-path, opacity; }
+.hero-main > img.hero-pan-in { z-index: 3; animation-duration: 560ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
+.hero-main > img.hero-pan-out { z-index: 2; animation-duration: 560ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
 .hero-main > img.hero-pan-in--from-right { animation-name: heroPanInFromRight; }
 .hero-main > img.hero-pan-in--from-left { animation-name: heroPanInFromLeft; }
 .hero-main > img.hero-pan-out--to-left { animation-name: heroPanOutToLeft; }
 .hero-main > img.hero-pan-out--to-right { animation-name: heroPanOutToRight; }
-@keyframes heroPanInFromRight { from { transform: translate3d(100%,0,0) scale(1.02); } to { transform: translate3d(0,0,0) scale(1); } }
-@keyframes heroPanInFromLeft { from { transform: translate3d(-100%,0,0) scale(1.02); } to { transform: translate3d(0,0,0) scale(1); } }
-@keyframes heroPanOutToLeft { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-100%,0,0) scale(1); } }
-@keyframes heroPanOutToRight { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(100%,0,0) scale(1); } }
+@keyframes heroPanInFromRight {
+  from { clip-path: inset(0 0 0 100%); transform: translate3d(18%,0,0) scale(1.025); }
+  to { clip-path: inset(0 0 0 0); transform: translate3d(0,0,0) scale(1); }
+}
+@keyframes heroPanInFromLeft {
+  from { clip-path: inset(0 100% 0 0); transform: translate3d(-18%,0,0) scale(1.025); }
+  to { clip-path: inset(0 0 0 0); transform: translate3d(0,0,0) scale(1); }
+}
+@keyframes heroPanOutToLeft { from { transform: translate3d(0,0,0) scale(1); opacity: 1; } to { transform: translate3d(-12%,0,0) scale(1.015); opacity: .72; } }
+@keyframes heroPanOutToRight { from { transform: translate3d(0,0,0) scale(1); opacity: 1; } to { transform: translate3d(12%,0,0) scale(1.015); opacity: .72; } }
 .home-hero-fallback,
 .home-thumb-fallback {
   display: grid;
@@ -368,8 +374,9 @@
 }
 .home-thumb-fallback { font-size: 16px; }
 .hero-below { display: block; }
-.hero-headline-stage { display: grid; min-width: 0; overflow: hidden; }
+.hero-headline-stage { display: grid; height: 66px; min-width: 0; overflow: hidden; }
 .hero-headline-stage > .hero-below { grid-area: 1 / 1; min-width: 0; }
+.hero-below h2 { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
 .hero-below.hero-pan-copy-in,
 .hero-below.hero-pan-copy-out { animation-duration: 520ms; animation-timing-function: cubic-bezier(.22,.61,.36,1); animation-fill-mode: both; }
 .hero-below.hero-pan-copy-in--from-right { animation-name: heroCopyInFromRight; }
@@ -552,6 +559,10 @@
 .configured-ad__image { position: relative; display: block; width: 100%; overflow: hidden; border-radius: 8px; background: #f2f4f7; }
 .configured-ad__image img { object-fit: contain; }
 .configured-ad:focus-within { outline: 3px solid var(--amber); outline-offset: 3px; }
+.header-ad-banner { flex: 0 1 min(38vw, 460px); width: min(38vw, 460px); margin-inline: auto; }
+.header-ad-banner .configured-ad__image { border-radius: 6px; background: transparent; }
+.header-ad-banner > a { border-radius: 6px; }
+@media (max-width: 860px) { .header-ad-banner { display: none; } }
 .atmaen-ad-slot--mobile { display: none; }
 @media (max-width: 900px) {
   .cms-ad-workspace { grid-template-columns: minmax(0, 1fr) minmax(270px, .85fr); gap: 12px; }
@@ -615,7 +626,8 @@
   #heroSliderSection .hero-main-column { order: 1; width: 100%; min-width: 0; }
   #heroSliderSection .hero-main { width: 100%; height: auto; aspect-ratio: 16 / 9; overflow: hidden; touch-action: pan-y; }
   #heroSliderSection .hero-below { position: static; width: 100%; margin: 10px 0 0; padding: 0 2px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-  #heroSliderSection .hero-below h2 { max-width: none; margin: 0; font-size: clamp(16px, 4.5vw, 20px); line-height: 1.5; }
+  #heroSliderSection .hero-headline-stage { height: 63px; }
+  #heroSliderSection .hero-below h2 { max-width: none; margin: 0; font-size: clamp(15px, 4vw, 18px); line-height: 1.45; }
   #heroSliderSection .hero-nav { order: 3; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 14px 0 0; }
   #heroSliderSection .hero-nav:not(.has-multiple) { display: none; }
   #heroSliderSection .hero-nav > .btn { min-height: 42px; padding: 8px 12px; white-space: nowrap; }

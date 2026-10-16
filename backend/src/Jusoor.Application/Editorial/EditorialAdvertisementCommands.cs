@@ -12,6 +12,7 @@ public static class EditorialAdSlotCatalog
     public static readonly IReadOnlyDictionary<string, (string Label, string Surface)> Slots =
         new Dictionary<string, (string, string)>(StringComparer.Ordinal)
         {
+            ["navbar-banner"] = ("بانر الهيدر بين الشعار والبحث", "web"),
             ["hero-after-videos"] = ("بعد فيديوهات المقدمة", "mobile"),
             ["after-mughtarib"] = ("بعد أخبار المغتربين", "mobile"),
             ["success-ad"] = ("إعلان قسم قصص النجاح", "both"),

@@ -1367,7 +1367,7 @@ footer .logo-img,
 .hero-below h2 {
   max-width: none;
   margin: 0;
-  font-size: clamp(17px, 1.6vw, 23px);
+  font-size: clamp(16px, 1.3vw, 19px);
   line-height: 1.45;
   color: var(--text);
 
