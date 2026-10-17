@@ -10,6 +10,7 @@ import { StoryGridCard } from "@/components/StoryGridCard";
 import { HomeHeroSlider } from "@/components/home/HomeHeroSlider";
 import { HomePollCard, NewsletterForm } from "@/components/home/HomePollCard";
 import { ConfiguredAd } from "@/components/home/ConfiguredAd";
+import { AdBox } from "@/components/home/AdBox";
 import { ServicesBand } from "@/components/home/ServicesBand";
 import { formatArabicDate } from "@/lib/format";
 
@@ -122,13 +123,20 @@ function LammaCard({ story }: { story: StorySummary }) {
   );
 }
 
-function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StorySummary[] }) {
+/**
+ * Lamma + events. On web the wide "lamma-top" ad heads the Lamma column (level with the
+ * events heading) and the square "lamma-events-square" ad sits under the events widget.
+ * Both columns end on the same line: the wide ad takes the height the Lamma column has
+ * to spare, so Lamma's last cards line up with the bottom of the square ad.
+ */
+function LammaSection({ lamma, events, topAd, sideAd }: { lamma: StorySummary[]; events: StorySummary[]; topAd?: PublicAdPlacement; sideAd?: PublicAdPlacement }) {
   const [feature, ...rest] = lamma;
   return (
     <section className="section tight on-surface" id="lamma">
       <div className="wrap">
-        <div className="split-2" style={{ gridTemplateColumns: "1fr 340px" }}>
-          <div>
+        <div className="split-2 lamma-split" style={{ gridTemplateColumns: "1fr 340px" }}>
+          <div className="lamma-main">
+            <AdBox placement={topAd} ratio="3 / 1" fill className="lamma-top-ad ad-box--web-only" />
             <Head label={deskLabels.lamma} slug="lamma" more="كل اللمّات ←" />
             {feature ? <>
               <Link className="lead-story lamma-feature" href={articleHref(feature)}>
@@ -145,18 +153,21 @@ function LammaSection({ lamma, events }: { lamma: StorySummary[]; events: StoryS
               {rest.length > 0 && <div className="lamma-grid">{rest.slice(0, 2).map((story) => <LammaCard key={story.id} story={story} />)}</div>}
             </> : <EmptyDesk label={deskLabels.lamma} />}
           </div>
-          <aside>
-            <div className="section-head"><h2 style={{ fontSize: 14 }}>📅 فعاليات وتغطيات</h2></div>
-            <div className="events-widget">
-              {events.slice(0, 4).map((story) => (
-                <Link className="event-item" key={story.id} href={articleHref(story)}>
-                  <span className="event-date"><b>{story.publishedAtUtc ? new Date(story.publishedAtUtc).getDate() : "—"}</b><span>{story.publishedAtUtc ? new Date(story.publishedAtUtc).toLocaleDateString("ar-EG", { month: "short" }) : ""}</span></span>
-                  <span><h5>{story.title}</h5><span className="foot">{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</span></span>
-                </Link>
-              ))}
-              {events.length === 0 && <EmptyDesk label={deskLabels.events} />}
-              <Link href="/category?cat=events" className="cta">شاهد كل الفعاليات ←</Link>
+          <aside className="lamma-side">
+            <div className="lamma-side__events">
+              <div className="section-head"><h2 style={{ fontSize: 14 }}>📅 فعاليات وتغطيات</h2></div>
+              <div className="events-widget">
+                {events.slice(0, 4).map((story) => (
+                  <Link className="event-item" key={story.id} href={articleHref(story)}>
+                    <span className="event-date"><b>{story.publishedAtUtc ? new Date(story.publishedAtUtc).getDate() : "—"}</b><span>{story.publishedAtUtc ? new Date(story.publishedAtUtc).toLocaleDateString("ar-EG", { month: "short" }) : ""}</span></span>
+                    <span><h5>{story.title}</h5><span className="foot">{placeOf(story)} · {formatArabicDate(story.publishedAtUtc)}</span></span>
+                  </Link>
+                ))}
+                {events.length === 0 && <EmptyDesk label={deskLabels.events} />}
+                <Link href="/category?cat=events" className="cta">شاهد كل الفعاليات ←</Link>
+              </div>
             </div>
+            <AdBox placement={sideAd} ratio="1 / 1" fill className="lamma-side-ad ad-box--web-only" />
           </aside>
         </div>
       </div>
@@ -301,18 +312,21 @@ export default async function HomePage() {
               <Head label={deskLabels.opportunities} slug="opportunities" />
               <DeskGrid stories={desks.opportunities.slice(0, 4)} label={deskLabels.opportunities} columns={2} />
             </div>
-            <aside>
-              <div className="section-head"><h2><span className="eyebrow">أحدث الأخبار</span></h2></div>
-              <div className="rank-list">
-                {latest.slice(0, 6).map((story, index) => (
-                  <Link className={`item home-rank-item${index < 3 ? " top" : ""}`} href={articleHref(story)} key={story.id}>
-                    <span className="rank">{String(index + 1).padStart(2, "0")}</span>
-                    <div><h5>{story.title}</h5></div>
-                  </Link>
-                ))}
-              </div>
-              <ConfiguredAd placement={ad("web", "latest-news-square")} className="home-latest-ad home-wide-ad--web-only" ratio="1 / 1" />
-            </aside>
+            <div className="latest-news-column">
+              <aside>
+                <div className="section-head"><h2><span className="eyebrow">أحدث الأخبار</span></h2></div>
+                <div className="rank-list">
+                  {latest.slice(0, 6).map((story, index) => (
+                    <Link className={`item home-rank-item${index < 3 ? " top" : ""}`} href={articleHref(story)} key={story.id}>
+                      <span className="rank">{String(index + 1).padStart(2, "0")}</span>
+                      <div><h5>{story.title}</h5></div>
+                    </Link>
+                  ))}
+                </div>
+              </aside>
+              {/* Its own box (not inside the latest-news frame), with its own entrance animation. */}
+              <AdBox placement={ad("web", "latest-news-square")} ratio="1 / 1" className="latest-news-ad ad-box--web-only" />
+            </div>
           </div>
         </div>
       </section>
@@ -324,8 +338,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HomeAdPlacement placement={ad("web", "lamma-top")} className="home-wide-ad home-wide-ad--web-only" ratio="3 / 1" />
-      <LammaSection lamma={desks.lamma} events={desks.events} />
+      <LammaSection lamma={desks.lamma} events={desks.events} topAd={ad("web", "lamma-top")} sideAd={ad("web", "lamma-events-square")} />
 
       <section className="section on-surface" id="city-alerts" style={{ paddingTop: 0 }}>
         <div className="wrap">

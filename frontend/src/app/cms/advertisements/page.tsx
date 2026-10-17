@@ -17,8 +17,9 @@ const SLOTS: SlotDefinition[] = [
   { key: "success-ad", label: "قسم قصص النجاح", surfaces: ["web", "mobile"], ratio: "1 / 1", note: "بجوار القصص على الويب، وفوق الاستطلاع على الهاتف" },
   { key: "atmaen-ad", label: "داخل قسم اطمن", surfaces: ["web", "mobile"], ratio: "16 / 8", note: "داخل مساحة الإعلان الموجودة" },
   { key: "editorial-top", label: "قبل خط أحمر ومع مسؤول", surfaces: ["web"], ratio: "3 / 1", note: "مساحة عرضية جديدة — الويب فقط" },
-  { key: "latest-news-square", label: "أسفل أحدث الأخبار", surfaces: ["web"], ratio: "1 / 1", note: "بعد ستة أخبار — الويب فقط" },
-  { key: "lamma-top", label: "أعلى قسم اللمة الحلوة", surfaces: ["web"], ratio: "3 / 1", note: "مساحة عرضية جديدة — الويب فقط" },
+  { key: "latest-news-square", label: "أسفل أحدث الأخبار", surfaces: ["web"], ratio: "1 / 1", note: "مربع مستقل أسفل صندوق أحدث الأخبار — الويب فقط" },
+  { key: "lamma-top", label: "أعلى قسم اللمة الحلوة", surfaces: ["web"], ratio: "3 / 1", note: "مساحة عرضية تملأ المنطقة أعلى اللمة الحلوة بمحاذاة فعاليات وتغطيات — الويب فقط" },
+  { key: "lamma-events-square", label: "أسفل فعاليات وتغطيات", surfaces: ["web"], ratio: "1 / 1", note: "مربع تحت فعاليات وتغطيات، ونهايته بمحاذاة آخر خبرين في اللمة الحلوة — الويب فقط" },
   { key: "services-inline", label: "بين خدمات الموقع", surfaces: ["web"], ratio: "4 / 3", note: "تظهر كعنصر داخل شريط الخدمات — الويب فقط" },
 ];
 

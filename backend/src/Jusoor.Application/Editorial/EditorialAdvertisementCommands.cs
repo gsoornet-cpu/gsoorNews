@@ -20,6 +20,7 @@ public static class EditorialAdSlotCatalog
             ["editorial-top"] = ("قبل خط أحمر ومع مسؤول", "web"),
             ["latest-news-square"] = ("أسفل أحدث الأخبار", "web"),
             ["lamma-top"] = ("أعلى قسم اللمة الحلوة", "web"),
+            ["lamma-events-square"] = ("أسفل فعاليات وتغطيات", "web"),
             ["services-inline"] = ("بين خدمات الموقع", "web"),
         };
 

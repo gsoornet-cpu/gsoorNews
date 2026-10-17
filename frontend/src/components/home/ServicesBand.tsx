@@ -63,8 +63,12 @@ export function ServicesBand({ ad }: { ad?: PublicAdPlacement }) {
                 </div>
               </a>
               {ad && index === 3 && <a className="svc-card svc-ad-card" href={ad.targetUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`${ad.altText} — زيارة موقع المعلن`}>
-                <span>مساحة إعلانية · إعلان ممول</span>
-                <Image src={ad.mediaUrl} alt={ad.altText} width={420} height={315} unoptimized />
+                <span className="svc-ad-card__label">مساحة إعلانية · إعلان ممول</span>
+                {/* Blurred copy of the creative fills any letterbox gap, so the sharp original is never cropped or stretched. */}
+                <span className="svc-ad-card__media">
+                  <Image className="svc-ad-card__bg" src={ad.mediaUrl} alt="" aria-hidden="true" fill sizes="280px" unoptimized />
+                  <Image className="svc-ad-card__img" src={ad.mediaUrl} alt={ad.altText} fill sizes="280px" unoptimized />
+                </span>
               </a>}
             </Fragment>)}
           </div>
