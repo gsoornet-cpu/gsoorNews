@@ -847,7 +847,7 @@ header.site {
   color: var(--amber);
 }
 .logo-img {
-  height: 80px;
+  height: 120px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -878,9 +878,12 @@ header.site {
 }
 
 .cms-sidebar .logo-img,
-footer .logo-img,
 .auth-visual .logo-img {
-  height: 30px;
+  height: 42px;
+}
+
+footer .logo-img {
+  height: 54px;
 }
 
 .masthead-credits {
@@ -4186,8 +4189,8 @@ body.nav-returned .mainnav {
 /* اللوجو */
 .nav-sticky-logo {
   background-color: #ffffff;
-  height: 40px;
-  padding: 0 24px;
+  height: 48px;
+  padding: 0 12px;
 
   display: flex;
   align-items: center;
@@ -4216,7 +4219,7 @@ body.nav-returned .mainnav {
 }
 
 .nav-sticky-logo img {
-  height: 32px;
+  height: 42px;
   width: auto;
   display: block;
 
@@ -7645,7 +7648,7 @@ footer.foot-v2 {
 .foot-v2-brand .logo-img {
   filter: brightness(0) invert(1);
   opacity: 0.95;
-  height: 26px;
+  height: 50px;
 }
 .foot-v2-col h5 {
   color: #fff;

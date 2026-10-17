@@ -57,9 +57,9 @@ function EmptyDesk({ label }: { label: string }) {
   return <div className="home-empty-desk"><span aria-hidden="true">✦</span><p>لا توجد مواد منشورة في «{label}» حتى الآن.</p><span>ستظهر التغطيات هنا بعد نشر خبر واختيار هذا القسم.</span></div>;
 }
 
-function HomeAdPlacement({ placement, className = "", ratio = "1 / 1" }: { placement?: PublicAdPlacement; className?: string; ratio?: string }) {
+function HomeAdPlacement({ placement, className = "", ratio = "1 / 1", naturalSize = false }: { placement?: PublicAdPlacement; className?: string; ratio?: string; naturalSize?: boolean }) {
   if (!placement) return null;
-  return <div className={`home-ad-placement ${className}`.trim()}><div className="wrap"><ConfiguredAd placement={placement} ratio={ratio} /></div></div>;
+  return <div className={`home-ad-placement ${className}`.trim()}><div className="wrap"><ConfiguredAd placement={placement} ratio={ratio} naturalSize={naturalSize} /></div></div>;
 }
 
 /** Demo's `.six-grid` of `.grid-card`s (cardGrid). */
@@ -263,7 +263,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HomeAdPlacement placement={ad("web", "editorial-top")} className="home-wide-ad home-wide-ad--web-only" ratio="3 / 1" />
+      <HomeAdPlacement placement={ad("web", "editorial-top")} className="home-wide-ad home-wide-ad--web-only home-ad-placement--natural" naturalSize />
       <section className="section editorial-columns-section" aria-label="خط أحمر ومع مسؤول">
         <div className="wrap">
           <div className="editorial-columns">

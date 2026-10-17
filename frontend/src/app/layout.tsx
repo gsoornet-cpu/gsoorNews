@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <head>
-        <link rel="icon" href="/assets/josour-logo.png" />
+        <link rel="icon" href="/assets/josour-brand.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- this

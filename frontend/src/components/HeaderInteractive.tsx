@@ -142,11 +142,11 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
           </button>
 
           <Link className="logo" href="/">
-            <Image className="logo-img" src="/assets/josour-logo.png" alt="جسور" width={110} height={32} priority />
+            <Image className="logo-img" src="/assets/josour-brand.png" alt="جسور" width={1176} height={847} priority />
             <span className="logo-slogan">صوت المصريين في الخارج</span>
           </Link>
 
-          <ConfiguredAd placement={navbarAd} className="header-ad-banner" ratio="3 / 1" label={false} />
+          <ConfiguredAd placement={navbarAd} className="header-ad-banner" label={false} naturalSize />
 
           <div className="header-actions">
             <button type="button" className="icon-btn" aria-label="بحث" onClick={() => { setDrawerOpen(false); setSearchOpen(true); }}>
@@ -169,7 +169,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
             </button>
             <div className="nav-sticky-logo">
               <Link href="/" aria-label="الرئيسية">
-                <Image src="/assets/josour-logo.png" alt="جسور" width={90} height={26} />
+                <Image src="/assets/josour-brand.png" alt="جسور" width={1176} height={847} />
               </Link>
             </div>
 
@@ -233,7 +233,7 @@ export function HeaderInteractive({ tickerHeadlines, navbarAd }: { tickerHeadlin
       >
         <div className="drawer">
           <div className="flex" style={{ justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-            <Image className="logo-img" src="/assets/josour-logo.png" alt="جسور" width={110} height={32} />
+            <Image className="logo-img" src="/assets/josour-brand.png" alt="جسور" width={1176} height={847} />
             <button type="button" className="drawer-close icon-btn" onClick={() => setDrawerOpen(false)}>✕</button>
           </div>
           <nav>

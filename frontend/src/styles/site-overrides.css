@@ -433,6 +433,10 @@
 .home-ad-placement__frame > a,
 .atmaen-ad-slot > a { display: block; border-radius: 8px; }
 .home-ad-placement__frame img { aspect-ratio: 1; object-fit: contain; }
+.home-ad-placement--natural { padding: 5px 0; border: 0; background: transparent; }
+.home-ad-placement--natural.home-wide-ad { margin: 0 auto; }
+.home-ad-placement--natural .configured-ad__image { border-radius: 8px; background: transparent; }
+.home-ad-placement--natural .configured-ad__image--natural img { display: block; }
 .home-ad-placement__frame > a:focus-visible,
 .atmaen-ad-slot > a:focus-visible,
 .home-success-desktop-ad:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
@@ -568,7 +572,7 @@
 .configured-ad__image { position: relative; display: block; width: 100%; overflow: hidden; border-radius: 8px; background: #f2f4f7; }
 .configured-ad__image img { object-fit: contain; }
 .configured-ad:focus-within { outline: 3px solid var(--amber); outline-offset: 3px; }
-.header-ad-banner { flex: 0 1 min(38vw, 460px); width: min(38vw, 460px); margin-inline: auto; }
+.header-ad-banner { flex: 0 1 min(52vw, 780px); width: min(52vw, 780px); margin-inline: auto; }
 .header-ad-banner .configured-ad__image { border-radius: 6px; background: transparent; }
 .header-ad-banner > a { border-radius: 6px; }
 @media (max-width: 860px) { .header-ad-banner { display: none; } }
