@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,12 +25,24 @@ const SLOTS: SlotDefinition[] = [
 
 const SURFACE_LABEL: Record<Surface, string> = { web: "الويب", mobile: "الموبايل" };
 
+function isHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export default function CmsAdvertisementsPage() {
   const router = useRouter();
   const [assets, setAssets] = useState<CmsMediaAsset[]>([]);
   const [assetPage, setAssetPage] = useState(1);
   const [assetTotal, setAssetTotal] = useState(0);
   const [assetSearch, setAssetSearch] = useState("");
+  const [searchingAssets, setSearchingAssets] = useState(false);
+  const assetSearchRequest = useRef(0);
+  const lastLoadedSearch = useRef<string | null>(null);
   const [items, setItems] = useState<CmsAdPlacement[]>([]);
   const [activeSurface, setActiveSurface] = useState<Surface>("web");
   const [selectedAssetId, setSelectedAssetId] = useState<string | null>(null);
@@ -40,7 +52,7 @@ export default function CmsAdvertisementsPage() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (includeMedia = true) => {
     try {
       const session = await cms.session();
       if (!session.authenticated) { router.replace("/cms/login"); return; }
@@ -48,11 +60,17 @@ export default function CmsAdvertisementsPage() {
         setError("إدارة الإعلانات متاحة لمحرر أول أو مدير تحرير أو رئيس تحرير.");
         return;
       }
-      const [placements, media] = await Promise.all([cmsAds.list(), cmsMedia.list(1, 100, "Image")]);
+      const [placements, media] = await Promise.all([
+        cmsAds.list(),
+        includeMedia ? cmsMedia.list(1, 100, "Image") : Promise.resolve(null),
+      ]);
       setItems(placements);
-      setAssets(media.items);
-      setAssetPage(media.page);
-      setAssetTotal(media.totalCount);
+      if (media) {
+        setAssets(media.items);
+        setAssetPage(media.page);
+        setAssetTotal(media.totalCount);
+        lastLoadedSearch.current = "";
+      }
       setDirty(false);
       setError(null);
     } catch (e) {
@@ -64,6 +82,35 @@ export default function CmsAdvertisementsPage() {
   }, [router]);
 
   useEffect(() => { void load(); }, [load]);
+
+  useEffect(() => {
+    const search = assetSearch.trim();
+    if (!loaded || lastLoadedSearch.current === search) return;
+    const requestId = ++assetSearchRequest.current;
+    let active = true;
+    const timeout = window.setTimeout(() => {
+      void (async () => {
+        setSearchingAssets(true);
+        setError(null);
+        try {
+          const result = await cmsMedia.list(1, 100, "Image", search);
+          if (!active || assetSearchRequest.current !== requestId) return;
+          setAssets(result.items);
+          setAssetPage(result.page);
+          setAssetTotal(result.totalCount);
+          lastLoadedSearch.current = search;
+        } catch (e) {
+          if (active && assetSearchRequest.current === requestId) setError(e instanceof Error ? e.message : "تعذّر البحث في مكتبة الصور.");
+        } finally {
+          if (active && assetSearchRequest.current === requestId) setSearchingAssets(false);
+        }
+      })();
+    }, 250);
+    return () => {
+      active = false;
+      window.clearTimeout(timeout);
+    };
+  }, [assetSearch, loaded]);
 
   function assign(slot: SlotDefinition, surface: Surface, assetId: string) {
     const asset = assets.find((item) => item.id === assetId);
@@ -104,8 +151,12 @@ export default function CmsAdvertisementsPage() {
         altText: file.name.replace(/\.[^.]+$/, "").slice(0, 500) || "إعلان ممول",
         credit: "إعلان ممول", caption: "", focalPointX: null, focalPointY: null,
       });
-      setAssets((current) => [asset, ...current.filter((item) => item.id !== asset.id)]);
-      setAssetTotal((current) => current + 1);
+      if (assetSearch.trim()) {
+        setAssetSearch("");
+      } else {
+        setAssets((current) => [asset, ...current.filter((item) => item.id !== asset.id)]);
+        setAssetTotal((current) => current + 1);
+      }
       setNotice("تم رفع الإعلان إلى مكتبة الصور. اسحبه إلى مساحة الظهور المطلوبة.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "تعذّر رفع الإعلان.");
@@ -117,8 +168,14 @@ export default function CmsAdvertisementsPage() {
   async function save() {
     setBusy(true); setError(null); setNotice(null);
     try {
-      if (items.some((item) => item.surface === activeSurface && (!item.targetUrl.trim() || !/^https?:\/\//i.test(item.targetUrl.trim())))) {
-        setError("أضف رابطًا يبدأ بـ https:// أو http:// لكل إعلان قبل الحفظ.");
+      const invalidPlacement = items.find((item) => {
+        const url = item.targetUrl.trim();
+        return !isHttpUrl(url);
+      });
+      if (invalidPlacement) {
+        const surface = SURFACE_LABEL[invalidPlacement.surface as Surface];
+        const slot = SLOTS.find((candidate) => candidate.key === invalidPlacement.slotKey)?.label ?? invalidPlacement.slotKey;
+        setError(`راجع رابط إعلان «${slot}» في واجهة ${surface}؛ يجب أن يبدأ بـ https:// أو http://.`);
         return;
       }
       await cmsAds.save(items.map((item, index) => ({
@@ -131,7 +188,7 @@ export default function CmsAdvertisementsPage() {
       })));
       setNotice(`تم حفظ إعدادات إعلانات ${SURFACE_LABEL[activeSurface]}.`);
       setDirty(false);
-      await load();
+      await load(false);
     } catch (e) {
       setError(e instanceof Error ? e.message : "تعذّر حفظ توزيع الإعلانات.");
     } finally {
@@ -143,7 +200,7 @@ export default function CmsAdvertisementsPage() {
     setBusy(true); setError(null);
     try {
       const nextPage = assetPage + 1;
-      const result = await cmsMedia.list(nextPage, 100, "Image");
+      const result = await cmsMedia.list(nextPage, 100, "Image", assetSearch.trim());
       setAssets((current) => [...current, ...result.items.filter((asset) => !current.some((existing) => existing.id === asset.id))]);
       setAssetPage(result.page);
     } catch (e) {
@@ -211,8 +268,8 @@ export default function CmsAdvertisementsPage() {
       <aside className="cms-ad-library-pane" dir="rtl">
         <div className="cms-ad-library-head"><div><h2>مكتبة صور الإعلانات</h2><p>اختر صورة ثم ضعها في مساحة، أو اسحبها مباشرة.</p></div>
           <label className="cms-btn primary">{busy ? "جارٍ التحميل…" : "رفع صورة"}<input hidden type="file" accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={(event) => { void upload(event.target.files?.[0]); event.currentTarget.value = ""; }} /></label>
-          <input className="cms-ad-search" type="search" value={assetSearch} onChange={(event) => setAssetSearch(event.target.value)} placeholder="ابحث في الصور…" aria-label="البحث في صور الإعلانات" />
-          <span className="cms-ad-library-count">{assets.length} من {assetTotal} صورة</span>
+          <input className="cms-ad-search" type="search" value={assetSearch} onChange={(event) => setAssetSearch(event.target.value)} placeholder="ابحث في جميع الصور…" aria-label="البحث في جميع صور مكتبة الوسائط" />
+          <span className="cms-ad-library-count">{searchingAssets ? "جارٍ البحث…" : `${assets.length} من ${assetTotal} صورة`}</span>
         </div>
         <div className="cms-ad-assets-scroll">
           <div className="cms-ad-assets">
@@ -224,7 +281,7 @@ export default function CmsAdvertisementsPage() {
             {assets.length === 0 && <p className="cms-hint">لا توجد صور في مكتبة الوسائط بعد. ارفع صورة إعلان للبدء.</p>}
             {assets.length > 0 && assets.filter((asset) => `${asset.altText} ${asset.fileName}`.toLocaleLowerCase().includes(assetSearch.trim().toLocaleLowerCase())).length === 0 && <p className="cms-hint">لا توجد صور تطابق البحث.</p>}
           </div>
-          {assets.length < assetTotal && <button className="cms-btn cms-ad-load-more" type="button" disabled={busy} onClick={() => void loadMoreAssets()}>{busy ? "جارٍ التحميل…" : `تحميل صور إضافية (${assetTotal - assets.length})`}</button>}
+          {assets.length < assetTotal && <button className="cms-btn cms-ad-load-more" type="button" disabled={busy || searchingAssets} onClick={() => void loadMoreAssets()}>{busy || searchingAssets ? "جارٍ التحميل…" : `تحميل صور إضافية (${assetTotal - assets.length})`}</button>}
         </div>
       </aside>
     </section>}

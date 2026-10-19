@@ -6,11 +6,12 @@ using Microsoft.Extensions.Configuration;
 namespace Jusoor.Infrastructure.Security;
 
 /// <summary>
-/// Local-development-only field encryption.
+/// Local-development and isolated client-preview field encryption.
 ///
 /// This is intentionally separate from the production Azure Key Vault
-/// implementation. It allows Atmaen to run locally without requiring an
-/// Azure subscription or Key Vault.
+/// implementation. It allows local development or an explicitly isolated
+/// client preview to run without an Azure subscription or Key Vault. It is
+/// not a production key-management substitute.
 ///
 /// The key is supplied through configuration and must never be committed
 /// to source control.

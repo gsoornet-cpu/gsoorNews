@@ -39,7 +39,7 @@ public sealed class CreateEditorialMediaUploadCommandValidator : AbstractValidat
 public sealed record FinalizeEditorialMediaUploadCommand(Guid AssetId, string ActorUserId)
     : IRequest<EditorialMediaResult>;
 
-public sealed record ListEditorialMediaQuery(int Page, int PageSize, EditorialMediaKind? Kind = null) : IRequest<PagedEditorialMedia>;
+public sealed record ListEditorialMediaQuery(int Page, int PageSize, EditorialMediaKind? Kind = null, string? SearchTerm = null) : IRequest<PagedEditorialMedia>;
 
 public sealed record EditorialMediaUploadResult(
     EditorialMediaOutcome Outcome, Guid? AssetId, string? UploadUrl, string? UploadToken,
@@ -200,6 +200,7 @@ public sealed class ListEditorialMediaQueryValidator : AbstractValidator<ListEdi
     {
         RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
         RuleFor(x => x.PageSize).InclusiveBetween(1, 100);
+        RuleFor(x => x.SearchTerm).MaximumLength(120);
     }
 }
 
@@ -218,10 +219,25 @@ public sealed class ListEditorialMediaQueryHandler : IRequestHandler<ListEditori
     {
         var query = _context.EditorialMediaAssets.AsNoTracking().Where(x => x.Status == EditorialMediaStatus.Ready);
         if (request.Kind.HasValue) query = query.Where(x => x.Kind == request.Kind.Value);
+        var searchTerm = request.SearchTerm?.Trim();
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            var pattern = $"%{EscapeLikePattern(searchTerm.ToLowerInvariant())}%";
+            query = query.Where(x =>
+                EF.Functions.Like(x.OriginalFileName.ToLower(), pattern, "!") ||
+                EF.Functions.Like(x.AltText.ToLower(), pattern, "!") ||
+                (x.Credit != null && EF.Functions.Like(x.Credit.ToLower(), pattern, "!")) ||
+                (x.Caption != null && EF.Functions.Like(x.Caption.ToLower(), pattern, "!")));
+        }
         var count = await query.CountAsync(cancellationToken);
         var items = await query.OrderByDescending(x => x.ReadyAtUtc).ThenBy(x => x.Id)
             .Skip((request.Page - 1) * request.PageSize).Take(request.PageSize).ToListAsync(cancellationToken);
         return new PagedEditorialMedia(items.Select(x => FinalizeEditorialMediaUploadCommandHandler.ToDto(x, _storage)).ToArray(),
             request.Page, request.PageSize, count);
     }
+
+    private static string EscapeLikePattern(string value)
+        => value.Replace("!", "!!", StringComparison.Ordinal)
+            .Replace("%", "!%", StringComparison.Ordinal)
+            .Replace("_", "!_", StringComparison.Ordinal);
 }

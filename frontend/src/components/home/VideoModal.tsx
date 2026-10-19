@@ -25,6 +25,7 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
   const videoRef = useRef<HTMLVideoElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const onCloseRef = useRef(onClose);
+  const isEmbeddedOnOpen = useRef(item.isEmbedded).current;
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -41,7 +42,7 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
       if (event.key === "Escape") onCloseRef.current();
     };
     window.addEventListener("keydown", onKey);
-    if (!item.isEmbedded) video?.play().catch(() => undefined); // autoplay can be blocked; the native controls still work
+    if (!isEmbeddedOnOpen) video?.play().catch(() => undefined); // autoplay can be blocked; the native controls still work
 
     return () => {
       cancelAnimationFrame(frame);
@@ -53,7 +54,7 @@ export function VideoModal({ item, onClose }: { item: VideoModalItem; onClose: (
         video.load();
       }
     };
-  }, []);
+  }, [isEmbeddedOnOpen]);
 
   return createPortal(
     <div

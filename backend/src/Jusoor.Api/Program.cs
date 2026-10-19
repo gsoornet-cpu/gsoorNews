@@ -13,31 +13,46 @@ using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-// Development-only providers must never be enabled outside Development.
+var clientDemoMode = builder.Configuration.GetValue<bool>("ClientDemoMode");
+// Local providers are allowed in Development. A separate, isolated client-preview
+// deployment may use the stable local encryption key, but it must not mint/log OTPs.
 if (!builder.Environment.IsDevelopment())
 {
-    if (builder.Configuration.GetValue<bool>("UseLocalFieldEncryption") ||
-        builder.Configuration.GetValue<bool>("UseLocalOtp"))
+    if (clientDemoMode)
     {
-        throw new InvalidOperationException(
-            "Local field encryption and local OTP providers are development-only; configure Azure Key Vault and Twilio for non-development environments.");
+        if (!builder.Environment.IsStaging())
+            throw new InvalidOperationException("ClientDemoMode is allowed only with ASPNETCORE_ENVIRONMENT=Staging.");
+        if (!builder.Configuration.GetValue<bool>("UseLocalFieldEncryption") ||
+            builder.Configuration.GetValue<bool>("UseLocalOtp"))
+            throw new InvalidOperationException("ClientDemoMode requires local field encryption and the disabled demo OTP provider.");
+        if (string.IsNullOrWhiteSpace(builder.Configuration["FieldEncryption:LocalKey"]))
+            throw new InvalidOperationException("ClientDemoMode requires a stable FieldEncryption:LocalKey secret.");
     }
+    else
+    {
+        if (builder.Configuration.GetValue<bool>("UseLocalFieldEncryption") ||
+            builder.Configuration.GetValue<bool>("UseLocalOtp"))
+        {
+            throw new InvalidOperationException(
+                "Local field encryption and local OTP providers are development-only; configure Azure Key Vault and Twilio for non-development environments.");
+        }
 
-    var requiredProductionSettings = new[]
-    {
-        "FieldEncryption:KeyVaultUri",
-        "FieldEncryption:KeyEncryptionKeyName",
-        "Twilio:AccountSid",
-        "Twilio:AuthToken",
-        "Twilio:VerifyServiceSid"
-    };
-    var missingProductionSettings = requiredProductionSettings
-        .Where(key => string.IsNullOrWhiteSpace(builder.Configuration[key]))
-        .ToArray();
-    if (missingProductionSettings.Length > 0)
-    {
-        throw new InvalidOperationException(
-            $"Production security configuration is incomplete: {string.Join(", ", missingProductionSettings)}.");
+        var requiredProductionSettings = new[]
+        {
+            "FieldEncryption:KeyVaultUri",
+            "FieldEncryption:KeyEncryptionKeyName",
+            "Twilio:AccountSid",
+            "Twilio:AuthToken",
+            "Twilio:VerifyServiceSid"
+        };
+        var missingProductionSettings = requiredProductionSettings
+            .Where(key => string.IsNullOrWhiteSpace(builder.Configuration[key]))
+            .ToArray();
+        if (missingProductionSettings.Length > 0)
+        {
+            throw new InvalidOperationException(
+                $"Production security configuration is incomplete: {string.Join(", ", missingProductionSettings)}.");
+        }
     }
 }
 
@@ -67,6 +82,12 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+if (clientDemoMode)
+{
+    app.Logger.LogWarning(
+        "CLIENT DEMO MODE ENABLED: use only a dedicated disposable preview database and synthetic content. Atmaen OTP verification is disabled; never store real applicant data here.");
+}
 
 // Hangfire storage is configured HERE — after Build(), reading app.Configuration
 // (fully merged: real env vars in production/dev, or WebApplicationFactory's

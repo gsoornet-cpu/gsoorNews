@@ -40,9 +40,10 @@ public sealed class EditorialMediaController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> List([FromQuery] int page = 1, [FromQuery] int pageSize = 24,
-        [FromQuery] EditorialMediaKind? kind = null, CancellationToken cancellationToken = default)
+        [FromQuery] EditorialMediaKind? kind = null, [FromQuery] string? search = null,
+        CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new ListEditorialMediaQuery(page, pageSize, kind), cancellationToken);
+        var result = await _mediator.Send(new ListEditorialMediaQuery(page, pageSize, kind, search), cancellationToken);
         return Ok(result);
     }
 

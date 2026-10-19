@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getPublishedNewsById, type NewsRetraction } from "@/lib/news-api";
+import { getPublishedNews, getPublishedNewsById, type NewsRetraction } from "@/lib/news-api";
 import { formatArabicDate, estimateReadMinutes } from "@/lib/format";
 import { htmlToPlainText } from "@/lib/html";
 import { CorrectionsBox } from "@/components/CorrectionsBox";
 import { JsonLd } from "@/components/JsonLd";
 import { articleDescription, articleUrl, buildArticleJsonLd, buildBreadcrumbJsonLd, toIsoDate } from "@/lib/seo";
 import { EDITORIAL_BYLINE, SITE_NAME, absoluteUrl } from "@/lib/site";
+import { StoryGridCard } from "@/components/StoryGridCard";
 
 // Always fresh: an unpublished article must stop resolving immediately.
 export const dynamic = "force-dynamic";
@@ -124,6 +125,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   const readMinutes = estimateReadMinutes(htmlToPlainText(story.body));
   const place = story.cityNameAr ?? story.countryNameAr ?? null;
   const byline = story.authorName || EDITORIAL_BYLINE;
+  let relatedStories: Awaited<ReturnType<typeof getPublishedNews>>["items"] = [];
+  try {
+    const relatedResult = await getPublishedNews(1, 8, story.presentationDesks[0]);
+    relatedStories = relatedResult.items.filter((item) => item.id !== story.id).slice(0, 3);
+  } catch {
+    // Related coverage is helpful but must never turn an otherwise readable article into an error page.
+  }
 
   return (
     <main id="main">
@@ -211,6 +219,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         <article className="article-body" dangerouslySetInnerHTML={{ __html: story.body }} />
         <CorrectionsBox corrections={story.corrections.filter((c) => !c.isMajor)} />
       </div>
+      {relatedStories.length > 0 && <section className="section tight on-surface article-related" aria-labelledby="article-related-heading">
+        <div className="wrap">
+          <div className="section-head"><h2 id="article-related-heading">اقرأ أيضًا</h2></div>
+          <div className="six-grid">{relatedStories.map((related) => <StoryGridCard key={related.id} story={related} />)}</div>
+        </div>
+      </section>}
     </main>
   );
 }

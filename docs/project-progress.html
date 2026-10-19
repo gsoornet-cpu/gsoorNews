@@ -101,11 +101,11 @@
     </div>
     <div>
       <div class="label">Current Slice</div>
-      <div class="value">Slice 26 — CMS-selected video publishing and /videos hub: implementation delivered. Full backend build succeeds (0 warnings/errors); Application 753/753 passes; EF reports no pending model changes; frontend lint, TypeScript, and Next.js production build pass, including /videos. Trial database migration, Supabase upload/CORS, and client browser acceptance remain pending. Slice 25 client verification also remains open. <span class="badge progress">◐ READY FOR ISOLATED CLIENT TEST</span></div>
+      <div class="value">Client preview hardening for the CMS is underway. Article workflow, SEO, media, author image, ad placement, and video selection code exist; ad slot save validates both interfaces, library search covers all media, and public article pages show related coverage. A Railway-only Staging demo profile is prepared without Azure/Twilio (local field key required; Atmaen OTP disabled), but it requires a new isolated PostgreSQL database. Frontend production build, VSTest, Supabase upload/CORS, migrations, and browser/customer acceptance are not yet verified. <span class="badge progress">◐ IMPLEMENTED IN PART — PREVIEW NOT DEPLOYED</span></div>
     </div>
     <div>
       <div class="label">Status</div>
-      <div class="value">ACTIVE — Slice 26 implementation delivered. Full backend solution build succeeds (0 warnings/errors); Application 753/753 passes; EF reports no pending model changes; frontend full lint, TypeScript, and Next.js production build pass, with /videos included. Slice 25/26 isolated PostgreSQL migration checks, Supabase media upload/CORS, browser/client acceptance, and Slice 24 Docker/PostgreSQL/Hangfire verification remain outstanding.</div>
+      <div class="value">ACTIVE — full backend solution build succeeds (0 warnings/errors), TypeScript and ESLint pass cleanly, and EF reports no pending model changes. Next production build and compile-only build both fail with Windows EPERM inside .next; the Infrastructure unit-test run aborts after VSTest cannot connect to testhost. Docker API access, isolated PostgreSQL migrations, Supabase media upload/CORS, and browser/client acceptance remain outstanding.</div>
     </div>
     <div>
       <div class="label">Last Updated</div>
@@ -115,7 +115,7 @@
   <div class="top-grid" style="margin-top:14px;">
     <div>
       <div class="label">Next Action</div>
-      <div class="value" style="font-weight:400;font-size:.92rem;">Client handoff for Slice 26: on an isolated trial PostgreSQL database, apply <code>AddEditorialArticleFeaturedVideo</code> after the pending Slice 25 migration; configure a dedicated Supabase media bucket and validate CORS/public read; upload/embed/select a video in a draft, complete the current review/approval/publish workflow, and verify published-only placement, player, article link, and pagination in desktop/mobile browsers. Slice 25 desk workflow acceptance is still open. Slice 24 schedule/cancel/Hangfire verification remains a separate Phase 3 check. Do not apply trial migrations to production; CSP H remains required before public staging/launch.</div>
+      <div class="value" style="font-weight:400;font-size:.92rem;">Create an isolated Railway preview database; configure <code>ASPNETCORE_ENVIRONMENT=Staging</code>, <code>ClientDemoMode=true</code>, <code>UseLocalFieldEncryption=true</code>, <code>UseLocalOtp=false</code>, and a stable generated <code>FieldEncryption__LocalKey</code>. Set dedicated CMS credentials and Supabase bucket/CORS; deploy migrations only to that trial database. Then verify ad CRUD and rendering, article/video workflow, permissions, and responsive behavior in a browser. Atmaen OTP intentionally returns 503. Do not point this profile at production or store real applicant data.</div>
     </div>
     <div>
       <div class="label">Completed &amp; Verified so far</div>
@@ -839,6 +839,11 @@
 </ul>
 
 <!-- ============ CHANGE HISTORY ============ -->
+<div class="history-entry">
+  <div class="date">2026-10-19 (CMS preview hardening)</div>
+  <p>Added an explicit Railway client-preview profile: it is accepted only with <code>ASPNETCORE_ENVIRONMENT=Staging</code>, a stable environment-supplied local encryption key, and <code>UseLocalOtp=false</code>. A new demo OTP adapter fails closed (mapped by existing Atmaen handlers to provider-unavailable responses) without generating or logging codes. Startup emits a clear warning to use only synthetic data on an isolated preview database. The Railway guide documents the temporary variables, key retention, isolated database, Supabase requirements, and teardown/transition cautions. Fixed ad manager save validation to check every placement across both surfaces before the API replaces the full assignment set; ad image search now queries the whole media library through the API. Article details render up to three related stories from the same presentation desk (falling back to latest news) without making article rendering depend on that optional query. Added two unit tests for demo OTP fail-closed behavior.</p>
+  <p>Verification: .NET solution build passes with 0 warnings/errors; TypeScript and ESLint pass cleanly; EF reports no pending model changes. The Infrastructure test assembly compiles, but VSTest cannot connect to testhost after 90 seconds, so tests are not marked passing. Next production and compile-only builds fail with Windows <code>EPERM</code> while creating generated <code>.next</code> directories. Docker API reports permission denied, so no trial migration, Supabase upload, Railway deployment, or browser acceptance was performed. The preview profile is prepared in source only, not deployed.</p>
+</div>
 <div class="history-entry">
   <div class="date">2026-10-19 (Execution plan resumed: security baseline)</div>
   <p>Added production-only CSP Report-Only and baseline response headers in <code>frontend/next.config.js</code>. A direct production-config assertion confirms the generated policy and headers. Frontend TypeScript succeeds; ESLint reports zero errors and one existing <code>VideoModal</code> hook-dependency warning. Full .NET solution build succeeds with zero warnings/errors. A high-risk config mismatch was found and fixed: when local field encryption is disabled, DI now selects Azure Key Vault envelope encryption; staging/production reject local encryption/OTP flags and require Azure Key Vault and Twilio configuration. Docker Compose now explicitly enables local-only providers in Development, and the Railway guide uses production providers while warning that existing local ciphertext needs a migration plan. `docker compose config --quiet` passes. A direct Production startup smoke check also rejects the local providers before application startup.</p>

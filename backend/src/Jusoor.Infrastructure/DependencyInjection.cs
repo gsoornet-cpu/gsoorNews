@@ -74,14 +74,18 @@ public static class DependencyInjection
         // that will is a later slice) — this registration exists so that
         // endpoint can simply take a constructor dependency on IOtpService
         // when it's built, without also having to wire this up then.
-        if (configuration.GetValue<bool>("UseLocalOtp"))
-	{
-    		services.AddSingleton<IOtpService, LocalOtpService>();
-	}
-	else
-	{
-    		services.AddSingleton<IOtpService, TwilioOtpService>();
-	}
+        if (configuration.GetValue<bool>("ClientDemoMode"))
+        {
+            services.AddSingleton<IOtpService, DisabledDemoOtpService>();
+        }
+        else if (configuration.GetValue<bool>("UseLocalOtp"))
+        {
+            services.AddSingleton<IOtpService, LocalOtpService>();
+        }
+        else
+        {
+            services.AddSingleton<IOtpService, TwilioOtpService>();
+        }
 
 
         // --- Field-level encryption for Atmaen Case data (Phase 2 decision 2,
