@@ -71,6 +71,21 @@ export default function CmsDashboardPage() {
   }, [router]);
 
   useEffect(() => {
+    const syncStatus = () => {
+      const requestedStatus = new URLSearchParams(window.location.search).get("status") ?? "";
+      if (requestedStatus === "" || Object.keys(STATUS_META).includes(requestedStatus)) { setStatus(requestedStatus as ArticleStatus | ""); setPage(1); }
+    };
+    const updateStatus = (event: Event) => {
+      const value = (event as CustomEvent<string>).detail;
+      if (value === "" || Object.keys(STATUS_META).includes(value)) { setStatus(value as ArticleStatus | ""); setPage(1); }
+    };
+    syncStatus();
+    window.addEventListener("cms-status-filter", updateStatus);
+    window.addEventListener("popstate", syncStatus);
+    return () => { window.removeEventListener("cms-status-filter", updateStatus); window.removeEventListener("popstate", syncStatus); };
+  }, []);
+
+  useEffect(() => {
     if (!session || session.roles?.length && session.roles.every((role) => role === "SeoEditor")) return;
     const timer = window.setTimeout(() => void load(status, page, searchTerm.trim()), searchTerm.trim() ? 280 : 0);
     return () => window.clearTimeout(timer);
@@ -112,23 +127,23 @@ export default function CmsDashboardPage() {
     }
   }
 
-  async function logout() {
-    await cms.logout();
-    router.replace("/cms/login");
-  }
-
   if (!session) {
     return <p>جارٍ التحميل…</p>;
   }
 
   return (
-    <div className="cms-card">
+    <div className="cms-page-stack">
+      <section className="cms-page-heading"><div><span className="cms-eyebrow">مساحة العمل التحريرية</span><h1>أهلًا بعودتك{session.email ? `، ${session.email.split("@")[0]}` : ""}</h1><p>تابع الأخبار وسير المراجعة، وأنجز مهام التحرير من مكان واحد.</p></div>{session.roles?.some((role) => ["Reporter", "AiEditor", "CopyEditor", "SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link className="cms-btn primary cms-dashboard-create" href="/cms/articles/new">＋ مقال جديد</Link>}</section>
+      <nav className="cms-shortcuts" aria-label="اختصارات لوحة التحرير">
+        <Link href="/cms" className="cms-shortcut"><span className="cms-shortcut-icon">▤</span><span><strong>إدارة الأخبار</strong><small>بحث، تحرير، ومتابعة حالة النشر</small></span><b aria-hidden="true">←</b></Link>
+        {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link href="/cms/home-videos" className="cms-shortcut"><span className="cms-shortcut-icon">▷</span><span><strong>فيديوهات الرئيسية</strong><small>اختيار وترتيب فيديوهات الواجهة</small></span><b aria-hidden="true">←</b></Link>}
+        {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link href="/cms/advertisements" className="cms-shortcut"><span className="cms-shortcut-icon">▧</span><span><strong>إدارة الإعلانات</strong><small>توزيع إعلانات الويب والموبايل</small></span><b aria-hidden="true">←</b></Link>}
+        {session.roles?.includes("SeoEditor") && <Link href="/cms/seo" className="cms-shortcut"><span className="cms-shortcut-icon">⌕</span><span><strong>تحسين SEO</strong><small>إدارة ظهور الأخبار في البحث</small></span><b aria-hidden="true">←</b></Link>}
+      </nav>
+      <div className="cms-card">
       <div className="cms-head">
-        <h1>إدارة الأخبار</h1>
+        <h2 className="cms-list-title">آخر الأخبار</h2>
         <div className="cms-actions">
-          {session.roles?.includes("SeoEditor") && <Link className="cms-btn" href="/cms/seo">تحرير SEO</Link>}
-          {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link className="cms-btn" href="/cms/home-videos">فيديوهات الرئيسية</Link>}
-          {session.roles?.some((role) => ["SeniorEditor", "ManagingEditor", "EditorInChief"].includes(role)) && <Link className="cms-btn" href="/cms/advertisements">إدارة الإعلانات</Link>}
           <div className="cms-filter">
             <label htmlFor="status" className="cms-hint">
               الحالة
@@ -140,6 +155,8 @@ export default function CmsDashboardPage() {
                 const value = e.target.value as ArticleStatus | "";
                 setStatus(value);
                 setPage(1);
+                router.replace(value ? `/cms?status=${value}` : "/cms?status=", { scroll: false });
+                window.dispatchEvent(new CustomEvent("cms-query-change", { detail: value ? `?status=${value}` : "?status=" }));
               }}
             >
               <option value="">الكل</option>
@@ -150,12 +167,6 @@ export default function CmsDashboardPage() {
               ))}
             </select>
           </div>
-          <Link className="cms-btn primary" href="/cms/articles/new">
-            + مقال جديد
-          </Link>
-          <button className="cms-btn" type="button" onClick={logout}>
-            تسجيل الخروج
-          </button>
         </div>
       </div>
 
@@ -239,6 +250,7 @@ export default function CmsDashboardPage() {
         </div>
         </>
       )}
+      </div>
     </div>
   );
 }

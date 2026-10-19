@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CmsWorkspace from "@/components/cms/CmsWorkspace";
 import "@/styles/cms.css";
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function CmsLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <main id="main" className="cms">
-      <div className="wrap">{children}</div>
+      <CmsWorkspace>{children}</CmsWorkspace>
     </main>
   );
 }
