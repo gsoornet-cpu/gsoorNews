@@ -329,12 +329,10 @@
       bluebarr خالص).
    -------------------------------------------------------------------------- */
 @media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
-  /* متغيّر موحّد لارتفاع الهيدر الثابت على الموبايل (يستخدمه أي عنصر
-     محتاج يعرف يبعد قد إيه عن أعلى الشاشة، بدل أرقام مكررة يدوياً —
-     مثال: .atmaen-toolbar تحت في قسم 12). صف واحد بس دلوقتي فالقيمة
-     رجعت أصغر. */
+  /* متغيّر موحّد لارتفاع الهيدر الثابت على الموبايل، تستخدمه العناصر
+     التي تحتاج تعويض ارتفاع الشريط عند التثبيت أو التمرير. */
   :root {
-    --mobile-sticky-header-h: 64px;
+    --mobile-sticky-header-h: 100px;
   }
 
   header.site {
@@ -349,7 +347,7 @@
     align-items: center;
     justify-content: space-between;
     min-height: 100px;
-    padding: 10px 0;
+    padding: 8px 0;
   }
 
   .burger {
@@ -369,8 +367,10 @@
     font-size: 19px;
   }
   .logo-img {
-    height: 46px;
+    height: 80px;
     width: auto;
+    max-width: min(34vw, 112px);
+    object-fit: contain;
   }
   .logo-slogan {
     display: none;
@@ -414,9 +414,6 @@
 @media (max-width: 480px) and (hover: none) and (pointer: coarse) {
   .logo {
     font-size: 17px;
-  }
-  .logo-img {
-    height: 80px;
   }
 }
 
@@ -1103,8 +1100,14 @@
    17) الاتجاه العرضي (Landscape) على الموبايل — تقليل ارتفاع الهيدر
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) and (orientation: landscape) and (max-height: 480px) and (hover: none) and (pointer: coarse) {
+  :root { --mobile-sticky-header-h: 72px; }
   .header-inner {
-    min-height: 52px;
+    min-height: 72px;
+    padding-block: 4px;
+  }
+  .logo-img {
+    height: 64px;
+    max-width: min(34vw, 112px);
   }
   .masthead-credits,
   .header-ad {

@@ -93,14 +93,13 @@ public static class DependencyInjection
         // lifetime — see ApplicationDbContext's own comment on why this
         // specific registration lifetime is load-bearing, not cosmetic.
         if (configuration.GetValue<bool>("UseLocalFieldEncryption"))
-	{
-    		services.AddSingleton<IFieldEncryptionService, LocalFieldEncryptionService>();
-	}
-	else
-	{
-    		services.AddSingleton<IFieldEncryptionService, LocalFieldEncryptionService>();
-
-	}
+        {
+            services.AddSingleton<IFieldEncryptionService, LocalFieldEncryptionService>();
+        }
+        else
+        {
+            services.AddSingleton<IFieldEncryptionService, AzureKeyVaultEnvelopeEncryptionService>();
+        }
 
 
         services.AddAuthentication(options =>

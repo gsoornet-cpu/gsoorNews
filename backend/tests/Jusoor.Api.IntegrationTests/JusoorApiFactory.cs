@@ -53,14 +53,10 @@ public class JusoorApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
                 // otherwise from their presence here.
                 ["FieldEncryption:KeyVaultUri"] = "https://jusoor-test-placeholder.vault.azure.net/",
                 ["FieldEncryption:KeyEncryptionKeyName"] = "test-placeholder-key",
-                // Infrastructure's DependencyInjection currently registers
-                // LocalFieldEncryptionService in BOTH branches of the
-                // UseLocalFieldEncryption check, and that service throws at
-                // construction without a key. Supplying a test-only key here
-                // makes the suite hermetic: it no longer depends on
-                // FieldEncryption__LocalKey happening to be set in the
-                // developer's shell. Base64 of a 32-byte ASCII string,
-                // never used outside this process.
+                // Integration tests explicitly use the local-only provider
+                // so they do not call a real Azure Key Vault. This test-only
+                // 32-byte key keeps the suite hermetic and never leaves the
+                // test process.
                 ["UseLocalFieldEncryption"] = "true",
                 ["FieldEncryption:LocalKey"] = "dGVzdC1vbmx5LTMyLWJ5dGUta2V5LW5vdC1yZWFsISE="
             });

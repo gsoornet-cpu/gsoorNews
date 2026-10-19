@@ -346,7 +346,7 @@ public class EditorialHandlerTests
         await SeedAsync(ctx, "reporter-2");
 
         var result = await new ListEditorialArticlesQueryHandler(ctx).Handle(
-            new ListEditorialArticlesQuery(1, 20, null, "reporter-1", Reporter), default);
+            new ListEditorialArticlesQuery(1, 20, null, null, "reporter-1", Reporter), default);
 
         result.TotalCount.Should().Be(1);
         result.Items.Single().OwnerUserId.Should().Be("reporter-1");
@@ -360,8 +360,8 @@ public class EditorialHandlerTests
         await SeedAsync(ctx, "reporter-2", published: true);
         var handler = new ListEditorialArticlesQueryHandler(ctx);
 
-        var all = await handler.Handle(new ListEditorialArticlesQuery(1, 20, null, "m", Managing), default);
-        var drafts = await handler.Handle(new ListEditorialArticlesQuery(1, 20, EditorialArticleStatus.Draft, "m", Managing), default);
+        var all = await handler.Handle(new ListEditorialArticlesQuery(1, 20, null, null, "m", Managing), default);
+        var drafts = await handler.Handle(new ListEditorialArticlesQuery(1, 20, EditorialArticleStatus.Draft, null, "m", Managing), default);
 
         all.TotalCount.Should().Be(2);
         drafts.Items.Should().ContainSingle().Which.Status.Should().Be("Draft");
@@ -374,7 +374,7 @@ public class EditorialHandlerTests
         await SeedAsync(ctx, "reporter-1");
 
         var result = await new ListEditorialArticlesQueryHandler(ctx).Handle(
-            new ListEditorialArticlesQuery(1, 20, null, "x", Researcher), default);
+            new ListEditorialArticlesQuery(1, 20, null, null, "x", Researcher), default);
 
         result.TotalCount.Should().Be(0);
     }

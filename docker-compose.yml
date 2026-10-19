@@ -37,6 +37,8 @@ services:
         condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Development
+      UseLocalFieldEncryption: "true"
+      UseLocalOtp: "true"
       ConnectionStrings__Postgres: "Host=postgres;Database=jusoor;Username=jusoor;Password=${POSTGRES_PASSWORD:-jusoor_dev_only}"
       Jwt__SigningKey: ${JWT_SIGNING_KEY:?Set JWT_SIGNING_KEY in your .env}
       Jwt__Issuer: jusoor-api

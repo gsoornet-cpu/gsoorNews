@@ -13,6 +13,33 @@ using Microsoft.Extensions.Options;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+// Development-only providers must never be enabled outside Development.
+if (!builder.Environment.IsDevelopment())
+{
+    if (builder.Configuration.GetValue<bool>("UseLocalFieldEncryption") ||
+        builder.Configuration.GetValue<bool>("UseLocalOtp"))
+    {
+        throw new InvalidOperationException(
+            "Local field encryption and local OTP providers are development-only; configure Azure Key Vault and Twilio for non-development environments.");
+    }
+
+    var requiredProductionSettings = new[]
+    {
+        "FieldEncryption:KeyVaultUri",
+        "FieldEncryption:KeyEncryptionKeyName",
+        "Twilio:AccountSid",
+        "Twilio:AuthToken",
+        "Twilio:VerifyServiceSid"
+    };
+    var missingProductionSettings = requiredProductionSettings
+        .Where(key => string.IsNullOrWhiteSpace(builder.Configuration[key]))
+        .ToArray();
+    if (missingProductionSettings.Length > 0)
+    {
+        throw new InvalidOperationException(
+            $"Production security configuration is incomplete: {string.Join(", ", missingProductionSettings)}.");
+    }
+}
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));

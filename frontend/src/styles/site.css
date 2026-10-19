@@ -7646,9 +7646,12 @@ footer.foot-v2 {
   max-width: 280px;
 }
 .foot-v2-brand .logo-img {
-  filter: brightness(0) invert(1);
-  opacity: 0.95;
-  height: 50px;
+  /* Keep the original brand colors and transparent outer canvas on the dark footer. */
+  filter: none;
+  opacity: 1;
+  height: 72px;
+  width: auto;
+  object-fit: contain;
 }
 .foot-v2-col h5 {
   color: #fff;

@@ -30,9 +30,12 @@ git push -u origin main
 | `ConnectionStrings__Postgres` | `Host=${{Postgres.PGHOST}};Port=${{Postgres.PGPORT}};Database=${{Postgres.PGDATABASE}};Username=${{Postgres.PGUSER}};Password=${{Postgres.PGPASSWORD}}` |
 | `Jwt__SigningKey` | نص عشوائي طويل: `openssl rand -base64 64` |
 | `Jwt__Issuer` / `Jwt__Audience` | `jusoor-api` / `jusoor-clients` |
-| `UseLocalFieldEncryption` | `true` |
-| `FieldEncryption__LocalKey` | `openssl rand -base64 32` |
-| `UseLocalOtp` | `true` |
+| `UseLocalFieldEncryption` | `false` |
+| `FieldEncryption__KeyVaultUri` | `https://<اسم-vault>.vault.azure.net/` |
+| `FieldEncryption__KeyEncryptionKeyName` | اسم مفتاح RSA في Key Vault |
+| `AZURE_TENANT_ID` / `AZURE_CLIENT_ID` / `AZURE_CLIENT_SECRET` | بيانات هوية خدمة مخصصة؛ خزّنها كـ Railway secrets وامنحها دور `Key Vault Crypto User` على الـ vault |
+| `UseLocalOtp` | `false` |
+| `Twilio__AccountSid` / `Twilio__AuthToken` / `Twilio__VerifyServiceSid` | بيانات حساب Twilio Verify كـ Railway secrets |
 | `SUPABASE_URL` / `SUPABASE_STORAGE_BUCKET` / `SUPABASE_SERVICE_ROLE_KEY` | من Supabase |
 | `Cors__AllowedOrigins__0` | `https://<دومين web>` (تحطه بعد الخطوة 4) |
 | `DevSeed__Email` / `DevSeed__Password` | حساب العميل (باسورد قوي: حرف كبير وصغير ورقم ورمز، 8+) |
@@ -40,6 +43,7 @@ git push -u origin main
 
 **متعملش Generate Domain للـ api** — يفضل داخلي (خاص) والـ web بيكلمه من جوّه الشبكة.
 
+> **أمان بيانات اطمّن:** لا تستخدم `UseLocalFieldEncryption=true` أو `UseLocalOtp=true` خارج Development. الكود يرفض إعدادات التطوير المحلية في Staging/Production ويستخدم Azure Key Vault envelope encryption وTwilio Verify. إذا كانت قاعدة بيانات موجودة وبها حالات شُفرت سابقًا بالمفتاح المحلي، أوقف الترقية هنا: يجب تنفيذ خطة إعادة تشفير/نقل موثقة مع الاحتفاظ بالمفتاح القديم قبل تغيير مزود التشفير، وإلا ستتعذر قراءة هذه الحقول. لا تنفّذ التبديل على قاعدة قائمة قبل التحقق من ذلك.
 ## 4) متغيرات خدمة `web`
 | المتغير | القيمة |
 |---|---|
