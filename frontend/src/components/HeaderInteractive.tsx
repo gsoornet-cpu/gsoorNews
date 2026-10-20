@@ -23,6 +23,7 @@ const NAV_LINKS = [
 ];
 
 const MORE_LINKS = [
+  { href: "/diaspora-map", label: "خريطة المهجر" },
   { href: "/category?cat=events", label: "فعاليات" },
   { href: "/category?cat=lamma", label: "اللمة الحلوة" },
   { href: "/category?cat=secondgen", label: "الجيل الثاني" },

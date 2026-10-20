@@ -123,6 +123,46 @@ export interface PublicAdPlacement {
   displayOrder: number;
 }
 
+export interface PublicCrisisMode {
+  isActive: boolean;
+  title: string;
+  summary: string;
+  sourceName: string;
+  sourceUrl: string;
+  severity: "advisory" | "urgent" | "emergency";
+  affectedCountryIds: string[];
+  lastModifiedAtUtc: string | null;
+}
+
+export interface PublicCountry { id: string; nameAr: string; nameEn: string; isoCode2: string; }
+
+export interface PublicDiasporaMapItem {
+  id: string;
+  countryId: string;
+  countryNameAr: string;
+  cityId: string | null;
+  cityNameAr: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  estimatedPopulation: number;
+  communitySignalCount: number | null;
+  sourceName: string;
+  sourceUrl: string;
+  sourcePublishedOn: string;
+}
+
+export function getPublicCrisisMode(): Promise<PublicCrisisMode> {
+  return apiFetch<PublicCrisisMode>("/api/v1/crisis", { cache: "no-store" });
+}
+
+export function getPublicCountries(): Promise<PublicCountry[]> {
+  return apiFetch<PublicCountry[]>("/api/v1/geography/countries", { cache: "no-store" });
+}
+
+export function getPublicDiasporaMap(): Promise<PublicDiasporaMapItem[]> {
+  return apiFetch<PublicDiasporaMapItem[]>("/api/v1/diaspora-map", { cache: "no-store" });
+}
+
 export async function getPublicAdPlacements(surface: "web" | "mobile"): Promise<PublicAdPlacement[]> {
   return apiFetch<PublicAdPlacement[]>(`/api/v1/advertisements/placements?surface=${surface}`);
 }

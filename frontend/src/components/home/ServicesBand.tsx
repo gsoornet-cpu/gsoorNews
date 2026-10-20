@@ -13,8 +13,8 @@ interface Service {
 }
 
 const services: Service[] = [
-  { icon: "🆘", title: "اطمّن على مغتربك", description: "استجابة وتتبع عاجل", href: "#atmaen", featured: true },
-  { icon: "🗺️", title: "خريطة المهجر", description: "توزيع الجاليات", href: "/category?cat=mughtarib" },
+  { icon: "🆘", title: "اطمّن على مغتربك", description: "إرسال بلاغ خاص لفريق المتابعة", href: "/atmaen", featured: true },
+  { icon: "🗺️", title: "خريطة المهجر", description: "بيانات موثقة عن الجاليات", href: "/diaspora-map" },
   { icon: "🔔", title: "تنبيهات جغرافية", description: "إشعارات الطوارئ", href: "#city-alerts" },
   { icon: "⚽", title: "الرياضيون", description: "متابعة المحترفين", href: "/category?cat=sports" },
   { icon: "🏛️", title: "دليل السفارات", description: "المعاملات والتواصل", href: "/category?cat=official" },

@@ -43,6 +43,14 @@ This list adds a client-trial workstream; it does not relabel the official Phase
 
 **Limits for this slice:** one CMS-selected hub video per article; an article may still contain multiple inline media items. The hub uses browser-native controls and the original video file; preview thumbnails, category-specific video tabs, modal playback and full demo detail parity are outside Slice 26. Supabase upload and real-browser verification were not available locally and remain client/developer acceptance items.
 
+## Supplemental CMS delivery — crisis controls, Atmaen access, diaspora map and editorial monitoring
+
+**Status:** code and local build checks complete; the user confirmed applying `20261020060238_AddCrisisModeConfiguration`. `20261020063652_AddDiasporaEstimates` is generated and still needs to be applied to the isolated development/trial database. Docker API access from the Codex execution environment and live browser acceptance remain unavailable.
+
+**Delivered in source:** CMS-managed crisis state and affected-country list with public crisis page/status; public Atmaen request flow and role-assigned CMS case queue; geography catalog management; a diaspora map fed only by curated estimates with source URL/date and explicit estimate labeling; a role-gated editorial monitoring report with 7/30/90-day totals, current workflow counts and the latest 30 transitions. Public community counts are suppressed below the approved `k=25` threshold, and country totals are suppressed when city cells are shown to avoid subtraction-based disclosure. Monitoring output intentionally omits actor IDs and internal transition reasons.
+
+**Trial follow-up:** apply the diaspora migration using the isolated database only, rebuild/restart the development stack, seed/enter only sourced map estimates, and confirm the CMS routes through the actual role accounts. Atmaen local OTP is a development-only path; Railway preview must keep OTP fail-closed until Twilio is configured. Production Azure Key Vault and Twilio setup remain deferred by the user.
+
 ## Verification and handoff notes
 
 - Do not apply the new migration to production as part of client trial. Apply it to an isolated trial/test PostgreSQL database first.

@@ -68,4 +68,9 @@ public static class AuthorizationPolicies
 
     /// <summary>Change newsroom role assignments: SystemAdmin only.</summary>
     public const string CanManageRoleAssignments = "CanManageRoleAssignments";
+
+    /// <summary>Manage public crisis messaging and affected countries; newsroom leadership only.</summary>
+    public const string CanManageCrisisMode = "CanManageCrisisMode";
+    public const string CanManageGeography = "CanManageGeography";
+    public const string CanViewEditorialMonitoring = "CanViewEditorialMonitoring";
 }

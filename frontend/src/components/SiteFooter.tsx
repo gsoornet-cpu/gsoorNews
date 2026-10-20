@@ -24,7 +24,7 @@ const MORE_LINKS = [
 
 const SERVICE_LINKS = [
   { href: "/atmaen", label: "اطمّن على مغتربك" },
-  { href: "/country?c=ae", label: "خريطة المهجر" },
+  { href: "/diaspora-map", label: "خريطة المهجر" },
   { href: "/category?cat=opportunities", label: "فرص العمل" },
   { href: "/auth", label: "بروفايل المهجر" },
 ];

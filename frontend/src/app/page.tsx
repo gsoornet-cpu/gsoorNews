@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { getPublishedNews, getPublishedVideos, getPublicAdPlacements, type PublicAdPlacement } from "@/lib/news-api";
+import { getPublishedNews, getPublishedVideos, getPublicAdPlacements, getPublicCrisisMode, type PublicAdPlacement } from "@/lib/news-api";
 import type { StorySummary } from "@/lib/stories-api";
 import { JsonLd } from "@/components/JsonLd";
 import { buildOrganizationJsonLd } from "@/lib/seo";
@@ -178,8 +178,8 @@ function LammaSection({ lamma, events, topAd, sideAd }: { lamma: StorySummary[];
 function AtmaenFeature({ webAd, mobileAd }: { webAd?: PublicAdPlacement; mobileAd?: PublicAdPlacement }) {
   return (
     <section className="section atmaen-feature-section" id="atmaen"><div className="wrap"><div className="atmaen-feature-card"><div className="split-2 atmaen-feature-layout">
-        <div><span className="eyebrow atmaen-feature-eyebrow">على منصة جسور فقط</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. اقفز الى قلب الحدث واعرف المستجدات لحظيًا عبر وضع الأزمة.. وابدأ حالة اطمن على مغتربك</h2>
-          <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/category?cat=mughtarib">اطمن على مغتربك</Link><Link className="btn btn-ghost" href="/category?cat=red">آخر تحديثات الأزمة</Link></div>
+          <div><span className="eyebrow atmaen-feature-eyebrow">على منصة جسور فقط</span><h2 className="atmaen-feature-title">لا تنتظر أخبار الوكالات والمراسلين وقت الأزمات الكبرى.. تابع المستجدات المعتمدة، وأرسل بلاغًا خاصًا للاطمئنان على مغتربك</h2>
+          <div className="flex gap-8 mt-24 atmaen-feature-actions"><Link className="btn btn-primary" href="/atmaen">اطمّن على مغتربك</Link><Link className="btn btn-ghost" href="/crisis">مركز الأزمة</Link></div>
         </div>
         <ConfiguredAd placement={webAd} className="atmaen-ad-slot atmaen-ad-slot--web" ratio="1424 / 745" />
         <ConfiguredAd placement={mobileAd} className="atmaen-ad-slot atmaen-ad-slot--mobile" ratio="1424 / 745" />
@@ -204,12 +204,13 @@ function NewsRecirculation({ desks }: { desks: Record<string, StorySummary[]> })
 
 export default async function HomePage() {
   const deskSlugs = Object.keys(deskLabels);
-  const [[newsResult, videoResult, webAdsResult, mobileAdsResult], deskResults] = await Promise.all([
+  const [[newsResult, videoResult, webAdsResult, mobileAdsResult, crisisResult], deskResults] = await Promise.all([
     Promise.allSettled([
       getPublishedNews(1, 50),
       getPublishedVideos(1, 7, true), // Only the editor-curated seven videos belong in the hero.
       getPublicAdPlacements("web"),
       getPublicAdPlacements("mobile"),
+      getPublicCrisisMode(),
     ] as const),
     Promise.allSettled(deskSlugs.map((slug) => getPublishedNews(1, 10, slug))),
   ]);
@@ -217,6 +218,7 @@ export default async function HomePage() {
   const videos = videoResult.status === "fulfilled" ? videoResult.value.items : [];
   const webAds = webAdsResult.status === "fulfilled" ? webAdsResult.value : [];
   const mobileAds = mobileAdsResult.status === "fulfilled" ? mobileAdsResult.value : [];
+  const crisis = crisisResult.status === "fulfilled" && crisisResult.value.isActive ? crisisResult.value : null;
   const ad = (surface: "web" | "mobile", slotKey: string) =>
     (surface === "web" ? webAds : mobileAds).find((placement) => placement.slotKey === slotKey);
   const desks: Record<string, StorySummary[]> = Object.fromEntries(deskSlugs.map((slug, index) => {
@@ -238,6 +240,7 @@ export default async function HomePage() {
   return (
     <main id="main">
       <JsonLd data={buildOrganizationJsonLd()} />
+      {crisis && <section className="wrap" aria-label="تنبيه أزمة نشطة"><Link className="crisis-spotlight" href="/crisis"><span className="crisis-spotlight__eyebrow"><i className="crisis-bar__dot" aria-hidden="true" />مركز الأزمة · {crisis.severity === "emergency" ? "طوارئ" : crisis.severity === "advisory" ? "تنبيه" : "عاجل"}</span><h2 className="crisis-spotlight__title">{crisis.title}</h2><p className="crisis-spotlight__summary">{crisis.summary}</p><span className="crisis-spotlight__actions"><span className="primary">التفاصيل وإرشادات المتابعة ←</span></span></Link></section>}
       {heroSlides.length > 0 && <HomeHeroSlider slides={heroSlides} />}
       <HomeAdPlacement placement={ad("mobile", "hero-after-videos")} className="home-ad-placement--mobile-only home-ad-placement--mobile-after-videos" />
 

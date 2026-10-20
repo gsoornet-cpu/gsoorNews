@@ -4,6 +4,7 @@ import "@/styles/site-mobile.css";
 import "@/styles/site-overrides.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { CrisisStatusBar } from "@/components/CrisisStatusBar";
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
@@ -45,6 +46,7 @@ export default function RootLayout({
       </head>
       <body>
         <SiteHeader />
+        <CrisisStatusBar />
         {children}
         <SiteFooter />
       </body>

@@ -1,6 +1,49 @@
 /* CMS — reuses the site's design tokens (colors, radius, shadow) so the
    editor feels like part of the same product. */
 .cms { padding: 32px 0 72px; }
+.cms-crisis-heading { border-inline-start: 4px solid var(--error); padding-inline-start: 20px; }
+.cms-geo-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; align-items: end; gap: 12px; }
+.cms-geo-form .cms-field { min-width: 0; margin: 0; }
+.cms-geo-form--city { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cms-geo-form--city .cms-field:nth-child(4) { grid-column: span 1; }
+.cms-count-pill { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 999px; background: #eef4ff; color: var(--blue); font-size: .82rem; font-weight: 800; }
+.cms-geo-list { display: grid; gap: 8px; }
+.cms-geo-list details { border: 1px solid var(--line); border-radius: 8px; background: #fff; overflow: hidden; }
+.cms-geo-list summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 15px; cursor: pointer; list-style: none; }
+.cms-geo-list summary::-webkit-details-marker { display: none; }
+.cms-geo-list summary > span:first-child { display: grid; gap: 2px; }
+.cms-geo-list summary small, .cms-geo-list li small { display: block; color: var(--text-mute); font-size: .8rem; }
+.cms-geo-list summary > span:last-child { color: var(--blue); font-weight: 700; white-space: nowrap; }
+.cms-geo-list ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.cms-geo-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 15px; border-bottom: 1px solid var(--line); }
+.cms-geo-list li:last-child { border-bottom: 0; }
+.cms-geo-list code { color: var(--text-mute); font-size: .78rem; }
+.cms-crisis-state { display: inline-flex; align-items: center; gap: 9px; flex: none; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--text-mute); font-size: .85rem; font-weight: 700; }
+.cms-crisis-state i { width: 9px; height: 9px; border-radius: 50%; background: #98a2b3; }
+.cms-crisis-state.is-active { color: #a62f22; border-color: #f0c5bf; background: #fff5f3; }
+.cms-crisis-state.is-active i { background: var(--error); box-shadow: 0 0 0 4px #c6402f1c; animation: cms-crisis-pulse 1.8s ease-out infinite; }
+.cms-crisis-card { display: grid; gap: 22px; }
+.cms-crisis-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .42fr); gap: 16px; }
+.cms-crisis-form .cms-field { margin: 0; }
+.cms-crisis-summary { grid-column: 1 / -1; }
+.cms-field small { color: var(--text-mute); font-size: .78rem; }
+.cms-crisis-country-header, .cms-crisis-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.cms-crisis-country-header h3 { margin: 0; font-size: 1rem; }
+.cms-crisis-country-header p, .cms-crisis-guidance p { margin: 4px 0 0; }
+.cms-crisis-country-header > span { color: var(--blue); font-weight: 800; white-space: nowrap; }
+.cms-crisis-countries { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 320px; overflow: auto; padding: 4px; }
+.cms-crisis-countries label { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; cursor: pointer; transition: border-color .18s ease, background-color .18s ease, transform .18s ease; }
+.cms-crisis-countries label:hover { border-color: #99b5e9; transform: translateY(-1px); }
+.cms-crisis-countries label.selected { border-color: var(--blue); background: #f0f5ff; }
+.cms-crisis-countries input { accent-color: var(--blue); width: 17px; height: 17px; }
+.cms-crisis-countries label small { margin-inline-start: auto; color: var(--text-mute); font: 600 .72rem var(--mono); }
+.cms-crisis-footer { padding-top: 18px; border-top: 1px solid var(--line); }
+.cms-crisis-footer p { margin: 0; }
+.cms-crisis-guidance { padding: 16px 18px; border: 1px solid #f1d6a8; border-radius: var(--radius); background: #fff9ed; color: #6d501c; font-size: .88rem; }
+.cms-crisis-guidance strong { color: #714a0b; }
+@keyframes cms-crisis-pulse { 0% { box-shadow: 0 0 0 0 #c6402f35; } 100% { box-shadow: 0 0 0 8px #c6402f00; } }
+@media (max-width: 900px) { .cms-geo-form { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cms-geo-form--city { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .cms-crisis-form, .cms-geo-form, .cms-geo-form--city { grid-template-columns: 1fr; } .cms-crisis-summary { grid-column: auto; } .cms-crisis-country-header, .cms-crisis-footer { align-items: flex-start; flex-direction: column; } .cms-crisis-footer .cms-actions { width: 100%; } .cms-crisis-footer .cms-btn { flex: 1; } .cms-geo-list li { align-items: flex-start; flex-direction: column; } }
 .cms-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-card); padding: 24px; }
 .cms-narrow { max-width: 460px; margin: 0 auto; }
 .cms-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
@@ -310,3 +353,19 @@
   .cms-users-card .cms-role-chip { white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) { .cms-sidebar { transition: none; } }
+
+.cms-map-privacy-note { padding: 15px 18px; border: 1px solid #e9d5ae; border-radius: 12px; color: #554525; background: linear-gradient(120deg, #fffaf0, #fffdf9); }
+.cms-map-privacy-note strong { color: #87530c; }
+.cms-map-privacy-note p { margin: 5px 0 0; font-size: 13px; line-height: 1.8; }
+.cms-map-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.cms-map-source-url { grid-column: span 2; }
+.cms-map-publish { display: flex; align-items: center; gap: 9px; color: #34445b; font-size: 13px; }
+.cms-map-publish input { width: 18px; height: 18px; accent-color: #1c5ac2; }
+.cms-map-form .cms-actions { grid-column: 1 / -1; justify-content: flex-start; }
+.cms-map-editor .cms-table td small { display: block; margin-top: 4px; }
+.cms-map-editor .cms-table td a { color: #2059b4; }
+@media (max-width: 600px) { .cms-map-form { grid-template-columns: 1fr; } .cms-map-source-url, .cms-map-form .cms-actions { grid-column: 1; } }
+.cms-report-range{display:grid;gap:8px;color:var(--cms-muted,#687386);font-size:.85rem;font-weight:700}.cms-report-range select{min-width:150px;padding:11px 14px;border:1px solid var(--cms-border,#dce2ea);border-radius:12px;background:#fff;color:inherit;font:inherit}.cms-report-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.cms-report-kpi{display:grid;gap:14px;padding:22px;border:1px solid var(--cms-border,#e2e7ef);border-radius:18px;background:linear-gradient(145deg,#fff,#f8faff);box-shadow:0 8px 24px #152c5010}.cms-report-kpi span{color:var(--cms-muted,#687386);font-size:.9rem}.cms-report-kpi strong{color:#174ea6;font-size:2rem;line-height:1.1}.cms-report-section{padding:22px;border:1px solid var(--cms-border,#e2e7ef);border-radius:18px;background:#fff}.cms-report-statuses{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}.cms-report-status{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px;border-radius:12px;background:#f5f7fb;color:#344054}.cms-report-status strong{color:#174ea6;font-size:1.2rem}.cms-report-table-wrap{overflow:auto}.cms-report-table{width:100%;border-collapse:collapse;text-align:right}.cms-report-table th,.cms-report-table td{padding:13px 12px;border-bottom:1px solid #edf0f4;white-space:nowrap}.cms-report-table th{background:#f7f8fa;color:#687386;font-size:.84rem}.cms-report-table td:first-child{white-space:normal;min-width:230px;max-width:420px}.cms-report-table td strong{color:#174ea6}.cms-empty-state{padding:28px;text-align:center;color:#687386;background:#f7f8fa;border-radius:12px}
+
+@media(max-width:900px){.cms-report-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.cms-report-table{min-width:760px}}
+@media(max-width:540px){.cms-report-kpis{grid-template-columns:1fr 1fr;gap:10px}.cms-report-kpi{padding:15px}.cms-report-kpi strong{font-size:1.55rem}.cms-report-section{padding:15px}.cms-page-heading:has(.cms-report-range){align-items:stretch;flex-direction:column}.cms-report-range select{width:100%}}

@@ -28,9 +28,17 @@ const GROUPS: NavGroup[] = [
   ] },
   { title: "إدارة المنصة", items: [
     { label: "المستخدمون والصلاحيات", href: "/cms/users", roles: ["SystemAdmin", "EditorInChief"] },
+    { label: "دليل الدول والمدن", href: "/cms/geography", roles: ["EditorInChief"] },
+      { label: "بيانات خريطة المهجر", href: "/cms/diaspora-map", roles: ["EditorInChief"] },
   ] },
   { title: "اطمّن", items: [
     { label: "قائمة الحالات المسندة", href: "/cms/atmaen", roles: ["CrisisEditor"] },
+  ] },
+  { title: "إدارة الأزمات", items: [
+    { label: "وضع الأزمة والدول المتأثرة", href: "/cms/crisis", roles: ["ManagingEditor", "EditorInChief"] },
+  ] },
+  { title: "التقارير والمراقبة", items: [
+    { label: "مراقبة غرفة الأخبار", href: "/cms/reports", roles: ["SeniorEditor", "ManagingEditor", "EditorInChief", "SystemAdmin"] },
   ] },
 ];
 

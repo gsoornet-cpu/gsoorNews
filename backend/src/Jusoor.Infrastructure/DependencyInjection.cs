@@ -202,6 +202,12 @@ public static class DependencyInjection
                 policy.RequireRole(NewsroomRole.EditorInChief, NewsroomRole.SystemAdmin));
             options.AddPolicy(AuthorizationPolicies.CanManageRoleAssignments, policy =>
                 policy.RequireRole(NewsroomRole.SystemAdmin));
+            options.AddPolicy(AuthorizationPolicies.CanManageCrisisMode, policy =>
+                policy.RequireRole(NewsroomRole.ManagingEditor, NewsroomRole.EditorInChief));
+            options.AddPolicy(AuthorizationPolicies.CanManageGeography, policy =>
+                policy.RequireRole(NewsroomRole.EditorInChief));
+            options.AddPolicy(AuthorizationPolicies.CanViewEditorialMonitoring, policy =>
+                policy.RequireRole(NewsroomRole.SeniorEditor, NewsroomRole.ManagingEditor, NewsroomRole.EditorInChief, NewsroomRole.SystemAdmin));
         });
 
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();

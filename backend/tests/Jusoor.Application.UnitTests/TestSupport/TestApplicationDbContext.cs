@@ -34,6 +34,8 @@ public class TestApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<EditorialMediaAsset> EditorialMediaAssets => Set<EditorialMediaAsset>();
     public DbSet<EditorialCategory> EditorialCategories => Set<EditorialCategory>();
     public DbSet<EditorialAdPlacement> EditorialAdPlacements => Set<EditorialAdPlacement>();
+    public DbSet<CrisisMode> CrisisModes => Set<CrisisMode>();
+    public DbSet<DiasporaEstimate> DiasporaEstimates => Set<DiasporaEstimate>();
 
     public void Detach<TEntity>(TEntity entity) where TEntity : class => Entry(entity).State = EntityState.Detached;
 
