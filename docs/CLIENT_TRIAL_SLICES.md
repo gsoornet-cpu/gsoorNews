@@ -45,7 +45,7 @@ This list adds a client-trial workstream; it does not relabel the official Phase
 
 ## Supplemental CMS delivery — crisis controls, Atmaen access, diaspora map and editorial monitoring
 
-**Status:** code and local build checks complete; the user confirmed applying `20261020060238_AddCrisisModeConfiguration`. `20261020063652_AddDiasporaEstimates` is generated and still needs to be applied to the isolated development/trial database. Docker API access from the Codex execution environment and live browser acceptance remain unavailable.
+**Status:** code and local build checks complete; the user confirmed applying `20261020060238_AddCrisisModeConfiguration`. The SQL for `20261020063652_AddDiasporaEstimates` is prepared at `docs/20261020063652_AddDiasporaEstimates.sql` and still needs to be applied to the isolated development/trial database. On 2026-10-22, the execution environment could not reach Docker Desktop's Linux engine or PostgreSQL at `localhost:5433`; no database migration was applied. Live browser acceptance remains pending.
 
 **Delivered in source:** CMS-managed crisis state and affected-country list with public crisis page/status; public Atmaen request flow and role-assigned CMS case queue; geography catalog management; a diaspora map fed only by curated estimates with source URL/date and explicit estimate labeling; a role-gated editorial monitoring report with 7/30/90-day totals, current workflow counts and the latest 30 transitions. Public community counts are suppressed below the approved `k=25` threshold, and country totals are suppressed when city cells are shown to avoid subtraction-based disclosure. Monitoring output intentionally omits actor IDs and internal transition reasons.
 
