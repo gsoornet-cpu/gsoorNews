@@ -31,13 +31,53 @@ The approved topical taxonomy (ten newsroom-managed categories) remains separate
 
 This list adds a client-trial workstream; it does not relabel the official Phase 4 work or mark any earlier slice as complete. Slice H (CSP and headers) remains a prerequisite to public staging/launch; an isolated client trial must not be exposed as public production.
 
+## Slice 27 — article, author, sharing and related content
+
+**Status:** source implementation complete; browser/content acceptance remains.
+
+**Delivered:** article bylines link to a public author archive; the archive filters the Published-only news feed by author and includes the available author image. Article pages provide Web Share where supported, copy-link, print, and direct social-share links, plus published taxonomy links and more from the same author/desk. The API accepts an optional country id for Published-only archive filtering, used by Slice 29's country route. Existing article-body sanitization, media rendering, corrections and retraction behavior remain the source of truth.
+
+**Limits:** the system does not record article view counts, so “most read” is not presented as fact. A separate image-caption field is not available in the article contract. Validate author images, sharing targets, print layout, related articles, archived/retracted content and mobile behavior against actual trial content.
+
+## Slice 28 — homepage modules from published CMS content
+
+**Status:** existing CMS-backed module implementation retained; final editorial mapping and browser acceptance remain. Removed the non-persistent homepage poll and hard-coded 72%/28% figures, which were demo-only and not backed by a voting service. The former newsletter CTA also did not save subscriptions; it now links to the real Crisis Center and Atmaen service rather than collecting an email without a working consent/subscription flow.
+
+The homepage already composes its news sections from Published-only desk feeds and CMS-selected home videos, with desktop/mobile ad placements resolved from CMS assignments. Unsupported voting and email-subscription widgets are not presented as working features. Review every section against the approved Final Demo with representative trial data, especially ordering, empty states, ad density and mobile carousel behavior.
+
+## Slice 29 — remaining public routes and account navigation
+
+**Status:** source implementation complete for implemented API capabilities; legal, browser and data acceptance remain.
+
+**Delivered:** `/country?code=<ISO-2>` resolves the live country catalog and displays only Published news assigned to that country; `/about` describes existing news and service capabilities without demo statistics; `/privacy` states the trial privacy behavior and makes the unresolved retention policy explicit; `/auth` provides real login/account registration via a separate HttpOnly user cookie, displays the authenticated profile, updates country/city privacy level, and adds/removes followed cities through authenticated profile APIs. Search, country catalog, crisis, Atmaen, diaspora map, category, article and video routes already exist.
+
+**Limits:** account recovery, phone verification, OAuth, and region-level location selection are not exposed. Registration uses the backend's current email/password endpoint; it is not evidence of verified identity. The privacy page is a trial disclosure, not the final legally approved policy. Ensure country/city seed data exists and exercise navigation, keyboard focus, screen-reader labels, responsive layouts and account cookie behavior in a real browser before client acceptance.
+
+## Slice 30 — isolated trial hardening
+
+**Status:** still open; cannot be marked complete from source compilation.
+
+Requires end-to-end browser and device acceptance, migration checks on the isolated database, seeded trial accounts and countries, dedicated Supabase media upload/CORS validation, security/CSP review, role-specific access review, and confirmation that staging remains private. The user confirmed the local EF command reports “No migrations were applied. The database is already up to date”; this is a local-database observation only and does not verify Railway or a separate trial database.
+
+**Source checks on 2026-10-22:** frontend TypeScript (`node node_modules/typescript/bin/tsc --noEmit --incremental false`) and ESLint (`npm run lint -- --no-cache`) pass after the homepage CTA/poll cleanup. These checks do not close the browser, database, storage, security or deployment acceptance items above.
+
+## Requested CMS capabilities tracked outside slices 25–30
+
+The following requirements were explicitly requested during the CMS design discussion but are not delivered by the trial slices above. They must not be inferred from the existing article presentation-desk taxonomy:
+
+- CMS-managed homepage collections: create/enable/disable a section, choose from approved homepage layouts, map it to an editorial desk, and set its order consistently on web and mobile.
+- CMS-managed navigation order/visibility for desktop and mobile, with permission checks, safe route validation and public rendering from the saved configuration.
+- Structured sports coverage tailored to Egyptian professionals abroad, naturalized Egyptian players and the Egyptian league. The current `sports` presentation desk is only an article label/feed; it is not a sports data model or tailored sports CMS.
+
+These need their own implementation slices, persistence/API contracts and CMS acceptance. No UI-only control should be added until its saved configuration actually controls both the website and mobile layout.
+
 ## Slice 26 — CMS-selected video publishing and video hub
 
 **Status:** implementation complete; client media upload, isolated database migration and browser acceptance remain.
 
 **Delivered:** the CMS lets an editor choose one ready video already embedded in an article for hub placement. The selection is validated against the sanitized article body and the Ready Video media record; image, pending and failed media cannot be promoted as videos. The API returns only explicitly selected Ready Video assets attached to Published articles. `/videos` now has a featured native player, a paginated player grid, publication/credit metadata, links to the associated article, and honest loading-failure/empty states. Existing article video embeds remain available on the article page. Existing workflow authorization and publishing are unchanged.
 
-**Migration:** `AddEditorialArticleFeaturedVideo` adds a nullable FK and index. Existing articles remain unfeatured. Apply it only to the isolated trial/test PostgreSQL database, never production as part of this handoff.
+**Migration:** `AddEditorialArticleFeaturedVideo` adds a nullable FK and index. Existing articles remain unfeatured. The user reports their local EF database is up to date; verify that the same isolated trial database is targeted before client acceptance. Never apply trial migrations to production as part of this handoff.
 
 **Acceptance path:** configure the API with a dedicated test Supabase bucket and correct public read/CORS policy; migrate the isolated trial DB; sign in to CMS; create a draft, upload an MP4/WebM through the existing media library, insert it in the body, choose it for the video hub, save, and complete the current review/approval/publish workflow. Confirm it stays absent from `/videos` before publication; after publication, confirm its native player plays and its linked article opens. Confirm unselected embeds and non-ready media do not appear. Check pagination after 18 video-bearing articles, desktop/mobile layouts, and media behavior in supported browsers. Confirm an ordinary article with no selected video still works.
 
@@ -45,7 +85,7 @@ This list adds a client-trial workstream; it does not relabel the official Phase
 
 ## Supplemental CMS delivery — crisis controls, Atmaen access, diaspora map and editorial monitoring
 
-**Status:** code and local build checks complete; the user confirmed applying `20261020060238_AddCrisisModeConfiguration`. The SQL for `20261020063652_AddDiasporaEstimates` is prepared at `docs/20261020063652_AddDiasporaEstimates.sql` and still needs to be applied to the isolated development/trial database. On 2026-10-22, the execution environment could not reach Docker Desktop's Linux engine or PostgreSQL at `localhost:5433`; no database migration was applied. Live browser acceptance remains pending.
+**Status:** code and local build checks complete; the user confirmed applying `20261020060238_AddCrisisModeConfiguration`. The user later ran `dotnet ef database update` successfully and reported “No migrations were applied. The database is already up to date.” This confirms only the database targeted by that local command; it does not independently identify or verify a separate isolated trial database. Live browser acceptance remains pending.
 
 **Delivered in source:** CMS-managed crisis state and affected-country list with public crisis page/status; public Atmaen request flow and role-assigned CMS case queue; geography catalog management; a diaspora map fed only by curated estimates with source URL/date and explicit estimate labeling; a role-gated editorial monitoring report with 7/30/90-day totals, current workflow counts and the latest 30 transitions. Public community counts are suppressed below the approved `k=25` threshold, and country totals are suppressed when city cells are shown to avoid subtraction-based disclosure. Monitoring output intentionally omits actor IDs and internal transition reasons.
 

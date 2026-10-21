@@ -799,6 +799,15 @@
     gap: 8px 14px;
     font-size: 12.5px;
   }
+  .article-toolbar { align-items: flex-start; flex-direction: column; padding: 12px; }
+  .article-share { width: 100%; align-items: flex-start; }
+  .article-share__status { min-width: 0; }
+  .article-share__actions button { width: 40px; height: 40px; }
+  .article-taxonomy { margin-inline: 14px; }
+  .author-breadcrumb { padding-top: 10px; }
+  .author-hero { padding-inline: 14px; }
+  .author-hero-avatar { width: 96px; height: 96px; }
+  .author-hero-avatar--initial { font-size: 36px; }
 }
 
 /* --------------------------------------------------------------------------

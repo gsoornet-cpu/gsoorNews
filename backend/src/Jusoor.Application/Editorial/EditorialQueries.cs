@@ -116,7 +116,7 @@ public class ListEditorialArticlesQueryHandler : IRequestHandler<ListEditorialAr
 //   detail (GetPublishedNewsByIdQuery) .. Published + Archived: full article · Retracted: the public notice only · anything else: not found.
 //   sitemap ............................. Published + Archived (flagged) · Retracted never.
 
-public sealed record GetPublishedNewsQuery(int Page = 1, int PageSize = 20, string? DeskSlug = null, string? SearchTerm = null) : IRequest<PagedResult<PublicNewsSummaryDto>>;
+public sealed record GetPublishedNewsQuery(int Page = 1, int PageSize = 20, string? DeskSlug = null, string? SearchTerm = null, string? AuthorName = null, Guid? CountryId = null) : IRequest<PagedResult<PublicNewsSummaryDto>>;
 
 public class GetPublishedNewsQueryValidator : AbstractValidator<GetPublishedNewsQuery>
 {
@@ -126,6 +126,8 @@ public class GetPublishedNewsQueryValidator : AbstractValidator<GetPublishedNews
         RuleFor(x => x.PageSize).InclusiveBetween(1, 50);
         RuleFor(x => x.DeskSlug).Must(slug => slug is null || EditorialDesk.IsValid(slug));
         RuleFor(x => x.SearchTerm).MaximumLength(120);
+        RuleFor(x => x.AuthorName).MaximumLength(120);
+        RuleFor(x => x.CountryId).Must(id => id is null || id != Guid.Empty);
     }
 }
 
@@ -146,6 +148,15 @@ public class GetPublishedNewsQueryHandler : IRequestHandler<GetPublishedNewsQuer
         if (request.DeskSlug is not null)
         {
             baseQuery = baseQuery.Where(a => a.PresentationDesks.Contains(request.DeskSlug));
+        }
+        if (request.CountryId.HasValue)
+        {
+            baseQuery = baseQuery.Where(a => a.CountryId == request.CountryId.Value);
+        }
+        var authorName = request.AuthorName?.Trim();
+        if (!string.IsNullOrWhiteSpace(authorName))
+        {
+            baseQuery = baseQuery.Where(a => a.AuthorName == authorName);
         }
         var searchTerm = request.SearchTerm?.Trim().ToLower();
         if (!string.IsNullOrWhiteSpace(searchTerm))

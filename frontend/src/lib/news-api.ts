@@ -94,10 +94,12 @@ export type PublicNewsDetail = { outcome: "found"; article: NewsDetail } | { out
  * already render, so the approved card components are reused unchanged.
  * Editorial articles have no third-party sources, hence sourceNames: [].
  */
-export async function getPublishedNews(page = 1, pageSize = 20, desk?: string, searchTerm?: string): Promise<PagedResult<StorySummary>> {
+export async function getPublishedNews(page = 1, pageSize = 20, desk?: string, searchTerm?: string, authorName?: string, countryId?: string): Promise<PagedResult<StorySummary>> {
   const query = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
   if (desk) query.set("desk", desk);
   if (searchTerm?.trim()) query.set("q", searchTerm.trim());
+  if (authorName?.trim()) query.set("author", authorName.trim());
+  if (countryId) query.set("countryId", countryId);
   const result = await apiFetch<PagedResult<NewsSummaryDto>>(`/api/v1/news?${query.toString()}`);
 
   return {

@@ -8,7 +8,6 @@ import { buildOrganizationJsonLd } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 import { StoryGridCard } from "@/components/StoryGridCard";
 import { HomeHeroSlider } from "@/components/home/HomeHeroSlider";
-import { HomePollCard, NewsletterForm } from "@/components/home/HomePollCard";
 import { ConfiguredAd } from "@/components/home/ConfiguredAd";
 import { AdBox } from "@/components/home/AdBox";
 import { ServicesBand } from "@/components/home/ServicesBand";
@@ -261,7 +260,6 @@ export default async function HomePage() {
             <aside className="sidebar-interactive-ad home-success-aside">
               <ConfiguredAd placement={ad("web", "success-ad")} className="home-success-desktop-ad" />
               <ConfiguredAd placement={ad("mobile", "success-ad")} className="home-success-mobile-ad" />
-              <HomePollCard />
             </aside>
             <div className="home-success-stories">
               <Head label={deskLabels.success} slug="success" asHeading />
@@ -346,8 +344,8 @@ export default async function HomePage() {
       <section className="section on-surface" id="city-alerts" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="cta-banner">
-            <div><h2>ما تفوّتش أي تحديث يخص بلدك</h2><p>اشترك في تنبيهات المدينة اللي إنت أو أهلك فيها — إشعار لحظي وقت الأزمات فقط، مفيش إزعاج يومي.</p></div>
-            <NewsletterForm />
+            <div><h2>تابع المستجدات التي تهمك</h2><p>تابع التنبيهات العامة التي تعتمدها جسور، أو أرسل طلبًا خاصًا لفريق «اطمّن». لن نطلب بريدك لاشتراك غير مفعّل.</p></div>
+            <div className="cta-form cta-form--links"><Link className="cta-form__link" href="/crisis">مركز التنبيهات</Link><Link className="cta-form__link cta-form__link--secondary" href="/atmaen">اطمّن على مغتربك</Link></div>
           </div>
         </div>
       </section>

@@ -23,9 +23,9 @@ public class NewsController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetPublished([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? desk, [FromQuery] string? q, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPublished([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? desk, [FromQuery] string? q, [FromQuery] string? author, [FromQuery] Guid? countryId, CancellationToken cancellationToken)
     {
-        var query = new GetPublishedNewsQuery(page == 0 ? 1 : page, pageSize == 0 ? 20 : pageSize, desk, q);
+        var query = new GetPublishedNewsQuery(page == 0 ? 1 : page, pageSize == 0 ? 20 : pageSize, desk, q, author, countryId);
         var result = await _mediator.Send(query, cancellationToken);
 
         return Ok(result);

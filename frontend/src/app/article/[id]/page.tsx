@@ -10,6 +10,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { articleDescription, articleUrl, buildArticleJsonLd, buildBreadcrumbJsonLd, toIsoDate } from "@/lib/seo";
 import { EDITORIAL_BYLINE, SITE_NAME, absoluteUrl } from "@/lib/site";
 import { StoryGridCard } from "@/components/StoryGridCard";
+import { ArticleShareActions } from "@/components/ArticleShareActions";
 
 // Always fresh: an unpublished article must stop resolving immediately.
 export const dynamic = "force-dynamic";
@@ -125,13 +126,22 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   const readMinutes = estimateReadMinutes(htmlToPlainText(story.body));
   const place = story.cityNameAr ?? story.countryNameAr ?? null;
   const byline = story.authorName || EDITORIAL_BYLINE;
-  let relatedStories: Awaited<ReturnType<typeof getPublishedNews>>["items"] = [];
-  try {
-    const relatedResult = await getPublishedNews(1, 8, story.presentationDesks[0]);
-    relatedStories = relatedResult.items.filter((item) => item.id !== story.id).slice(0, 3);
-  } catch {
-    // Related coverage is helpful but must never turn an otherwise readable article into an error page.
-  }
+  const [authorResult, deskResult] = await Promise.allSettled([
+    story.authorName ? getPublishedNews(1, 4, undefined, undefined, story.authorName) : Promise.resolve({ items: [] }),
+    getPublishedNews(1, 8, story.presentationDesks[0]),
+  ]);
+  const moreFromAuthor = authorResult.status === "fulfilled"
+    ? authorResult.value.items.filter((item) => item.id !== story.id).slice(0, 3)
+    : [];
+  const relatedStories = deskResult.status === "fulfilled"
+    ? deskResult.value.items.filter((item) => item.id !== story.id).slice(0, 3)
+    : [];
+  const authorHref = story.authorName ? `/author?name=${encodeURIComponent(story.authorName)}` : null;
+  const deskLabels: Record<string, string> = {
+    mughtarib: "أخبار المغتربين", success: "قصة نجاح", egypt: "أخبار مصر", opportunities: "فرص استثمارية",
+    official: "مع مسؤول", events: "فعاليات", red: "خط أحمر", lamma: "اللمة الحلوة", secondgen: "الجيل الثاني",
+    sports: "رياضة", arts: "فنون", articles: "مقالات رأي", various: "منوعات",
+  };
 
   return (
     <main id="main">
@@ -170,7 +180,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
               {story.authorImageUrl
                 ? <Image className="avatar" src={story.authorImageUrl} alt={byline} width={26} height={26} unoptimized />
                 : <span className="avatar" style={{ width: 26, height: 26, fontSize: 11 }}>ج</span>}
-              <span>{byline}</span>
+              {authorHref ? <Link href={authorHref} rel="author">{byline}</Link> : <span>{byline}</span>}
             </span>
             {publishedLabel && (
               <span className="meta-item meta-date">
@@ -199,6 +209,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
               <span>{readMinutes} {readMinutes === 1 ? "دقيقة قراءة" : "دقائق قراءة"}</span>
             </span>
           </div>
+          <ArticleShareActions title={story.title} />
         </div>
       </div>
 
@@ -217,10 +228,22 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
             it as markup is safe only because of that server-side boundary — never feed this
             element anything that did not come from the API's `body` field. */}
         <article className="article-body" dangerouslySetInnerHTML={{ __html: story.body }} />
+        {(story.primaryCategoryNameAr || story.secondaryTags.length > 0 || story.presentationDesks.length > 0) && <nav className="article-taxonomy" aria-label="تصنيفات الخبر">
+          {story.primaryCategoryNameAr && <span className="article-taxonomy__label">التصنيفات</span>}
+          {story.primaryCategoryNameAr && <span className="article-taxonomy__tag">{story.primaryCategoryNameAr}</span>}
+          {story.secondaryTags.map((tag) => <Link className="article-taxonomy__tag" href={`/search?q=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
+          {story.presentationDesks.filter((desk) => deskLabels[desk]).map((desk) => <Link className="article-taxonomy__tag is-desk" href={`/category?cat=${encodeURIComponent(desk)}`} key={desk}>{deskLabels[desk]}</Link>)}
+        </nav>}
         <CorrectionsBox corrections={story.corrections.filter((c) => !c.isMajor)} />
       </div>
+      {moreFromAuthor.length > 0 && <section className="section tight on-surface article-author-more" aria-labelledby="article-author-more-heading">
+        <div className="wrap article-editorial-narrow">
+          <div className="section-head"><h2 id="article-author-more-heading">المزيد من الكاتب</h2>{authorHref && <Link className="more" href={authorHref}>كل مقالات {byline} ←</Link>}</div>
+          <div className="six-grid">{moreFromAuthor.map((item) => <StoryGridCard key={item.id} story={item} />)}</div>
+        </div>
+      </section>}
       {relatedStories.length > 0 && <section className="section tight on-surface article-related" aria-labelledby="article-related-heading">
-        <div className="wrap">
+        <div className="wrap article-editorial-narrow">
           <div className="section-head"><h2 id="article-related-heading">اقرأ أيضًا</h2></div>
           <div className="six-grid">{relatedStories.map((related) => <StoryGridCard key={related.id} story={related} />)}</div>
         </div>

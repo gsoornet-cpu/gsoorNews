@@ -2243,6 +2243,26 @@ body.video-modal-locked {
   gap: 8px;
   flex: none;
 }
+.cta-form--links { align-items: center; }
+.cta-form__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, .32);
+  border-radius: 7px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color .18s ease, transform .18s ease;
+}
+.cta-form__link:hover { background: #102b55; transform: translateY(-1px); }
+.cta-form__link:focus-visible { outline: 3px solid #f3a62c; outline-offset: 3px; }
+.cta-form__link--secondary { background: transparent; }
+.cta-form__link--secondary:hover { background: rgba(255, 255, 255, .12); }
 .cta-form input {
   padding: 11px 14px;
   border-radius: 6px;
@@ -6186,6 +6206,37 @@ body {
   outline: 2px solid var(--blue-2);
   outline-offset: 2px;
 }
+
+/* Data-backed author page and article sharing actions. */
+.author-page { min-height: 55vh; }
+.author-breadcrumb { padding-top: 14px; font-size: 12.5px; color: var(--text-mute); }
+.author-hero-avatar--initial { display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, var(--blue), var(--blue-dark)); font-size: 44px; font-weight: 800; }
+.author-hero-info > p { margin: 4px 0 12px; color: var(--text-mute); font-size: 14px; }
+.author-article-range { color: var(--text-mute); font-size: 12px; }
+.author-state { margin-block: 36px; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); }
+.author-state h1 { margin: 0 0 8px; font-size: 22px; }
+.author-state p { margin: 0; color: var(--text-mute); }
+.author-page .pagination > span { display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 42px; color: var(--text-mute); font-size: 13px; }
+.article-editorial-narrow { max-width: 980px; }
+.article-share { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.article-share__label { color: var(--text-mute); font-size: 12px; font-weight: 700; }
+.article-share__actions { display: flex; align-items: center; gap: 6px; }
+.article-share__actions button { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--line); border-radius: 8px; color: var(--blue); background: #fff; cursor: pointer; transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease; }
+.article-share__actions button:hover { transform: translateY(-1px); border-color: var(--blue); color: #fff; background: var(--blue); }
+.article-share__actions button.is-facebook:hover { border-color: #1877f2; background: #1877f2; }
+.article-share__actions button.is-whatsapp:hover { border-color: #1ba85b; background: #1ba85b; }
+.article-share__actions button.is-x:hover { border-color: #111; background: #111; }
+.article-share__actions svg { width: 17px; height: 17px; }
+.article-share__status { min-width: 100%; color: var(--success); font-size: 11px; }
+.article-meta .author a { color: inherit; text-decoration: none; }
+.article-meta .author a:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+.article-taxonomy { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; max-width: 720px; margin: 0 auto 22px; }
+.article-taxonomy__label { color: var(--text-mute); font-size: 12px; font-weight: 700; }
+.article-taxonomy__tag { display: inline-flex; min-height: 30px; align-items: center; padding: 4px 10px; border: 1px solid #dfe5ed; border-radius: 18px; color: #526176; background: #f7f9fc; font-size: 11px; text-decoration: none; }
+a.article-taxonomy__tag:hover { border-color: var(--blue); color: var(--blue); background: #eff5ff; }
+.article-taxonomy__tag.is-desk { color: #2058a8; border-color: #d7e4f8; background: #f1f6ff; }
+.article-author-more, .article-related { border-top: 1px solid var(--line); }
+@media print { .article-share, .article-taxonomy { display: none !important; } }
 
 /* ---- article.html: clickable author identity in the byline ---- */
 .article-meta a.author {

@@ -719,14 +719,13 @@
   .search-panel { z-index: 1301; top: 0; left: 0; right: 0; width: 100%; max-width: none; height: 100dvh; max-height: none; border-radius: 0; transform: translateY(12px); padding: calc(14px + env(safe-area-inset-top, 0px)) 16px calc(14px + env(safe-area-inset-bottom, 0px)); }
   .search-panel.is-active { transform: translateY(0); }
 
-  /* Newsletter controls stay inside the blue card on narrow screens. */
+  /* Service links stay usable inside the blue card on narrow screens. */
   .cta-banner { align-items: stretch; gap: 14px; padding: 22px 18px; }
   .cta-banner > div { min-width: 0; flex: 1 1 100%; width: 100%; }
   .cta-banner h2 { font-size: clamp(18px, 5vw, 21px); line-height: 1.45; }
   .cta-banner p { margin-bottom: 0; line-height: 1.75; }
-  .cta-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; flex: 1 1 100%; width: 100%; min-width: 0; gap: 8px; }
-  .cta-form input { min-width: 0; width: 100%; }
-  .cta-form button { min-width: 82px; padding-inline: 12px; white-space: nowrap; }
+  .cta-form--links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); flex: 1 1 100%; width: 100%; min-width: 0; gap: 8px; }
+  .cta-form__link { min-width: 0; padding-inline: 10px; text-align: center; }
 
   /* Strong but calm separation for the atmaen promotion. */
   .atmaen-feature-section { padding-block: 28px; }
@@ -889,4 +888,46 @@ button.hero-main-button:focus-visible { outline: 2px solid var(--amber); outline
 
 @media (max-width: 860px) {
   .ad-box--web-only { display: none !important; }
+}
+/* Country archive and the two trust pages share the site's editorial rhythm. */
+.info-page-hero { padding: clamp(2rem, 5vw, 4.5rem) 0; background: linear-gradient(115deg, #f1f5fa 0%, #fff 70%); border-bottom: 1px solid #e1e7ef; }
+.info-page-hero h1 { margin: .6rem 0; color: #172334; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 900; }
+.info-page-hero p { max-width: 760px; color: #536274; font-size: 1.1rem; line-height: 1.9; }
+.info-page-hero .eyebrow { color: #d86f13; font-weight: 800; }
+.info-page-content { display: grid; grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr); gap: clamp(2rem, 6vw, 5rem); padding-block: 3rem; }
+.info-page-content article { max-width: 850px; }
+.info-page-content article h2 { margin: 0 0 .8rem; color: #172334; font-size: 1.35rem; }
+.info-page-content article p { margin: 0 0 2rem; color: #526174; line-height: 2; }
+.info-page-links { display: grid; align-content: start; gap: .65rem; }
+.info-page-links a, .info-page-content > a { padding: .9rem 1rem; border: 1px solid #e0e6ed; border-radius: 10px; background: #fff; color: #1554ad; font-weight: 700; text-decoration: none; }
+.info-page-links a:hover, .info-page-content > a:hover { border-color: #1554ad; background: #f5f8fe; }
+.info-page-content--policy { grid-template-columns: minmax(0, 1fr) auto; }
+.info-policy-note { padding: 1rem 1.2rem; border-inline-start: 4px solid #e17a1b; background: #fff8f0; color: #63401f !important; }
+.country-page .page-header { padding-bottom: 1.5rem; }
+.account-page { min-height: 55vh; padding: clamp(2rem, 6vw, 5rem) 0; background: linear-gradient(145deg, #f3f6fa, #fff 65%); }
+.account-card { width: min(100%, 620px); margin-inline: auto; padding: clamp(1.25rem, 4vw, 2.5rem); border: 1px solid #e2e8f0; border-radius: 18px; background: #fff; box-shadow: 0 18px 50px #183a6112; }
+.account-card h1 { margin: .4rem 0; color: #15243a; font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 900; }
+.account-card > p { color: #5d6a7b; line-height: 1.8; }
+.account-card form { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.account-card label { display: grid; gap: .4rem; color: #25364d; font-weight: 700; }
+.account-card input { min-height: 48px; padding: .6rem .8rem; border: 1px solid #d7dee8; border-radius: 8px; background: #fff; color: #172334; }
+.account-card select { min-height: 46px; padding: .55rem .7rem; border: 1px solid #d7dee8; border-radius: 8px; background: #fff; color: #172334; font: inherit; }
+.account-card > label { margin-block: .8rem; }
+.account-follow-row { display: flex; gap: .6rem; align-items: center; }
+.account-follow-row select { flex: 1; min-width: 0; }
+.account-places { display: grid; gap: .5rem; padding: 0; list-style: none; }
+.account-places li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .7rem .8rem; border: 1px solid #e0e6ed; border-radius: 8px; }
+.account-places button { padding: .35rem .6rem; border: 1px solid #d8a6a6; border-radius: 6px; background: white; color: #a11f1f; font: inherit; cursor: pointer; }
+.account-card input:focus-visible { outline: 3px solid #1d5bc144; border-color: #1d5bc1; }
+.account-card .btn { min-height: 48px; border: 0; border-radius: 8px; background: #1c56bd; color: white; font: inherit; font-weight: 800; cursor: pointer; }
+.account-card .btn:disabled { opacity: .65; cursor: wait; }
+.account-switch { margin-top: 1rem; padding: .3rem 0; border: 0; background: none; color: #1554ad; font: inherit; font-weight: 700; cursor: pointer; }
+.account-note { margin-top: 1.3rem !important; padding: .85rem 1rem; border-radius: 8px; background: #f4f6f8; color: #586577 !important; font-size: .9rem; }
+.account-message { margin: 0; padding: .75rem; border-radius: 8px; background: #fff0f0; color: #a11f1f; }
+.account-card h2 { margin-top: 1.5rem; font-size: 1.1rem; }
+.account-card ul { padding-inline-start: 1.5rem; }
+
+@media (max-width: 720px) {
+  .info-page-content, .info-page-content--policy { grid-template-columns: 1fr; gap: 1.5rem; padding-block: 2rem; }
+  .info-page-hero { padding-block: 1.75rem; }
 }

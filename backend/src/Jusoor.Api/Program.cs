@@ -136,17 +136,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Hangfire Dashboard — KNOWN LIMITATION, not solved in this slice: our API
-// uses JWT bearer authentication, but a browser navigating to /hangfire
-// has no way to attach an Authorization header to a page load. Hangfire's
-// default dashboard authorization (MapHangfireDashboard with no explicit
-// filters) falls back to local-requests-only, which is safe for local dev
-// but is NOT an access control suitable for a deployed environment.
-// Production-grade dashboard access (e.g. a separate cookie-based admin
-// login, or restricting the route at the network/reverse-proxy level)
-// is Planned, not implemented here — flagging this explicitly rather than
-// shipping a dashboard that looks secured but isn't.
-app.MapHangfireDashboard("/hangfire");
+// The dashboard has no browser-compatible authenticated admin session yet.
+// Keep it entirely out of Staging/Production rather than treating the
+// default local-only filter as deployed access control. Background jobs run
+// normally without exposing this operational UI.
+if (app.Environment.IsDevelopment() && app.Configuration.GetValue("Hangfire:DashboardEnabled", true))
+{
+    app.MapHangfireDashboard("/hangfire");
+}
 
 using (var scope = app.Services.CreateScope())
 {

@@ -48,7 +48,7 @@ Statuses below combine the source code, migrations/tests present in the reposito
 ### Stage A — establish a truthful baseline and clear release blockers
 
 - [x] Run frontend type check and source lint. **TypeScript:** `node node_modules/typescript/bin/tsc --noEmit --incremental false` exited 0. **ESLint:** `npm run lint` exits 0 with no warnings after stabilizing the VideoModal mount-time embed value.
-- [ ] Verify the frontend production build. TypeScript and ESLint pass, but two production build attempts failed before compilation with Windows `EPERM` creating paths under `frontend/.next`; not counted as a source compile failure or a pass. The existing generated cache was preserved.
+- [ ] Verify the frontend standalone production artifact. TypeScript and ESLint pass; `next build` compiled successfully, passed Next's lint/type phase, and generated all 18 static pages. Final standalone trace copying still fails on Windows with `EPERM` creating nested paths under `frontend/.next/standalone/node_modules/next`; container artifact verification remains open.
 - [x] Run the backend solution build. **Build:** `dotnet build Jusoor.sln --no-restore --disable-build-servers -m:1 /p:UseSharedCompilation=false` succeeded (0 warnings/errors) after repairing test-only compile breaks caused by the new ads interface and role-aware list query.
 - [ ] Run backend tests. The Infrastructure unit-test project compiled, including the new disabled-demo-OTP tests, but VSTest again could not connect to its testhost after 90 seconds; no test pass is claimed. Docker Desktop is running per user, but this execution environment gets `permission denied` connecting to `dockerDesktopLinuxEngine`; API/Testcontainers verification is therefore still blocked.
 - [x] Check EF model snapshot consistency. `dotnet ef migrations has-pending-model-changes --project src/Jusoor.Infrastructure --startup-project src/Jusoor.Api --no-build` reported no pending model changes.
@@ -61,7 +61,7 @@ Statuses below combine the source code, migrations/tests present in the reposito
 ### Stage B — security and operational readiness (highest launch priority)
 
 - [ ] Validate CSP end-to-end and narrow the policy from production browser reports before enforcement. Production-only `Content-Security-Policy-Report-Only` plus baseline headers are in `frontend/next.config.js`; policy/header assertions pass. Browser delivery/violation review remains open. No report collector or enforcement is claimed.
-- [ ] Resolve Hangfire dashboard access using the documented deployment boundary (cookie auth or network/reverse-proxy restriction), not a cosmetic authorization attribute.
+- [x] Prevent unauthenticated Hangfire dashboard exposure: `/hangfire` is now mapped only in Development and can be disabled with `Hangfire:DashboardEnabled=false`. Staging/Production continue running background jobs but do not expose the dashboard. A browser-compatible admin dashboard remains a future feature if operations require it.
 - [ ] Confirm production role seeding, role-revocation/token freshness, atomic last-admin behavior and audit requirements. Security config now includes an isolated `ClientDemoMode`: `Staging` only, requires a stable local encryption key, and routes OTP to a provider that fails closed without logging codes. The production path still requires Azure Key Vault + Twilio. This is not a production substitute; Railway/database startup and isolated preview acceptance remain pending.
 - [ ] Review upload validation, authorization, SSRF protections, secret handling, rate limits, error exposure, and dependency advisories.
 - [ ] Verify every migration and scheduled-publishing job on disposable PostgreSQL; never apply trial migrations to production during this work.
@@ -69,12 +69,15 @@ Statuses below combine the source code, migrations/tests present in the reposito
 ### Stage C — CMS and public-site client-trial completion
 
 - [ ] Accept desks and video workflow against isolated PostgreSQL and a dedicated Supabase bucket, including browser/mobile playback.
-- [ ] Complete article detail, author-image, related-content and media parity with actual published data (Slice 27).
-- [ ] Complete home modules with real CMS-backed content and the documented section-specific treatments (Slice 28).
-- [ ] Complete remaining demo routes, navigation, search/geography, responsive and accessibility parity (Slice 29).
+- [x] Implement article detail, author-image, related-content, article sharing, author archive and country-filtered published news (Slice 27). Real-browser and trial-content acceptance remain.
+- [x] Preserve the CMS-backed homepage modules, section feeds, featured videos and surface-specific ad placements (Slice 28 source implementation). Editorial mapping and browser acceptance with representative trial content remain.
+- [x] Remove homepage UI that implied unavailable functionality: deleted the non-persistent poll with fabricated 72%/28% results and replaced the inactive newsletter form with links to the real Crisis Center and Atmaen flow. TypeScript and ESLint pass after this change.
+- [x] Implement remaining public about/privacy/account/country routes alongside existing navigation, search, geography, crisis and service routes (Slice 29). Account recovery/phone verification and final legal review are explicitly not implemented; responsive/accessibility browser acceptance remains.
 - [ ] Add CMS e2e coverage for article draft → review → approval → publish, scheduling, media/video, SEO and ad placement authorization.
 - [ ] Verify ad CRUD end to end for each allow-listed slot and each supported surface, including creative upload, target-link validation, preview, and public render. Fixed the CMS save validation to validate both surfaces, because the API persists the complete web/mobile assignment set in one request.
 - [ ] Complete isolated client-trial hardening (Slice 30); keep staging private until Stage B's CSP/security gates pass.
+- [ ] Implement the separately requested CMS-controlled homepage section manager (create/enable/layout/desk/order for web and mobile) and navigation order/visibility manager. The current presentation desk catalog is not a CMS-managed layout or navigation configuration.
+- [ ] Implement tailored sports content modeling and CMS fields for Egyptian professional players abroad, naturalized Egyptian players and the Egyptian league. The current `sports` desk only tags and feeds articles.
 
 ### Stage D — Phase 2 and later roadmap, only where decisions unblock it
 
